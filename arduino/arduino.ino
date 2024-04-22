@@ -1,3 +1,7 @@
+#include "Src/LightSensorModule/LightSensor.h"
+
+LightSensor lightSensor = LightSensor(A0);
+
 const int sensorPin = A0;
 
 void setup() {
@@ -5,9 +9,6 @@ void setup() {
 }
 
 void loop() {
-  int sensorValue = analogRead(sensorPin);
-  
-  Serial.print("Sensor value: ");
-  Serial.println(sensorValue);
+  Serial.println(lightSensor.isActive());
   delay(1000);
 }
