@@ -15,6 +15,12 @@ public class WarehouseMap extends JPanel {
         this.gridWidth = gridWidth;
     }
 
+    public WarehouseMap(int gridHeight, int gridWidth, int width, int height) {
+        this.gridHeight = gridHeight;
+        this.gridWidth = gridWidth;
+        this.width = width;
+        this.height = height;
+    }
 
     @Override
     protected void paintComponent(Graphics g) {
