@@ -21,7 +21,7 @@ public class WarehouseMap extends JPanel {
         //dummy data
         this.addGridProduct(1,1,Color.BLUE);
         this.addGridProduct(3,2,Color.RED);
-        this.addGridProduct(3,5,Color.YELLOW);
+        this.addGridProduct(3,50,Color.YELLOW);
         this.addGridProduct(5,5,Color.GREEN);
     }
 
@@ -69,8 +69,14 @@ public class WarehouseMap extends JPanel {
     }
 
     public void addGridProduct(int x, int y, Color color) {
+        for (int i = 0; i < gridProducts.size(); i++) {
+            if (gridProducts.get(i).getGridX() == x && gridProducts.get(i).getGridY() == y) {
+                System.out.println("x: " + x + " y: " + y + " already exists");
+                return;
+            }
+        }
         if (x > gridWidth || y > gridHeight) {
-            System.out.println("x: " + x + "y: " + y + " does not exist");
+            System.out.println("x: " + x + " y: " + y + " does not exist");
             return;
         }
         gridProducts.add(new GridProduct(x,y,color));

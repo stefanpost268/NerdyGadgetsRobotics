@@ -25,4 +25,12 @@ public class GridProduct {
         g.setColor(color);
         g.fillRect(x,y,width,height);
     }
+
+    public int getGridX() {
+        return gridX;
+    }
+
+    public int getGridY() {
+        return gridY;
+    }
 }
