@@ -1,8 +1,7 @@
 #include "Src/LightSensorModule/LightSensor.h"
-#include "Modules/ArduinoJson-v7.0.4.h"
+#include "Vendor/ArduinoJson-v7.0.4.h"
 
 // emergencyStop
-#include <ArduinoJson.h>
 #define LED 4
 #define emergencyStop 8
 #define resetButton 10
@@ -86,7 +85,6 @@ if (!SAFETY_MODE && !messageSent) { // Check if the sensor is inactive and the m
 
   delay(1000);
 }
-
 
 void SAFETY() {
   LEDstate();
