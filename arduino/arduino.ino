@@ -83,7 +83,7 @@ if (!SAFETY_MODE && !messageSent) { // Check if the sensor is inactive and the m
     messageSent = true; // Set the flag to indicate that the message has been sent
   }
 
-  delay(1000);
+  
 }
 
 void SAFETY() {
