@@ -94,9 +94,6 @@ void SAFETY() {
   if (digitalRead(resetButton) == HIGH && digitalRead(emergencyStop) == LOW) {
     SAFETY_MODE = false;
   }
-  if (!Serial.available()) { //json implementeren?
-    SAFETY_MODE = true;
-  }
   if (SAFETY_MODE == true) {
     //stop robot
   }
