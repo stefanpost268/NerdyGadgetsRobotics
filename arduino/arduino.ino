@@ -61,7 +61,7 @@ SAFETY();
   }
 
 //emergencyStop
-if (!SAFETY_MODE && !messageSent) { // Check if the sensor is inactive and the message hasn't been sent
+if (digitalRead(emergencyStop) == HIGH && !messageSent) { // Check if the sensor is inactive and the message hasn't been sent
     // Create a DynamicJsonDocument
     DynamicJsonDocument doc(128); // Adjust the size as per your data
 
@@ -71,7 +71,7 @@ if (!SAFETY_MODE && !messageSent) { // Check if the sensor is inactive and the m
     // Create an object for the data
     JsonObject data = doc.createNestedObject("data");
     data["state"] = "SAFETY_MODE";
-    data["reason"] = "emergency button was pressed";
+    data["reason"] = "Emergency stop is pressed!";
 
     // Serialize the JSON document to a string
     String jsonString;
