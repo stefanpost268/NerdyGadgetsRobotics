@@ -16,6 +16,7 @@ public class Dashboard extends JFrame {
         setLocationRelativeTo(null);
 
         getContentPane().add(new WarehouseMap(Integer.valueOf(ConfigReader.getConfig("grid.height")),Integer.valueOf(ConfigReader.getConfig("grid.width"))));
+//        getContentPane().add(new WarehouseMap(5,5));
 
 
 
