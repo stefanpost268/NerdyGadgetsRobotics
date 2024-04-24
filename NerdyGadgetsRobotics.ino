@@ -1,26 +1,29 @@
-// #include <Arduino_JSON.h>
+#include <Arduino.h>
+#include <Wire.h>
+
+#define SLAVE_ADDRESS 9 // Address of the slave Arduino
 
 // motor pins
 int cdirectionPin = 12;
 int cpwmPin = 3;
 int cbrakePin = 9;
-int cencoder1 = A0; // Analog encoder
-int cencoder2 = A1; // Digital encoder
+int cencoder1; // Analog encoder
+int cencoder2; // Digital encoder
 
 // joystick pins
-int cxjoystick = A2;
-int cyjoystick = A3;
+int cyjoystick = A2;
 
 // IRSensor pin
-int cIRSensor = A4;
+int cIRSensor;
 
 // cINsensor pin
-int cINSensor1 = A5;
+int cINSensor1;
+int cINSensor2;
 
 // variables
-int x;
 int y;
 int IR1;
+bool vorkOpen = false;
 
 void setup()
 {
@@ -31,48 +34,69 @@ void setup()
     pinMode(cencoder1, INPUT);
     pinMode(cencoder2, INPUT);
 
-    // joystick pins
-    pinMode(cxjoystick, INPUT);
+    // joystick pin
     pinMode(cyjoystick, INPUT);
 
     // IRSensor pins
     pinMode(cIRSensor, INPUT);
     pinMode(cINSensor1, INPUT);
 
+    // Initialize I2C communications as Master
+    Wire.begin();
+
     Serial.begin(9600);
 }
 
 void loop()
 {
-    Serial.println(analogRead(cINSensor1));
+    if (analogRead(cIRSensor) < 100) {
+        sendVorkStateToSlave(vorkOpen);
+    }
 
     // read joystick values
-    x = analogRead(A2);
-    y = analogRead(A3);
-    x = map(x, 0, 1023, -255, 255);
-    y = map(y, 0, 1023, -255, 255);
+    y = analogRead(cyjoystick);
+    y = map(y, 0, 1023, -254, 255);
 
-    // read IR sensors
+    // read IR & IN sensors
     IR1 = analogRead(cIRSensor);
 
-    if (x >= 0)
-    {
-        vorkForward(x);
-    }
-    else
-    {
-        vorkBackward(x);
-    }
+    // initialize vork movement
+    driveVork(y);
 }
 
-void vorkForward(int x)
+void vorkForward(int y)
 {
     digitalWrite(cdirectionPin, HIGH);
-    analogWrite(cpwmPin, x);
+    analogWrite(cpwmPin, y);
 }
 
-void vorkBackward(int x)
+void vorkBackward(int y)
 {
     digitalWrite(cdirectionPin, LOW);
-    analogWrite(cpwmPin, abs(x));
+    analogWrite(cpwmPin, abs(y));
+}
+
+void sendVorkStateToSlave(bool b) {
+  Wire.beginTransmission(SLAVE_ADDRESS);    // Start communication with slave
+  Wire.write(b);                            // Send the command to the slave
+  Wire.endTransmission();                   // End transmission
+
+  Serial.print("Vork open: ");
+  Serial.println(b);
+}
+
+void driveVork(int y) {
+    if (y > 50)
+    {
+        digitalWrite(cbrakePin, LOW);
+        vorkForward(y);
+    }
+    else if (y < -50)
+    {
+        digitalWrite(cbrakePin, LOW);
+        vorkBackward(y);
+    }
+    else {
+        digitalWrite(cbrakePin, HIGH);
+    }
 }
