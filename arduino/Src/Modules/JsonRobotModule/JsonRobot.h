@@ -7,7 +7,7 @@
 
 class JsonRobot {
     public:
-        void emitRobotState(LabelEnum x , RobotStateEnum t, String reason );      
+        void emitRobotState(String label , String state, String reason );      
     private:
 
 };

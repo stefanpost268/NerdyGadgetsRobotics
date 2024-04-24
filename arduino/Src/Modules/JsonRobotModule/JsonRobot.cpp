@@ -3,7 +3,7 @@
 #include "../../Enum/LabelEnum.h"
 #include "JsonRobot.h"
 
-void JsonRobot::emitRobotState(LabelEnum label, RobotStateEnum state, String reason){
+void JsonRobot::emitRobotState(String label, String state, String reason){
 // Create a DynamicJsonDocument
     DynamicJsonDocument doc(128); // Adjust the size as per your data
 

@@ -2,9 +2,9 @@
 #define ROBOTENUM_H
 
 enum RobotStateEnum {
-    AUTOMATIC_MODE,
-    MANUAL_MODE, 
-    EMERGENCY_STOP 
+    AUTOMATIC_MODE = 'AUTOMATIC_MODE',
+    MANUAL_MODE = 'MANUAL_MODE', 
+    EMERGENCY_STOP = 'EMERGENCY_STOP' 
 };
 
 #endif
