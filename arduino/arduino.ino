@@ -1,3 +1,7 @@
+#include "Src/Modules/LightSensorModule/LightSensor.h"
+
+LightSensor lightSensor = LightSensor(2);
+bool safetyMode = false;
 
 int adirectionPin = 12;
 int apwmPin = 3;
@@ -23,10 +27,14 @@ void setup()
 
     pinMode(A2, INPUT);
     pinMode(A3, INPUT);
+
+    Serial.begin(9600);
 }
 
 void loop()
 {
+
+  
     int x = analogRead(A2);
     int y = analogRead(A3);
     x = map(x, 0, 1023, -255, 255);
@@ -47,15 +55,15 @@ void loop()
 
     switch (y >= 0) {
         case true:
-          digitalWrite(bbrakePin, LOW);
+          digitalWrite(abrakePin, LOW);
           up(y);
           break;
         case false:
-          digitalWrite(bbrakePin, LOW);
+          digitalWrite(abrakePin, LOW);
           down(y);
           break;
         default:
-          digitalWrite(bbrakePin, HIGH);
+          digitalWrite(abrakePin, HIGH);
     }
 }
 
