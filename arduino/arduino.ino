@@ -1,4 +1,4 @@
-#include "Src/LightSensorModule/LightSensor.h"
+#include "Src/Modules/LightSensorModule/LightSensor.h"
 
 LightSensor lightSensor = LightSensor(A0);
 bool safetyMode = false;

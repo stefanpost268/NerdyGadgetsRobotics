@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include "LightSensor.h"
-#include "../../Modules/ArduinoJson-v7.0.4.h"
+#include "../../../Vendor/ArduinoJson-v7.0.4.h"
 
 LightSensor::LightSensor(int pin) {
     this->pin = pin;
