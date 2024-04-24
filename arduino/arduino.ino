@@ -20,10 +20,10 @@ void setup() {
 
 void loop() {
 
-  // //LightSensor 
-  // if (!lightSensor.isActive() && !SAFETY_MODE) { 
-  //    jsonrobot.emitRobotState(STATE, EMERGENCY_STOP, "warehouse is tilted");
-  // }
+  //LightSensor 
+  if (!lightSensor.isActive() && !SAFETY_MODE) { 
+     jsonrobot.emitRobotState("STATE", "EMERGENCY_STOP", "warehouse is tilted");
+  }
 
   //EmergencyStop
   if (emergencyButton.isEmergencyStopPressed() && !SAFETY_MODE && !emergencyButton.isResetPressed()) { 
