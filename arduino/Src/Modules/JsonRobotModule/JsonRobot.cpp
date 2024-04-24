@@ -1,8 +1,9 @@
 #include "../../../Vendor/ArduinoJson-v7.0.4.h"
 #include "../../Enum/RobotStateEnum.h"
 #include "../../Enum/LabelEnum.h"
+#include "JsonRobot.h"
 
-void EmitRobotState(LabelEnum label, RobotStateEnum state){
+void JsonRobot::emitRobotState(LabelEnum label, RobotStateEnum state, String reason){
 // Create a DynamicJsonDocument
     DynamicJsonDocument doc(128); // Adjust the size as per your data
 
@@ -12,7 +13,7 @@ void EmitRobotState(LabelEnum label, RobotStateEnum state){
     // Create an object for the data
     JsonObject data = doc.createNestedObject("data");
     data["state"] = state;
-    data["reason"] = state == EMERGENCY_STOP ? "Emergency stop is pressed!" : "";
+    data["reason"] = reason;
 
     // Serialize the JSON document to a string
     String jsonString;
