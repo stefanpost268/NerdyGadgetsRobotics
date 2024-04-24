@@ -2,7 +2,8 @@ package objects;
 
 import visualComponents.WarehouseMap;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
 
 public class GridProduct {
     private int width = 25;

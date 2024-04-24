@@ -16,7 +16,7 @@ public class ConfigReader {
             }
             prop.load(inputStream);
 
-            //giving indication if a attribute does not exist because it cost me 2 hours to figure out that i searched the wrong name
+            //giving indication if a attribute does not exist
             if (prop.getProperty(attribute) == null) {
                 System.out.println("could not find a attribute with the name: " + attribute);
             }
