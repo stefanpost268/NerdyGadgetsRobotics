@@ -7,6 +7,9 @@ int bdirectionPin = 13;
 int bpwmPin = 11;
 int bbrakePin = 8;
 
+float speedy = 0.50;
+float speedx = 0.75;
+
 void setup()
 {
     // define pins
@@ -18,24 +21,28 @@ void setup()
     pinMode(bpwmPin, OUTPUT);
     pinMode(bbrakePin, OUTPUT);
 
-    pinMode(A4, INPUT);
-    pinMode(A5, INPUT);
+    pinMode(A2, INPUT);
+    pinMode(A3, INPUT);
 }
 
 void loop()
 {
-    int x = analogRead(A4);
-    int y = analogRead(A5);
+    int x = analogRead(A2);
+    int y = analogRead(A3);
     x = map(x, 0, 1023, -255, 255);
     y = map(y, 0, 1023, -255, 255);
 
     switch (x >= 0) {
         case true:
+            digitalWrite(bbrakePin, LOW);
             left(x);
             break;
         case false:
+            digitalWrite(bbrakePin, LOW);
             right(x);
             break;
+        default:
+          digitalWrite(bbrakePin, HIGH);    
     }
 
     switch (y >= 0) {
@@ -54,17 +61,17 @@ void loop()
 
 void left(int x) {
     digitalWrite(adirectionPin, HIGH);
-    analogWrite(apwmPin, x);
+    analogWrite(apwmPin, x*speedx);
 }
 
 void right(int x) {
     digitalWrite(adirectionPin, LOW);
-    analogWrite(apwmPin, abs(x));
+    analogWrite(apwmPin, abs(x)*speedx);
 }
 
 void up(int y) {
     digitalWrite(bdirectionPin, HIGH);
-    analogWrite(bpwmPin, y);
+    analogWrite(bpwmPin, y*speedy);
 }
 
 void down(int y) {
