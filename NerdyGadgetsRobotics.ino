@@ -11,14 +11,10 @@ int cencoder1; // Analog encoder
 int cencoder2; // Digital encoder
 
 // joystick pins
-int cyjoystick = A2;
+int cyjoystick = A3;
 
 // IRSensor pin
-int cIRSensor;
-
-// cINsensor pin
-int cINSensor1;
-int cINSensor2;
+int cIRSensor = A2;
 
 // variables
 int y;
@@ -37,9 +33,8 @@ void setup()
     // joystick pin
     pinMode(cyjoystick, INPUT);
 
-    // IRSensor pins
+    // IRSensor pin
     pinMode(cIRSensor, INPUT);
-    pinMode(cINSensor1, INPUT);
 
     // Initialize I2C communications as Master
     Wire.begin();
@@ -49,34 +44,39 @@ void setup()
 
 void loop()
 {
-    if (analogRead(cIRSensor) < 100) {
-        sendVorkStateToSlave(vorkOpen);
-    }
+    // send vork state to slave
+    sendVorkStateToSlave(vorkOpen);
 
     // read joystick values
     y = analogRead(cyjoystick);
     y = map(y, 0, 1023, -254, 255);
 
-    // read IR & IN sensors
+    // read IR sensor value
     IR1 = analogRead(cIRSensor);
-
+    
     // initialize vork movement
-    driveVork(y);
+    driveVork(y);    
 }
 
 void vorkForward(int y)
-{
-    digitalWrite(cdirectionPin, HIGH);
-    analogWrite(cpwmPin, y);
-}
-
-void vorkBackward(int y)
 {
     digitalWrite(cdirectionPin, LOW);
     analogWrite(cpwmPin, abs(y));
 }
 
+void vorkBackward(int y)
+{
+    digitalWrite(cdirectionPin, HIGH);
+    analogWrite(cpwmPin, y);
+}
+
 void sendVorkStateToSlave(bool b) {
+  if (analogRead(cIRSensor) > 380) {
+    b = true;
+  } else {
+    b = false;
+  }
+  
   Wire.beginTransmission(SLAVE_ADDRESS);    // Start communication with slave
   Wire.write(b);                            // Send the command to the slave
   Wire.endTransmission();                   // End transmission
@@ -86,12 +86,12 @@ void sendVorkStateToSlave(bool b) {
 }
 
 void driveVork(int y) {
-    if (y > 50)
+    if (y < -50 && IR1 > 140)
     {
         digitalWrite(cbrakePin, LOW);
         vorkForward(y);
     }
-    else if (y < -50)
+    else if (y > 50  && IR1 < 390)
     {
         digitalWrite(cbrakePin, LOW);
         vorkBackward(y);
