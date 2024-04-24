@@ -59,22 +59,22 @@ void loop()
     }
 }
 
-void left(int x) {
+void up(int x) {
     digitalWrite(adirectionPin, HIGH);
     analogWrite(apwmPin, x*speedx);
 }
 
-void right(int x) {
+void down(int x) {
     digitalWrite(adirectionPin, LOW);
     analogWrite(apwmPin, abs(x)*speedx);
 }
 
-void up(int y) {
+void right(int y) {
     digitalWrite(bdirectionPin, HIGH);
     analogWrite(bpwmPin, y*speedy);
 }
 
-void down(int y) {
+void left(int y) {
     digitalWrite(bdirectionPin, LOW);
     analogWrite(bpwmPin, abs(y));
 }
