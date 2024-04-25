@@ -9,9 +9,9 @@ EmergencyButton::EmergencyButton(int emergencyStopPin, int resetPin ): resetPin(
 }
 
 bool EmergencyButton::isEmergencyStopPressed() {
-  return digitalRead(this->emergencyStopPin) == HIGH;
+  return digitalRead(this->emergencyStopPin) == LOW;
 }
 
 bool EmergencyButton::isResetPressed(){
-  return digitalRead(this->resetPin) == HIGH;
+  return digitalRead(this->resetPin) == LOW;
 }

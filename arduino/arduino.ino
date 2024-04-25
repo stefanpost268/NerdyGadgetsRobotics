@@ -23,6 +23,7 @@ void loop() {
   //LightSensor 
   if (!lightSensor.isActive() && !SAFETY_MODE) { 
      jsonrobot.emitRobotState("STATE", "EMERGENCY_STOP", "warehouse is tilted");
+     SAFETY_MODE = true;
   }
 
   //EmergencyStop
@@ -30,15 +31,14 @@ void loop() {
     jsonrobot.emitRobotState("STATE", "EMERGENCY_STOP", "Emergency button was pressed");
     SAFETY_MODE = true;
   }
+
   //reset
   if(SAFETY_MODE) {
     if (!emergencyButton.isEmergencyStopPressed() && emergencyButton.isResetPressed()) {
       jsonrobot.emitRobotState("STATE", "MANUAL_MODE", "Reset button was pressed");
         SAFETY_MODE = false;
     }
-    return;
   }
-
 }
 
 
