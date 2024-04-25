@@ -1,4 +1,6 @@
 #include "Src/Modules/LightSensorModule/LightSensor.h"
+#include <Wire.h>
+#define SLAVE_ADDRESS 9 // Address of this Arduino
 
 LightSensor lightSensor = LightSensor(2);
 bool safetyMode = false;
@@ -14,6 +16,8 @@ int bbrakePin = 8;
 float speedy = 0.50;
 float speedx = 0.75;
 
+bool command;
+
 void setup()
 {
     // define pins
@@ -28,61 +32,67 @@ void setup()
     pinMode(A2, INPUT);
     pinMode(A3, INPUT);
 
+    Wire.begin(SLAVE_ADDRESS); // Initialize I2C communication with address
+    Wire.onReceive(receiveEvent); // Set up a function to handle received data
+
     Serial.begin(9600);
 }
 
 void loop()
 {
-
-  
-    int x = analogRead(A2);
-    int y = analogRead(A3);
+    int x = analogRead(A3);
+    int y = analogRead(A2);
     x = map(x, 0, 1023, -255, 255);
     y = map(y, 0, 1023, -255, 255);
 
     switch (x >= 0) {
         case true:
             digitalWrite(bbrakePin, LOW);
-            left(x);
-            break;
+            left(x);           
+          break;
         case false:
             digitalWrite(bbrakePin, LOW);
             right(x);
-            break;
-        default:
-          digitalWrite(bbrakePin, HIGH);    
+          break;
     }
 
     switch (y >= 0) {
         case true:
-          digitalWrite(abrakePin, LOW);
+          digitalWrite(bbrakePin, LOW);
           up(y);
           break;
         case false:
-          digitalWrite(abrakePin, LOW);
+          digitalWrite(bbrakePin, LOW);
           down(y);
           break;
-        default:
-          digitalWrite(abrakePin, HIGH);
     }
 }
 
-void up(int x) {
-    digitalWrite(adirectionPin, HIGH);
+void left(int x) {
+    digitalWrite(adirectionPin, LOW);
     analogWrite(apwmPin, x*speedx);
 }
 
-void down(int x) {
-    digitalWrite(adirectionPin, LOW);
+void right(int x) {
+    digitalWrite(adirectionPin, HIGH);
     analogWrite(apwmPin, abs(x)*speedx);
 }
 
-void right(int y) {
+void up(int y) {
     digitalWrite(bdirectionPin, HIGH);
     analogWrite(bpwmPin, y*speedy);
 }
 
-void left(int y) {
+void down(int y) {
     digitalWrite(bdirectionPin, LOW);
     analogWrite(bpwmPin, abs(y));
+}
+
+void receiveEvent(bool numBytes) {
+  while (Wire.available() > 0) {
+    bool command = Wire.read(); // Read the received command
+
+    Serial.print("Received command: ");
+    Serial.println(command);
+  }
 }
