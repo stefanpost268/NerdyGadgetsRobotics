@@ -50,7 +50,7 @@ public class DatabaseConnector {
                 "JOIN orders o on o.OrderID = l.OrderID \n" +
                 "WHERE o.WachtrijStatus Not Like 'Done'\n" +
                 "GROUP BY l.orderID\n" +
-                "ORDER BY l.OrderLineID;";
+                "ORDER BY o.WachtrijStatus, l.OrderID;";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             ResultSet resultSet = statement.executeQuery();
@@ -75,7 +75,7 @@ public class DatabaseConnector {
         String query = "SELECT l.StockItemID, l.Description, l.quantity\n" +
                 "FROM orderlines l\n" +
                 "JOIN orders o on o.OrderID = l.OrderID \n" +
-                "WHERE o.WachtrijStatus Not Like 'Done'\n" +
+                "WHERE o.WachtrijStatus = 'In progress'\n" +
                 "ORDER BY l.OrderLineID;";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
