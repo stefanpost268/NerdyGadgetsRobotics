@@ -16,6 +16,9 @@ int bbrakePin = 8;
 float speedy = 0.50;
 float speedx = 0.75;
 
+const int xas = A3;
+const int yas = A2;
+
 bool command;
 
 void setup()
@@ -40,31 +43,44 @@ void setup()
 
 void loop()
 {
-    int x = analogRead(A3);
-    int y = analogRead(A2);
+    int x = analogRead(xas);
+    int y = analogRead(yas);
     x = map(x, 0, 1023, -255, 255);
     y = map(y, 0, 1023, -255, 255);
 
-    switch (x >= 0) {
-        case true:
-            digitalWrite(bbrakePin, LOW);
-            left(x);           
-          break;
-        case false:
-            digitalWrite(bbrakePin, LOW);
-            right(x);
-          break;
+    if(safetyMode) {
+    return;
+  }
+
+  if (!lightSensor.isActive()) {
+    lightSensor.emitWarehouseTiltedStatus();
+    safetyMode = true;
+  }
+
+// controls for x axes
+    if (x > 50 && command ==1 && safetyMode == false) {
+        digitalWrite(bbrakePin, LOW);
+        left(x);
+    }
+    else if (x < -50 && command ==1 && safetyMode == false) {
+        digitalWrite(bbrakePin, LOW);
+        right(x);
+    }
+    else {
+        digitalWrite(bbrakePin, HIGH);    
     }
 
-    switch (y >= 0) {
-        case true:
-          digitalWrite(bbrakePin, LOW);
-          up(y);
-          break;
-        case false:
-          digitalWrite(bbrakePin, LOW);
-          down(y);
-          break;
+    // controls for y axes
+    if (y > 50 && command ==1 && safetyMode == false) {
+        digitalWrite(abrakePin, LOW);
+        up(y);
+    }
+    else if(y < -50 && command ==1 && safetyMode == false) {
+        digitalWrite(abrakePin, LOW);
+        down(y);
+    }
+    else {
+        digitalWrite(abrakePin, HIGH);
     }
 }
 
@@ -89,10 +105,12 @@ void down(int y) {
 }
 
 void receiveEvent(bool numBytes) {
-  while (Wire.available() > 0) {
+  if (Wire.available() > 0) {
     bool command = Wire.read(); // Read the received command
 
     Serial.print("Received command: ");
     Serial.println(command);
+  }else{
+    safetyMode = true;
   }
 }
