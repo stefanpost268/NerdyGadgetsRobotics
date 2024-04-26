@@ -1,5 +1,5 @@
-#ifndef LIGHSENSOR_H
-#define LIGHSENSOR_H
+#ifndef LIGHTSENSOR_H
+#define LIGHTSENSOR_H
 
 class LightSensor {
     public:
