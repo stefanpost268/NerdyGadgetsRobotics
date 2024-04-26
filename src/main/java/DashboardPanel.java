@@ -3,77 +3,74 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 public class DashboardPanel extends JPanel {
-
-    private DefaultTableModel wachtrijTableModel;
-    private DefaultTableModel verwerkingTableModel;
-    public DashboardPanel(List<Object[]> wachtrijData, List<Object[]> verwerkingData) {
+    private DefaultTableModel queueTableModel;
+    private DefaultTableModel processingTableModel;
+    public DashboardPanel(List<Object[]> queueData, List<Object[]> processingData) {
         setBackground(Color.WHITE);
         setLayout(null);
 
 
-        // Containers maken
-        JPanel wachtrijContainer = new JPanel();
-        wachtrijContainer.setBackground(Color.LIGHT_GRAY);
-        wachtrijContainer.setBounds(670, 10, 320, 350);
-        wachtrijContainer.setLayout(new FlowLayout(FlowLayout.LEFT)); // align left
-        add(wachtrijContainer);
+        // create containers
+        JPanel queueContainer = new JPanel();
+        queueContainer.setBackground(Color.LIGHT_GRAY);
+        queueContainer.setBounds(670, 10, 320, 350);
+        queueContainer.setLayout(new FlowLayout(FlowLayout.LEFT)); // align left
+        add(queueContainer);
 
-        JPanel verwerkingContainer = new JPanel();
-        verwerkingContainer.setBackground(Color.LIGHT_GRAY);
-        verwerkingContainer.setBounds(670, 370, 320, 270);
-        verwerkingContainer.setLayout(new FlowLayout(FlowLayout.LEFT)); // align left
-        add(verwerkingContainer);
+        JPanel processingContainer = new JPanel();
+        processingContainer.setBackground(Color.LIGHT_GRAY);
+        processingContainer.setBounds(670, 370, 320, 270);
+        processingContainer.setLayout(new FlowLayout(FlowLayout.LEFT)); // align left
+        add(processingContainer);
 
 
 
         // Container Titels
-        JLabel wachtrijLabel = new JLabel("Bestelling wachtrij");
-        wachtrijContainer.add(wachtrijLabel);
-        JLabel verwerkingLabel = new JLabel("Producten verwerking in Bestelling");
-        verwerkingContainer.add(verwerkingLabel);
+        JLabel queueLabel = new JLabel("Bestelling queue");
+        queueContainer.add(queueLabel);
+        JLabel processingLabel = new JLabel("Producten processing in Bestelling");
+        processingContainer.add(processingLabel);
 
 
-        // tabellen opzetten / tabel model
-        wachtrijTableModel = new DefaultTableModel(
+        // Tablle models
+        queueTableModel = new DefaultTableModel(
                 new Object[]{"Bestel Nr", "Product aantal", "Status","Actie"}, 0
         );
 
-        verwerkingTableModel = new DefaultTableModel(
+        processingTableModel = new DefaultTableModel(
                 new Object[]{"Product ID", "Product naam", "Aantal","Locatie"}, 0
         );
 
 
-        // tabellen aanmaken
-        JTable wachtrijTable = new JTable(wachtrijTableModel);
-        wachtrijTable.setDefaultEditor(Object.class, null); // read-only
-        JScrollPane wachtrijScrollPane = new JScrollPane(wachtrijTable); // Scroll toevoegen aan tabel als nodig
-        wachtrijScrollPane.setPreferredSize(new Dimension(300, 310));
-        wachtrijTable.getTableHeader().setReorderingAllowed(false); // Stop user coloms slepen
-        wachtrijContainer.add(wachtrijScrollPane);
+        // Create tables
+        JTable queueTable = new JTable(queueTableModel);
+        queueTable.setDefaultEditor(Object.class, null); // read-only
+        JScrollPane queueScrollPane = new JScrollPane(queueTable); // Add scroll to table
+        queueScrollPane.setPreferredSize(new Dimension(300, 310));
+        queueTable.getTableHeader().setReorderingAllowed(false); // Stop user column swipe
+        queueContainer.add(queueScrollPane);
 
-        JTable verwerkingTable = new JTable(verwerkingTableModel);
-        verwerkingTable.setDefaultEditor(Object.class, null); // read-only
-        JScrollPane verwerkingScrollPane = new JScrollPane(verwerkingTable); // Scroll toevoegen aan tabel als nodig
-        verwerkingScrollPane.setPreferredSize(new Dimension(300, 230));
-        verwerkingTable.getTableHeader().setReorderingAllowed(false); // Stop user coloms slepen
-        verwerkingContainer.add(verwerkingScrollPane);
+        JTable processingTable = new JTable(processingTableModel);
+        processingTable.setDefaultEditor(Object.class, null); // read-only
+        JScrollPane processingScrollPane = new JScrollPane(processingTable); // Add scroll to table
+        processingScrollPane.setPreferredSize(new Dimension(300, 230));
+        processingTable.getTableHeader().setReorderingAllowed(false); // Stop user column swipe
+        processingContainer.add(processingScrollPane);
 
 
-        // Voer data in table
-        vulWachtrijTable(wachtrijData);
-        vulVerwerkingTable(verwerkingData);
+        // feed data in tables
+        fillQueueTable(queueData);
+        fillProcessingTable(processingData);
 
     }
-
-    private void vulWachtrijTable(List<Object[]> data) {
+    private void fillQueueTable(List<Object[]> data) {
         for (Object[] row : data) {
-            wachtrijTableModel.addRow(row);
+            queueTableModel.addRow(row);
         }
     }
-
-    private void vulVerwerkingTable(List<Object[]> data) {
+    private void fillProcessingTable(List<Object[]> data) {
         for (Object[] row : data) {
-            verwerkingTableModel.addRow(row);
+            processingTableModel.addRow(row);
         }
     }
 }

@@ -7,27 +7,27 @@ public class Main {
         DatabaseConnector databaseConnector = new DatabaseConnector();
         databaseConnector.connect(); // Connect to the database
 
-        List<Object[]> wachtrijData = databaseConnector.queryWachtrij(); // Retrieve data for the first table
-        List<Object[]> verwerkingData = databaseConnector.queryVerwerking(); // Retrieve data for the second table
+        List<Object[]> queueData = databaseConnector.queryQueue(); // Retrieve data for the first table
+        List<Object[]> processingData = databaseConnector.queryProcessing(); // Retrieve data for the second table
 
-        // sluit database connection af als applicatie afsluit
+        // close database connection when application closes
         Runtime.getRuntime().addShutdownHook(new Thread(databaseConnector::close));
 
 
 
         SwingUtilities.invokeLater(() -> {
-            createAndShowGUI(wachtrijData, verwerkingData);
+            createAndShowGUI(queueData, processingData);
         });
     }
 
-    private static void createAndShowGUI(List<Object[]> wachtrijData, List<Object[]> verwerkingData) {
+    private static void createAndShowGUI(List<Object[]> queueData, List<Object[]> processingData) {
         JFrame frame = new JFrame("Dashboard");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1010, 710);
         frame.setLayout(new BorderLayout());
 
         // Dashboard panel
-        JPanel dashboardPanel = new DashboardPanel(wachtrijData, verwerkingData); // Pass the data to DashboardPanel constructor
+        JPanel dashboardPanel = new DashboardPanel(queueData, processingData); // Pass the data to DashboardPanel constructor
         frame.add(dashboardPanel, BorderLayout.CENTER);
 
         frame.setVisible(true);

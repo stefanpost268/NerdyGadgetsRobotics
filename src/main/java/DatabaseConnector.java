@@ -43,8 +43,8 @@ public class DatabaseConnector {
         }
     }
 
-    public List<Object[]> queryWachtrij() {
-        List<Object[]> wachtrij = new ArrayList<>();
+    public List<Object[]> queryQueue() {
+        List<Object[]> queue = new ArrayList<>();
         String query = "SELECT l.OrderID, COUNT(*), o.WachtrijStatus\n" +
                 "FROM orderlines l\n" +
                 "JOIN orders o on o.OrderID = l.OrderID \n" +
@@ -58,8 +58,8 @@ public class DatabaseConnector {
             while (resultSet.next()) {
                 int orderID = resultSet.getInt("OrderID");
                 int aantal = resultSet.getInt("COUNT(*)");
-                String wachtrijStatus = resultSet.getString("WachtrijStatus");
-                wachtrij.add(new Object[]{orderID, aantal, wachtrijStatus});
+                String queueStatus = resultSet.getString("WachtrijStatus");
+                queue.add(new Object[]{orderID, aantal, queueStatus});
             }
 
         } catch (SQLException e) {
@@ -67,11 +67,11 @@ public class DatabaseConnector {
             e.printStackTrace();
         }
 
-        return wachtrij;
+        return queue;
     }
 
-    public List<Object[]> queryVerwerking() {
-        List<Object[]> verwerking = new ArrayList<>();
+    public List<Object[]> queryProcessing() {
+        List<Object[]> processing = new ArrayList<>();
         String query = "SELECT l.StockItemID, l.Description, l.quantity\n" +
                 "FROM orderlines l\n" +
                 "JOIN orders o on o.OrderID = l.OrderID \n" +
@@ -85,7 +85,7 @@ public class DatabaseConnector {
                 int stockItemID = resultSet.getInt("StockItemID");
                 String description = resultSet.getString("Description");
                 int aantal = resultSet.getInt("Quantity");
-                verwerking.add(new Object[]{stockItemID, description, aantal});
+                processing.add(new Object[]{stockItemID, description, aantal});
             }
 
         } catch (SQLException e) {
@@ -93,6 +93,6 @@ public class DatabaseConnector {
             e.printStackTrace();
         }
 
-        return verwerking;
+        return processing;
     }
 }
