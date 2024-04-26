@@ -3,13 +3,6 @@
 
 #define SLAVE_ADDRESS 9 // Address of the slave Arduino
 
-// motor pins
-int cdirectionPin = 12;
-int cpwmPin = 3;
-int cbrakePin = 9;
-int cencoder1; // Analog encoder
-int cencoder2; // Digital encoder
-
 // joystick pins
 int cyjoystick = A3;
 
@@ -23,13 +16,6 @@ bool vorkOpen = false;
 
 void setup()
 {
-    // motor pins
-    pinMode(cdirectionPin, OUTPUT);
-    pinMode(cpwmPin, OUTPUT);
-    pinMode(cbrakePin, OUTPUT);
-    pinMode(cencoder1, INPUT);
-    pinMode(cencoder2, INPUT);
-
     // joystick pin
     pinMode(cyjoystick, INPUT);
 
@@ -58,18 +44,6 @@ void loop()
     driveVork(y);    
 }
 
-void vorkForward(int y)
-{
-    digitalWrite(cdirectionPin, LOW);
-    analogWrite(cpwmPin, abs(y));
-}
-
-void vorkBackward(int y)
-{
-    digitalWrite(cdirectionPin, HIGH);
-    analogWrite(cpwmPin, y);
-}
-
 void sendVorkStateToSlave(bool b) {
   if (analogRead(cIRSensor) > 380) {
     b = true;
@@ -83,20 +57,4 @@ void sendVorkStateToSlave(bool b) {
 
   Serial.print("Vork open: ");
   Serial.println(b);
-}
-
-void driveVork(int y) {
-    if (y < -50 && IR1 > 140)
-    {
-        digitalWrite(cbrakePin, LOW);
-        vorkForward(y);
-    }
-    else if (y > 50  && IR1 < 390)
-    {
-        digitalWrite(cbrakePin, LOW);
-        vorkBackward(y);
-    }
-    else {
-        digitalWrite(cbrakePin, HIGH);
-    }
 }
