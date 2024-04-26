@@ -69,7 +69,7 @@ public class DatabaseConnector {
 
         return queue;
     }
-
+    //
     public List<Object[]> queryProcessing() {
         List<Object[]> processing = new ArrayList<>();
         String query = "SELECT l.StockItemID, l.Description, l.quantity\n" +
