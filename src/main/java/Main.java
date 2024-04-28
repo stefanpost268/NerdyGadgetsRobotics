@@ -3,11 +3,9 @@ import services.MysqlConnection;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
-import java.awt.*;
+import java.awt.CardLayout;
 
 public class Main extends JFrame {
-    private MysqlConnection mysqlConnection = new MysqlConnection();
-
     public static void main(String[] args) {
         new Main().gui();
     }
@@ -22,11 +20,10 @@ public class Main extends JFrame {
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.setUI(new BasicTabbedPaneUI());
         tabbedPane.addTab("Dashboard", new DashboardPage());
-        tabbedPane.addTab("Vooraad", new ProductPage(this.mysqlConnection));
+        tabbedPane.addTab("Vooraad", new ProductPage());
         tabbedPane.setBorder(null);
 
         add(tabbedPane);
         setVisible(true);
-
     }
 }
