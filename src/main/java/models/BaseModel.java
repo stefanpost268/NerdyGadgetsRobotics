@@ -11,6 +11,7 @@ import interfaces.Model;
 
 public abstract class BaseModel<T> implements Model<T> {
     private static MysqlConnection MYSQL;
+    protected String rawSql = "";
 
     public BaseModel() {
         if(MYSQL == null) {
@@ -77,5 +78,30 @@ public abstract class BaseModel<T> implements Model<T> {
         }
 
         return tableData;
+    }
+
+    /**
+     * Search specific column on relative records.
+     */
+    public T like(String rowName, String search) {
+        this.rawSql += " WHERE " + rowName + " LIKE '%" + search + "%'";
+        return (T) this;
+    }
+
+    /**
+     * Get records from database
+     */
+    public List<T> get() {
+        if(this.rawSql.isEmpty()) {
+            this.rawSql = "SELECT * FROM " + this.getTableName();
+        } else {
+            this.rawSql = "SELECT * FROM " + this.getTableName() + this.rawSql;
+        }
+
+        System.out.println(this.rawSql);
+
+        List<T> data = this.executeQuery(this.rawSql);
+        this.rawSql = "";
+        return data;
     }
 }

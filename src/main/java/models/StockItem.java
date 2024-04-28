@@ -33,9 +33,4 @@ public class StockItem extends BaseModel<StockItem> {
     public StockItem createInstance() {
         return new StockItem();
     }
-
-    public List<StockItem> get() {
-        return this.executeQuery("SELECT * FROM " + this.getTableName());
-    }
-
 }

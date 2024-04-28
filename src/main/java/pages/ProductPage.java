@@ -5,6 +5,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import models.StockItem;
 
@@ -40,8 +41,16 @@ public class ProductPage extends JPanel implements ActionListener {
     }
 
     private void search() {
+        List<StockItem> stockItems;
+        System.out.println(this.searchField.getText().isEmpty());
+        if(this.searchField.getText().isEmpty()) {
+            stockItems = this.stockItem.get();
+        } else {
+            stockItems = this.stockItem.like("StockItemName", this.searchField.getText()).get();
+        }
+
         DefaultTableModel model = new DefaultTableModel(
-                this.stockItem.toTableData(stockItem.get()),
+                this.stockItem.toTableData(stockItems),
                 this.stockItem.fillable()
         );
 
