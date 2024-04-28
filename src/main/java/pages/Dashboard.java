@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 import java.awt.*;
 import helpers.ConfigReader;
 
+@Deprecated // use DashboardPage instead
 public class Dashboard extends JFrame {
     public Dashboard() throws HeadlessException {
         setTitle("Dashboard");

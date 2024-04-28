@@ -19,6 +19,7 @@ public class Main extends JFrame{
 
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.setUI(new BasicTabbedPaneUI());
+        tabbedPane.addTab("Dashboard", new DashboardPage());
         tabbedPane.addTab("Vooraad", new ProductPage());
         tabbedPane.setBorder(null);
 
