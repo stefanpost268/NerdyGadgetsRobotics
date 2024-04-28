@@ -2,6 +2,7 @@ package models;
 
 import services.MysqlConnection;
 import java.lang.reflect.Field;
+import java.sql.PreparedStatement;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.util.List;
@@ -12,6 +13,7 @@ import interfaces.Model;
 public abstract class BaseModel<T> implements Model<T> {
     private static MysqlConnection MYSQL;
     protected String rawSql = "";
+    private String searchValue = null;
 
     public BaseModel() {
         if(MYSQL == null) {
@@ -38,8 +40,12 @@ public abstract class BaseModel<T> implements Model<T> {
         List<T> results = new ArrayList<>();
 
         try {
-            Statement statement = MYSQL.getConnection().createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
+            PreparedStatement statement = MYSQL.getConnection().prepareStatement(query);
+            if(this.searchValue != null) {
+                statement.setString(1, this.searchValue);
+            }
+
+            ResultSet resultSet = statement.executeQuery();
             ResultSetMetaData metaData = resultSet.getMetaData();
             int columnCount = metaData.getColumnCount();
             while (resultSet.next()) {
@@ -84,7 +90,8 @@ public abstract class BaseModel<T> implements Model<T> {
      * Search specific column on relative records.
      */
     public T like(String rowName, String search) {
-        this.rawSql += " WHERE " + rowName + " LIKE '%" + search + "%'";
+        this.rawSql += " WHERE " + rowName + " LIKE ?";
+        this.searchValue = "%" + search + "%";
         return (T) this;
     }
 
@@ -102,6 +109,7 @@ public abstract class BaseModel<T> implements Model<T> {
 
         List<T> data = this.executeQuery(this.rawSql);
         this.rawSql = "";
+        this.searchValue = null;
         return data;
     }
 }
