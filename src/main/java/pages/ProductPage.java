@@ -24,6 +24,7 @@ public class ProductPage extends JPanel implements ActionListener {
         searchPanel.add(this.searchButton);
         add(searchPanel, BorderLayout.PAGE_START);
         this.searchButton.addActionListener(this);
+        this.searchField.addActionListener(this);
 
         renderTable();
     }
@@ -42,7 +43,6 @@ public class ProductPage extends JPanel implements ActionListener {
 
     private void search() {
         List<StockItem> stockItems;
-        System.out.println(this.searchField.getText().isEmpty());
         if(this.searchField.getText().isEmpty()) {
             stockItems = this.stockItem.get();
         } else {
@@ -65,7 +65,7 @@ public class ProductPage extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource().equals(this.searchButton)) {
+        if(e.getSource().equals(this.searchButton) || e.getSource().equals(this.searchField)) {
             search();
         }
     }

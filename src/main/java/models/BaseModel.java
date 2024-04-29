@@ -105,8 +105,6 @@ public abstract class BaseModel<T> implements Model<T> {
             this.rawSql = "SELECT * FROM " + this.getTableName() + this.rawSql;
         }
 
-        System.out.println(this.rawSql);
-
         List<T> data = this.executeQuery(this.rawSql);
         this.rawSql = "";
         this.searchValue = null;
