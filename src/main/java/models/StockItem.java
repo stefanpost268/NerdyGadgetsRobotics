@@ -1,7 +1,5 @@
 package models;
 
-import java.util.List;
-
 public class StockItem extends BaseModel<StockItem> {
     public Integer StockItemID;
     public String StockItemName;
