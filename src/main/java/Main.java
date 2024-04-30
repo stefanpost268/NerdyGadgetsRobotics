@@ -1,5 +1,4 @@
 import pages.*;
-import services.MysqlConnection;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
@@ -20,7 +19,6 @@ public class Main extends JFrame {
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.setUI(new BasicTabbedPaneUI());
         tabbedPane.addTab("Dashboard", new DashboardPage());
-        tabbedPane.addTab("Bestellingen", new OrderPage());
         tabbedPane.addTab("Vooraad", new ProductPage());
         tabbedPane.setBorder(null);
 
