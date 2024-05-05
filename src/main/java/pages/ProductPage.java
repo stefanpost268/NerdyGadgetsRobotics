@@ -7,14 +7,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-import models.StockItem;
+import models.StockItemOld;
 
 public class ProductPage extends JPanel implements ActionListener {
 
     private JTextField searchField = new JTextField(20);
     private JButton searchButton = new JButton("Search");
     private JTable table;
-    private StockItem stockItem = new StockItem();
+    private StockItemOld stockItem = new StockItemOld();
 
     public ProductPage() {
         setLayout(new BorderLayout());
@@ -42,7 +42,7 @@ public class ProductPage extends JPanel implements ActionListener {
     }
 
     private void search() {
-        List<StockItem> stockItems;
+        List<StockItemOld> stockItems;
         if(this.searchField.getText().isEmpty()) {
             stockItems = this.stockItem.get();
         } else {
