@@ -1,32 +1,34 @@
 package models;
 
-public class Order extends BaseModel<Order> {
-    public Integer OrderID;
-    public Integer OrderDate;
-    public Integer CustomerID;
-    public Integer ContactPersonID;
-    public Integer SalespersonPersonID;
-    public Integer PickedByPersonID;
 
-    @Override
-    public String[] fillable() {
-        return new String[] {
-            "OrderID",
-            "OrderDate",
-            "CustomerID",
-            "ContactPersonID",
-            "SalespersonPersonID",
-            "PickedByPersonID",
-        };
-    }
+import jakarta.persistence.*;
 
-    @Override
-    public String getTableName() {
-        return "orders";
-    }
+@Entity
+@Table(name = "orders")
+public class Order {
 
-    @Override
-    public Order createInstance() {
-        return new Order();
-    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int OrderID;
+
+    @Column(nullable = false)
+    private int CustomerID;
+
+    @Column(nullable = false)
+    private int SalespersonPersonID;
+
+    @Column(nullable = false)
+    private int ContactPersonID;
+
+    @Column(nullable = false)
+    private int PickedByPersonID;
+
+    @Column(nullable = true)
+    private String Comments;
+
+    @Column(nullable = true)
+    private String DeliveryInstructions;
+
+    @Column(nullable = true)
+    private String InternalComments;
 }
