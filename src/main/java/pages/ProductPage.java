@@ -5,18 +5,18 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
-
-import models.StockItemOld;
+import models.StockItem;
+import repositories.StockItemRepository;
 
 public class ProductPage extends JPanel implements ActionListener {
 
+    private StockItemRepository stockItem;
     private JTextField searchField = new JTextField(20);
     private JButton searchButton = new JButton("Search");
     private JTable table;
-    private StockItemOld stockItem = new StockItemOld();
 
-    public ProductPage() {
+    public ProductPage(StockItemRepository stockItem) {
+        this.stockItem = stockItem;
         setLayout(new BorderLayout());
 
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -42,17 +42,29 @@ public class ProductPage extends JPanel implements ActionListener {
     }
 
     private void search() {
-        List<StockItemOld> stockItems;
+        Iterable<StockItem> stockItems;
         if(this.searchField.getText().isEmpty()) {
-            stockItems = this.stockItem.get();
+            stockItems = this.stockItem.findAll();
         } else {
-            stockItems = this.stockItem.like("StockItemName", this.searchField.getText()).get();
+            stockItems = this.stockItem.findByStockItemNameContaining(this.searchField.getText());
         }
 
-        DefaultTableModel model = new DefaultTableModel(
-                this.stockItem.toTableData(stockItems),
-                this.stockItem.fillable()
-        );
+        Object[][] data = new Object[(int) stockItems.spliterator().estimateSize()][];
+        int i = 0;
+        for(StockItem stockItem : stockItems) {
+            data[i] = stockItem.getFieldValues().toArray();
+            i++;
+        }
+
+        DefaultTableModel model;
+        if (stockItems.iterator().hasNext()) {
+            model = new DefaultTableModel(
+                    data,
+                    stockItems.iterator().next().getFieldNames().toArray()
+            );
+        } else {
+            model = new DefaultTableModel();
+        }
 
         if(this.table == null) {
             this.table = new JTable(model);
