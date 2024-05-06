@@ -12,7 +12,7 @@ import models.StockItem;
 public class ProductPage extends JPanel implements ActionListener {
 
     private JTextField searchField = new JTextField(20);
-    private JButton searchButton = new JButton("Search");
+    private JButton searchButton = new JButton("Zoeken");
     private JTable table;
     private StockItem stockItem = new StockItem();
 
