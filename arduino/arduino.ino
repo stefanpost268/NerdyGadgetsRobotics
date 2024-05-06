@@ -16,6 +16,7 @@ JsonRobot jsonrobot = JsonRobot();
 InductiveSensor inductiveSensor1 = InductiveSensor(4);
 InductiveSensor inductiveSensor2 = InductiveSensor(7);
 InductiveSensor inductiveSensor3 = InductiveSensor(6);
+InductiveSensor klikSensor = InductiveSensor(1);
 
 const int sensorPin = A0;
 bool SAFETY_MODE = false;
@@ -103,7 +104,7 @@ void loop()
     }
 
     // controls for y axes
-    if (y > 50 && command ==1 && SAFETY_MODE == false) {
+    if (y > 50 && command ==1 && SAFETY_MODE == false && klikSensor.readInductiveSensor() != 0){
         digitalWrite(abrakePin, LOW);
         up(y);
     }
@@ -114,8 +115,6 @@ void loop()
     else {
         digitalWrite(abrakePin, HIGH);
     }
-
-    Serial.println(inductiveSensor3.readInductiveSensor());
 }
 
 void left(int x) {
