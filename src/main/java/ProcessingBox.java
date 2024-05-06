@@ -20,9 +20,10 @@ public class ProcessingBox extends JPanel {
 
         JTable processingTable = new JTable(processingTableModel);
         processingTable.setDefaultEditor(Object.class, null); // read-only
+        processingTable.getTableHeader().setReorderingAllowed(false); // Stop user column swipe
+
         JScrollPane processingScrollPane = new JScrollPane(processingTable); // Add scroll to table
         processingScrollPane.setPreferredSize(new Dimension(300, 230));
-        processingTable.getTableHeader().setReorderingAllowed(false); // Stop user column swipe
         add(processingScrollPane);
 
         fillProcessingTable(processingData);

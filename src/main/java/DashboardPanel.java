@@ -1,10 +1,13 @@
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
+//import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
-public class DashboardPanel extends JPanel {
+public class DashboardPanel extends JFrame {
     public DashboardPanel(List<Object[]> queueData, List<Object[]> processingData) {
-        setBackground(Color.WHITE);
+        setTitle("Dashboard");
+        setSize(1010, 710);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
 
         QueueBox queueBox = new QueueBox(queueData);
@@ -12,5 +15,7 @@ public class DashboardPanel extends JPanel {
 
         ProcessingBox processingBox = new ProcessingBox(processingData);
         add(processingBox);
+
+        setVisible(true);
     }
 }
