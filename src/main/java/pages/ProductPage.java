@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import models.StockItem;
 import repositories.StockItemRepository;
+import services.Formatter;
 
 public class ProductPage extends JPanel implements ActionListener {
 
@@ -49,17 +50,12 @@ public class ProductPage extends JPanel implements ActionListener {
             stockItems = this.stockItem.findByStockItemNameContaining(this.searchField.getText());
         }
 
-        Object[][] data = new Object[(int) stockItems.spliterator().estimateSize()][];
-        int i = 0;
-        for(StockItem stockItem : stockItems) {
-            data[i] = stockItem.getFieldValues().toArray();
-            i++;
-        }
+        Object[][] data = Formatter.modelListToGenericObject(stockItems);
 
         DefaultTableModel model;
         if (stockItems.iterator().hasNext()) {
             model = new DefaultTableModel(
-                    data,
+                    Formatter.modelListToGenericObject(stockItems),
                     stockItems.iterator().next().getFieldNames().toArray()
             );
         } else {
