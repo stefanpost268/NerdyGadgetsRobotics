@@ -1,12 +1,12 @@
-#ifndef CMOTORCONTROLLER_H
-#define CMOTORCONTROLLER_H
+#ifndef MOTORCONTROLLER_H
+#define MOTORCONTROLLER_H
 
-class cMotorController {
+class MotorController {
 public:
     /**
      * Constructor
     */
-    cMotorController(int cdirectionPin, int cpwmPin, int cbrakePin, int cencoder1, int cencoder2);
+    MotorController(int directionPin, int pwmPin, int brakePin, int encoder1);
 
     /**
      * Function that drives the vork
@@ -14,11 +14,10 @@ public:
     void driveVork(int y, int IR1);
 
 private:
-    int cdirectionPin;
-    int cpwmPin;
-    int cbrakePin;
-    int cencoder1;
-    int cencoder2;
+    int directionPin;
+    int pwmPin;
+    int brakePin;
+    int encoder1;
 
     /**
      * Function that enables the brake
@@ -44,4 +43,4 @@ private:
     void setup();
 };
 
-#endif // cMotorController
+#endif // MotorController

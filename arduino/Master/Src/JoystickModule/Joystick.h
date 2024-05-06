@@ -1,17 +1,17 @@
-#ifndef CJOYSTICK_H
-#define CJOYSTICK_H
+#ifndef JOYSTICK_H
+#define JOYSTICK_H
 
-class cJoystick {
+class Joystick {
 public:
     /**
      * Constructor
     */
-    cJoystick(int cyjoystick);
+    Joystick(int yjoystick);
 
     /**
      * Function that reads the joystick value
     */
-    int readcJoystick();
+    int readJoystick();
 
     /**
      * Function that sets up the joystick
@@ -19,7 +19,7 @@ public:
     void setup();
 
 private:
-    int cyjoystick;
+    int yjoystick;
 };
 
-#endif // CJOYSTICK_H
+#endif // JOYSTICK_H
