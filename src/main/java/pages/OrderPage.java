@@ -2,20 +2,21 @@ package pages;
 
 import javax.swing.*;
 import dialogs.OrderInfoDialog;
-import models.Order;
+import repositories.OrderRepository;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
 public class OrderPage extends JPanel implements ActionListener {
 
+    private OrderRepository orderRepository;
     private JButton orderButton = new JButton("Open order id 1");
-    private List<Order> order = new Order().get();
 
-    public OrderPage() {
-        add(this.orderButton);
+    public OrderPage(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
+
         this.orderButton.addActionListener(this);
+        add(this.orderButton);
     }
 
     @Override

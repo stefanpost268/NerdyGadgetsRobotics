@@ -1,9 +1,7 @@
-import models.StockItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import pages.*;
-import repositories.StockItemRepository;
-
+import repositories.*;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import java.awt.CardLayout;
@@ -12,6 +10,8 @@ public class Main extends JFrame {
 
     @Autowired
     private StockItemRepository stockItemRepository;
+    @Autowired
+    private OrderRepository orderRepository;
 
     public static void main(String[] args) {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
@@ -30,7 +30,7 @@ public class Main extends JFrame {
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.setUI(new BasicTabbedPaneUI());
         tabbedPane.addTab("Dashboard", new DashboardPage());
-        tabbedPane.addTab("Bestellingen", new OrderPage());
+        tabbedPane.addTab("Bestellingen", new OrderPage(this.orderRepository));
         tabbedPane.addTab("Vooraad", new ProductPage(this.stockItemRepository));
         tabbedPane.setBorder(null);
 
