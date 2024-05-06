@@ -1,3 +1,6 @@
+package pages;
+
+import visualComponents.*;
 import javax.swing.*;
 import java.util.List;
 public class DashboardPanel extends JFrame {
