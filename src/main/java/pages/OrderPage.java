@@ -16,8 +16,6 @@ public class OrderPage extends JPanel implements ActionListener {
     public OrderPage() {
         add(this.orderButton);
         this.orderButton.addActionListener(this);
-
-        System.out.println(order.get(5).CustomerID);
     }
 
     @Override

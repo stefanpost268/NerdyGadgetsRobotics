@@ -17,11 +17,6 @@ public class Main extends JFrame {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 
         Main main = context.getBean(Main.class);
-        Iterable<StockItem> stockItems = main.stockItemRepository.findByStockItemName("\"The Gu\" red shirt XML tag t-shirt (Black) 3XL");
-
-        for(StockItem stockItem : stockItems) {
-            System.out.println(stockItem.getStockItemName());
-        }
         main.gui();
     }
 
@@ -36,7 +31,7 @@ public class Main extends JFrame {
         tabbedPane.setUI(new BasicTabbedPaneUI());
         tabbedPane.addTab("Dashboard", new DashboardPage());
         tabbedPane.addTab("Bestellingen", new OrderPage());
-        tabbedPane.addTab("Vooraad", new ProductPage());
+        tabbedPane.addTab("Vooraad", new ProductPage(this.stockItemRepository));
         tabbedPane.setBorder(null);
 
         add(tabbedPane);
