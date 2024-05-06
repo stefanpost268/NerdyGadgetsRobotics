@@ -11,7 +11,7 @@ public:
     /**
      * Function that drives the vork
     */
-    void driveVork(int y, int IR1);
+    void driveVork(int y, int IRSensorWaarde);
 
 private:
     int directionPin;

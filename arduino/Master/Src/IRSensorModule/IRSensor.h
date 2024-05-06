@@ -6,7 +6,7 @@ public:
     /**
      * Constructor
     */
-    IRSensor(int cIRSensor);
+    IRSensor(int IRSensorPin);
 
     /**
      * Function that reads the IR sensor
@@ -14,7 +14,7 @@ public:
     int readIRSensor();
 
 private:
-    int cIRSensor;
+    int IRSensorPin;
     
     /**
      * Function that sets up the IR sensor

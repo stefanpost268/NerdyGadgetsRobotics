@@ -1,15 +1,15 @@
 #include <Arduino.h>
 #include "IRSensor.h"
 
-IRSensor::IRSensor(int cIRSensor) {
-    this->cIRSensor = cIRSensor;
+IRSensor::IRSensor(int IRSensorPin) {
+    this->IRSensorPin = IRSensorPin;
     setup();
 }
 
 void IRSensor::setup() {
-    pinMode(cIRSensor, INPUT);
+    pinMode(IRSensorPin, INPUT);
 }
 
 int IRSensor::readIRSensor() {
-    return analogRead(cIRSensor);
+    return analogRead(IRSensorPin);
 }

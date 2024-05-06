@@ -19,12 +19,5 @@ bool Communication::readVorkState(IRSensor sensor) {
 void Communication::sendVorkStateToWorker(IRSensor sensor) {
     Wire.beginTransmission(workerAdress);
     Wire.write(readVorkState(sensor));                            
-    Wire.endTransmission();                   
-
-    /**
-     * For debugging purposes
-     * Remove this when done!
-    */
-    Serial.print("Vork open: ");
-    Serial.println(readVorkState(sensor));
+    Wire.endTransmission();
 }
