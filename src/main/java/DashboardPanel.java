@@ -1,6 +1,4 @@
 import javax.swing.*;
-//import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 import java.util.List;
 public class DashboardPanel extends JFrame {
     public DashboardPanel(List<Object[]> queueData, List<Object[]> processingData) {
