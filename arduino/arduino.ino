@@ -7,11 +7,15 @@
 #include "Src/Enum/RobotStateEnum.h"
 #include "Src/Enum/LabelEnum.h"
 #include "Src/Modules/EmergencyButtonModule/EmergencyButton.h"
+#include "Src/Modules/InductiveSensorModule/InductiveSensor.h"
 
 // lightSensor
 LightSensor lightSensor = LightSensor(2);
 EmergencyButton emergencyButton = EmergencyButton(5, 10);
 JsonRobot jsonrobot = JsonRobot();
+InductiveSensor inductiveSensor1 = InductiveSensor(4);
+InductiveSensor inductiveSensor2 = InductiveSensor(7);
+InductiveSensor inductiveSensor3 = InductiveSensor(6);
 
 const int sensorPin = A0;
 bool SAFETY_MODE = false;
@@ -77,8 +81,8 @@ void loop()
 
     int x = analogRead(xas);
     int y = analogRead(yas);
-    x = map(x, 0, 1023, -255, 255);
-    y = map(y, 0, 1023, -255, 255);
+    x = map(x, 0, 1023, -254, 255);
+    y = map(y, 0, 1023, -254, 255);
 
     if (!lightSensor.isActive()) {
         lightSensor.emitWarehouseTiltedStatus();
@@ -86,11 +90,11 @@ void loop()
     }
 
     // controls for x axes
-    if (x > 50 && command ==1 && SAFETY_MODE == false) {
+    if (x > 50 && command ==1 && SAFETY_MODE == false && inductiveSensor1.readInductiveSensor() != 0) {
         digitalWrite(bbrakePin, LOW);
         left(x);
     }
-    else if (x < -50 && command ==1 && SAFETY_MODE == false) {
+    else if (x < -50 && command ==1 && SAFETY_MODE == false && inductiveSensor2.readInductiveSensor() != 0) {
         digitalWrite(bbrakePin, LOW);
         right(x);
     }
@@ -103,13 +107,15 @@ void loop()
         digitalWrite(abrakePin, LOW);
         up(y);
     }
-    else if(y < -50 && command ==1 && SAFETY_MODE == false) {
+    else if(y < -50 && command ==1 && SAFETY_MODE == false && inductiveSensor3.readInductiveSensor() != 0){
         digitalWrite(abrakePin, LOW);
         down(y);
     }
     else {
         digitalWrite(abrakePin, HIGH);
     }
+
+    Serial.println(inductiveSensor3.readInductiveSensor());
 }
 
 void left(int x) {
