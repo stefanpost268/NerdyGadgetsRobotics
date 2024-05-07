@@ -14,8 +14,10 @@ public class OrderInfoDialog extends JDialog {
     private JLabel customerName = new JLabel();
     private JLabel customerPhone = new JLabel();
     private JLabel customerAdres = new JLabel();
+    private JLabel contactPerson = new JLabel();
+    private JLabel salesPerson = new JLabel();
+    private JLabel pickedByPerson = new JLabel();
 
-    private JLabel shippingDateLabel = new JLabel("Bezorg Datum: ");
     public OrderInfoDialog(Order order) {
         Customer customer = order.getCustomer();
 
@@ -30,10 +32,16 @@ public class OrderInfoDialog extends JDialog {
         this.customerName.setText(customer.getCustomerName());
         this.customerPhone.setText(customer.getPhoneNumber());
         this.customerAdres.setText(customer.getDeliveryPostalCode());
+        this.contactPerson.setText(order.getContactPerson().getFullName());
+        this.salesPerson.setText(order.getSalesperson().getFullName());
+        if(order.getPickedByPerson() != null) {
+            this.pickedByPerson.setText(order.getPickedByPerson().getFullName());
+        }
 
 
         add(addOrderInfo());
         add(addCustomerInfo());
+        add(getPeople());
         setVisible(true);
     }
 
@@ -111,6 +119,40 @@ public class OrderInfoDialog extends JDialog {
         gbc.gridx = 1;
         gbc.gridy = 2;
         panel.add(this.customerAdres, gbc);
+
+        return panel;
+    }
+
+    private JPanel getPeople() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(5, 5, 5, 5); // Padding between components
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        panel.add(new JLabel("Contact Persoon: "), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        panel.add(this.contactPerson, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        panel.add(new JLabel("Verkoop Medewerker: "), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        panel.add(this.salesPerson, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        panel.add(new JLabel("Magazijn Medewerker: "), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        panel.add(this.pickedByPerson, gbc);
 
         return panel;
     }
