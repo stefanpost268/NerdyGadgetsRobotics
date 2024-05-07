@@ -9,9 +9,10 @@ import java.util.List;
 public class Customer {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int CustomerID;
 
-    @Column(name = "CustomerName")
+    @Column(name = "CustomerName", unique = true)
     private String CustomerName;
 
     @Column(name = "PhoneNumber")
@@ -23,7 +24,15 @@ public class Customer {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Order> orders;
 
-    public int getCustomerID() {
-        return CustomerID;
+    public String getCustomerName() {
+        return CustomerName;
+    }
+
+    public String getPhoneNumber() {
+        return PhoneNumber;
+    }
+
+    public String getDeliveryPostalCode() {
+        return DeliveryPostalCode;
     }
 }
