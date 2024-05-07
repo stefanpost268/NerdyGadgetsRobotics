@@ -2,10 +2,12 @@ package pages;
 
 import javax.swing.*;
 import dialogs.OrderInfoDialog;
+import models.Order;
 import repositories.OrderRepository;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Optional;
 
 public class OrderPage extends JPanel implements ActionListener {
 
@@ -22,11 +24,14 @@ public class OrderPage extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == this.orderButton) {
-            OrderInfoDialog infoDialog = new OrderInfoDialog();
-            infoDialog.add(new JLabel("Order Info Dialog"));
-            infoDialog.setSize(300, 200);
-            infoDialog.setVisible(true);
-            infoDialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            Optional<Order> order  = this.orderRepository.findById(1);
+            if(order.isEmpty()) {
+                System.out.println("Order not found");
+                return;
+            }
+
+            OrderInfoDialog infoDialog = new OrderInfoDialog(order.get());
+
         }
     }
 }
