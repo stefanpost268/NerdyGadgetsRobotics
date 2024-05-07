@@ -11,11 +11,13 @@ public class OrderInfoDialog extends JDialog {
     private JLabel orderID = new JLabel();
     private JLabel shippingDate = new JLabel();
     private JLabel orderState = new JLabel();
+    private JLabel customerName = new JLabel();
+    private JLabel customerPhone = new JLabel();
+    private JLabel customerAdres = new JLabel();
 
     private JLabel shippingDateLabel = new JLabel("Bezorg Datum: ");
     public OrderInfoDialog(Order order) {
         Customer customer = order.getCustomer();
-        System.out.println(customer.getCustomerID());
 
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
         setSize(300, 200);
@@ -24,6 +26,10 @@ public class OrderInfoDialog extends JDialog {
         this.orderID.setText(String.valueOf(order.getOrderID()));
         this.shippingDate.setText(order.getExpectedDeliveryDate().toString());
         this.orderState.setText("NOT IMPLEMENTED");
+
+        this.customerName.setText(customer.getCustomerName());
+        this.customerPhone.setText(customer.getPhoneNumber());
+        this.customerAdres.setText(customer.getDeliveryPostalCode());
 
 
         add(addOrderInfo());
@@ -76,18 +82,35 @@ public class OrderInfoDialog extends JDialog {
 
     private JPanel addCustomerInfo() {
         JPanel panel = new JPanel();
+        panel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(5, 5, 5, 5); // Padding between components
 
-        panel.add(new JLabel("Naam Klant: "));
-        panel.add(new JLabel("Klant ID: "));
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        panel.add(new JLabel("Naam Klant: "), gbc);
 
-        panel.add(new JLabel("Telefoon nummer:"));
-        panel.add(new JLabel("NULL"));
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        panel.add(this.customerName, gbc);
 
-        panel.add(new JLabel("Adress:"));
-        panel.add(new JLabel("NULL"));
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        panel.add(new JLabel("Telefoon nummer: "), gbc);
 
-        panel.add(new JLabel("Email"));
-        panel.add(new JLabel("NULL"));
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        panel.add(this.customerPhone, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        panel.add(new JLabel("Adress: "), gbc);
+
+        // Order State Value
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        panel.add(this.customerAdres, gbc);
 
         return panel;
     }
