@@ -31,7 +31,6 @@ public class OrderPage extends JPanel implements ActionListener {
             }
 
             OrderInfoDialog infoDialog = new OrderInfoDialog(order.get());
-
         }
     }
 }

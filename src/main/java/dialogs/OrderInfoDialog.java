@@ -1,5 +1,6 @@
 package dialogs;
 
+import models.Customer;
 import models.Order;
 
 import javax.swing.*;
@@ -13,6 +14,9 @@ public class OrderInfoDialog extends JDialog {
 
     private JLabel shippingDateLabel = new JLabel("Bezorg Datum: ");
     public OrderInfoDialog(Order order) {
+        Customer customer = order.getCustomer();
+        System.out.println(customer.getCustomerID());
+
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
         setSize(300, 200);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -21,7 +25,9 @@ public class OrderInfoDialog extends JDialog {
         this.shippingDate.setText(order.getExpectedDeliveryDate().toString());
         this.orderState.setText("NOT IMPLEMENTED");
 
+
         add(addOrderInfo());
+        add(addCustomerInfo());
         setVisible(true);
     }
 
@@ -64,6 +70,24 @@ public class OrderInfoDialog extends JDialog {
         gbc.gridx = 1;
         gbc.gridy = 2;
         panel.add(this.orderState, gbc);
+
+        return panel;
+    }
+
+    private JPanel addCustomerInfo() {
+        JPanel panel = new JPanel();
+
+        panel.add(new JLabel("Naam Klant: "));
+        panel.add(new JLabel("Klant ID: "));
+
+        panel.add(new JLabel("Telefoon nummer:"));
+        panel.add(new JLabel("NULL"));
+
+        panel.add(new JLabel("Adress:"));
+        panel.add(new JLabel("NULL"));
+
+        panel.add(new JLabel("Email"));
+        panel.add(new JLabel("NULL"));
 
         return panel;
     }

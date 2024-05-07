@@ -8,6 +8,10 @@ import java.util.Date;
 @Entity
 @Table(name = "orders")
 public class Order {
+    public Order() {
+
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int OrderID;
@@ -15,8 +19,9 @@ public class Order {
     @Column(nullable = false)
     private Date ExpectedDeliveryDate;
 
-    @Column(nullable = false)
-    private int CustomerID;
+    @ManyToOne()
+    @JoinColumn(name = "CustomerID")
+    private Customer customer;
 
     @Column(nullable = false)
     private int SalespersonPersonID;
@@ -36,11 +41,18 @@ public class Order {
     @Column(nullable = true)
     private String InternalComments;
 
+
+
     public int getOrderID() {
         return OrderID;
     }
 
     public Date getExpectedDeliveryDate() {
         return ExpectedDeliveryDate;
+    }
+
+
+    public Customer getCustomer() {
+        return customer;
     }
 }
