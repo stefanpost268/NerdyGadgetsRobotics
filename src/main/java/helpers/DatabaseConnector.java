@@ -1,4 +1,4 @@
-package database;
+package helpers;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,8 +9,6 @@ public class DatabaseConnector {
     private static final String USERNAME = "root";
     private static final String PASSWORD = "";
     private Connection connection;
-    private List<Object[]> queueData;
-    private List<Object[]> processingData;
 
     public DatabaseConnector() {
         try {
@@ -19,9 +17,6 @@ public class DatabaseConnector {
 
             //connect to the database
             connect();
-
-            //retrieve data
-            queryData();
 
             //close the database connection when the application exits
             Runtime.getRuntime().addShutdownHook(new Thread(this::close));
@@ -53,14 +48,8 @@ public class DatabaseConnector {
         }
     }
 
-    private void queryData() {
-        queueData = queryQueueData(); // Retrieve queue data from the database
-        processingData = queryProcessingData(); // Retrieve processing data from the database
-    }
-
-
-    private List<Object[]> queryQueueData() {
-        List<Object[]> queue = new ArrayList<>();
+    public List<Object[]> getQueueData() {
+        List<Object[]> queueData = new ArrayList<>();
         String query = "SELECT l.OrderID, COUNT(*), o.WachtrijStatus\n" +
                 "FROM orderlines l\n" +
                 "JOIN orders o on o.OrderID = l.OrderID \n" +
@@ -75,7 +64,7 @@ public class DatabaseConnector {
                 int orderID = resultSet.getInt("OrderID");
                 int quantity = resultSet.getInt("COUNT(*)");
                 String queueStatus = resultSet.getString("WachtrijStatus");
-                queue.add(new Object[]{orderID, quantity, queueStatus});
+                queueData.add(new Object[]{orderID, quantity, queueStatus});
             }
 
         } catch (SQLException e) {
@@ -83,11 +72,10 @@ public class DatabaseConnector {
             e.printStackTrace();
         }
 
-        return queue;
+        return queueData;
     }
-    //
-    private List<Object[]> queryProcessingData() {
-        List<Object[]> processing = new ArrayList<>();
+    public List<Object[]> getProcessingData() {
+        List<Object[]> processingData = new ArrayList<>();
         String query = "SELECT l.StockItemID, l.Description, l.quantity\n" +
                 "FROM orderlines l\n" +
                 "JOIN orders o on o.OrderID = l.OrderID \n" +
@@ -101,7 +89,7 @@ public class DatabaseConnector {
                 int stockItemID = resultSet.getInt("StockItemID");
                 String description = resultSet.getString("Description");
                 int quantity = resultSet.getInt("Quantity");
-                processing.add(new Object[]{stockItemID, description, quantity});
+                processingData.add(new Object[]{stockItemID, description, quantity});
             }
 
         } catch (SQLException e) {
@@ -109,13 +97,6 @@ public class DatabaseConnector {
             e.printStackTrace();
         }
 
-        return processing;
-    }
-    public List<Object[]> getQueueData() {
-        return queueData;
-    }
-
-    public List<Object[]> getProcessingData() {
         return processingData;
     }
 }

@@ -1,9 +1,9 @@
-import database.DatabaseConnector;
+import helpers.DatabaseConnector;
 import pages.DashboardPanel;
 
 public class Main {
     public static void main(String[] args) {
-        DatabaseConnector databaseConnector = new DatabaseConnector();
-        new DashboardPanel(databaseConnector.getQueueData(), databaseConnector.getProcessingData());
+        DatabaseConnector database = new DatabaseConnector();
+        new DashboardPanel(database.getQueueData(), database.getProcessingData());
     }
 }
