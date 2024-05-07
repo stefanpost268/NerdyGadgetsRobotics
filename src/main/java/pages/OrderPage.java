@@ -13,6 +13,7 @@ public class OrderPage extends JPanel implements ActionListener {
 
     private OrderRepository orderRepository;
     private JButton orderButton = new JButton("Open order id 1");
+    private OrderInfoDialog infoDialog;
 
     public OrderPage(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
@@ -30,7 +31,11 @@ public class OrderPage extends JPanel implements ActionListener {
                 return;
             }
 
-            OrderInfoDialog infoDialog = new OrderInfoDialog(order.get());
+            if(this.infoDialog != null) {
+                this.infoDialog.dispose();
+            }
+
+            this.infoDialog = new OrderInfoDialog(order.get());
         }
     }
 }
