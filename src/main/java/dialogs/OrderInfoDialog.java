@@ -22,9 +22,9 @@ public class OrderInfoDialog extends JDialog {
     private JLabel contactPerson = new JLabel();
     private JLabel salesPerson = new JLabel();
     private JLabel pickedByPerson = new JLabel();
-    private JLabel comment = new JLabel();
-    private JLabel internalComment = new JLabel();
-    private JLabel deliveryComment = new JLabel();
+    private JTextArea comment = new JTextArea(4, 20);
+    private JTextArea internalComment = new JTextArea(4, 20);
+    private JTextArea deliveryComment = new JTextArea(4, 20);
 
     public OrderInfoDialog(Order order) {
         Customer customer = order.getCustomer();
@@ -70,8 +70,11 @@ public class OrderInfoDialog extends JDialog {
 
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         leftPanel.add(addOrderInfo());
+        leftPanel.add(new JSeparator());
         leftPanel.add(addCustomerInfo());
+        leftPanel.add(new JSeparator());
         leftPanel.add(getPeople());
+        leftPanel.add(new JSeparator());
         leftPanel.add(getComments());
 
         leftPanel.setMinimumSize(new Dimension(350, 0));
@@ -231,31 +234,30 @@ public class OrderInfoDialog extends JDialog {
         panel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.CENTER;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
         gbc.insets = new Insets(5, 5, 5, 5); // Padding between components
 
-        gbc.gridx = 0;
-        gbc.gridy = 0;
+        // Comment 1
+        gbc.gridy = 1;
         panel.add(new JLabel("Opmerkingen: "), gbc);
+        gbc.gridy = 2;
+        panel.add(new JScrollPane(this.comment), gbc);
+        this.comment.setEnabled(false);
 
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        panel.add(this.comment, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 1;
+        // Comment 2
+        gbc.gridy = 3;
         panel.add(new JLabel("Interne Opmerkingen: "), gbc);
+        gbc.gridy = 4;
+        panel.add(new JScrollPane(this.internalComment), gbc);
+        this.internalComment.setEnabled(false);
 
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        panel.add(this.internalComment, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 2;
+        // Comment 3
+        gbc.gridy = 5;
         panel.add(new JLabel("Bezorg Opmerkingen: "), gbc);
-
-        gbc.gridx = 1;
-        gbc.gridy = 2;
-        panel.add(this.deliveryComment, gbc);
+        gbc.gridy = 6;
+        panel.add(new JScrollPane(this.deliveryComment), gbc);
+        this.deliveryComment.setEnabled(false);
 
         return panel;
     }
