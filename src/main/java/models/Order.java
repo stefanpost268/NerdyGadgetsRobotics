@@ -79,4 +79,8 @@ public class Order {
     public List<OrderLines> getOrderLines() {
         return orderLines;
     }
+
+    public String getOrderState() {
+        return "NOT IMPLEMENTED";
+    }
 }

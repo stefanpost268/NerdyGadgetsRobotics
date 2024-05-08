@@ -37,7 +37,7 @@ public class OrderInfoDialog extends JDialog {
 
         this.orderID.setText(String.valueOf(order.getOrderID()));
         this.shippingDate.setText(order.getExpectedDeliveryDate().toString());
-        this.orderState.setText("NOT IMPLEMENTED");
+        this.orderState.setText(order.getOrderState());
 
         this.customerName.setText(customer.getCustomerName());
         this.customerPhone.setText(customer.getPhoneNumber());
