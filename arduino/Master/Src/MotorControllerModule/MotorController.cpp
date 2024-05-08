@@ -28,7 +28,7 @@ void MotorController::vorkBackwards(int y) {
 
 void MotorController::driveVork(int y, int IRSensorWaarde, bool EmergencyButtonState) {
     if (!EmergencyButtonState) {
-        if (y < -50 && IRSensorWaarde > 140)
+        if (y < -50 && IRSensorWaarde > 160)
         {
             disableBrake();
             vorkForwards(y);
