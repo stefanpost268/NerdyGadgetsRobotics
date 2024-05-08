@@ -20,6 +20,7 @@ dependencies {
     implementation("jakarta.persistence:jakarta.persistence-api:3.2.0-M2")
     implementation("org.hibernate.orm:hibernate-core:6.5.0.Final")
     implementation("org.slf4j:slf4j-nop:2.1.0-alpha1")
+    implementation("org.xhtmlrenderer:flying-saucer-pdf:9.7.2")
 }
 
 tasks.test {

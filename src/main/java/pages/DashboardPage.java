@@ -2,6 +2,7 @@ package pages;
 
 import helpers.ConfigReader;
 import visualComponents.WarehouseMap;
+import visualComponents.ExportPdfButton;
 
 import javax.swing.JPanel;
 import java.awt.*;
@@ -13,6 +14,7 @@ public class DashboardPage extends JPanel {
                 Integer.valueOf(ConfigReader.getConfig("grid.width"))
         );
         map.setPreferredSize(new Dimension(1350, 720));
+        add(new ExportPdfButton());
         add(map);
     }
 }
