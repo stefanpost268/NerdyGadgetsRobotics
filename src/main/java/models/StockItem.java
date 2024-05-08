@@ -33,8 +33,16 @@ public class StockItem {
     public List<String> getFieldNames() {
         return Arrays.asList("StockItemID", "StockItemName", "UnitPrice", "RecommendedRetailPrice", "TypicalWeightPerUnit", "QuantityPerOuter", "Size");
     }
+    
+    public int getStockItemID() {
+        return StockItemID;
+    }
 
-    public List<Object> getFieldValues() {
-        return Arrays.asList(this.StockItemID, this.stockItemName, this.UnitPrice, this.RecommendedRetailPrice, this.TypicalWeightPerUnit, this.QuantityPerOuter, this.Size);
+    public String getStockItemName() {
+        return stockItemName;
+    }
+
+    public double getTypicalWeightPerUnit() {
+        return TypicalWeightPerUnit;
     }
 }
