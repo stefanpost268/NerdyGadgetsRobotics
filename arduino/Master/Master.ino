@@ -17,6 +17,12 @@ void setup()
 
 void loop()
 {
+    Wire.requestFrom(9, 1);
+    if(Wire.available())
+    {
+        Serial.println(Wire.read());
+    } 
+
     communication.sendVorkStateToWorker(sensor);
     
     motorcontroller.driveVork(
