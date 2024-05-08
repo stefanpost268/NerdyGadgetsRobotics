@@ -14,10 +14,10 @@
 LightSensor lightSensor = LightSensor(2);
 EmergencyButton emergencyButton = EmergencyButton(5, 10);
 JsonRobot jsonrobot = JsonRobot();
-InductiveSensor inductiveSensor1 = InductiveSensor(4);
-InductiveSensor inductiveSensor2 = InductiveSensor(7);
-InductiveSensor inductiveSensor3 = InductiveSensor(6);
-InductiveSensor klikSensor = InductiveSensor(1);
+InductiveSensor inductiveSensorLinks = InductiveSensor(4);
+InductiveSensor inductiveSensorRechts = InductiveSensor(7);
+InductiveSensor inductiveSensorOnder = InductiveSensor(6);
+InductiveSensor klikSensorBoven = InductiveSensor(1);
 MotorController motorcontrollerxas = MotorController(12, 3, 9, A1, 1);
 MotorController motorcontrolleryas = MotorController(13, 11, 8, A0, 1);
 
@@ -25,6 +25,9 @@ bool SAFETY_MODE = false;
 
 int xas = A3;
 int yas = A2;
+
+int x = 0;
+int y = 0;
 
 bool vorkOpen;
 
@@ -46,6 +49,9 @@ void loop()
     if (!lightSensor.isActive() && !SAFETY_MODE) { 
         jsonrobot.emitRobotState("STATE", "EMERGENCY_STOP", "warehouse is tilted");
         SAFETY_MODE = true;
+        motorcontrollerxas.emergencyStop();
+        motorcontrolleryas.emergencyStop();
+        
     }
 
     //EmergencyStop
@@ -60,25 +66,24 @@ void loop()
         jsonrobot.emitRobotState("STATE", "MANUAL_MODE", "Reset button was pressed");
             SAFETY_MODE = false;
         }
-
-        return;
+  
+        x = 0;
+        y = 0;
     }
+    else {
+      x = map(analogRead(xas), 0, 1023, 255, -255);
+      y = map(analogRead(yas), 0, 1023, -255, 255);
 
-    int x = analogRead(xas);
-    int y = analogRead(yas);
-    x = map(x, 0, 1023, 255, -255);
-    y = map(y, 0, 1023, -255, 255);
-
-    if (!lightSensor.isActive()) {
-        lightSensor.emitWarehouseTiltedStatus();
-        SAFETY_MODE = true;
+      if (!lightSensor.isActive()) {
+          lightSensor.emitWarehouseTiltedStatus();
+          SAFETY_MODE = true;
+      }
     }
-
     // controls for x axes
-    motorcontrollerxas.driveMotor(x, inductiveSensor1.readInductiveSensor(), inductiveSensor2.readInductiveSensor(), false, vorkOpen);
+    motorcontrollerxas.driveMotor(x, inductiveSensorRechts.readInductiveSensor(), inductiveSensorLinks.readInductiveSensor(), SAFETY_MODE, vorkOpen);
 
     // controls for y axes
-    motorcontrolleryas.driveMotor(y, inductiveSensor3.readInductiveSensor(), 1, false, 0);
+    motorcontrolleryas.driveMotor(y, inductiveSensorOnder.readInductiveSensor(), klikSensorBoven.readInductiveSensor(), SAFETY_MODE, 0);
 }
 
 void receiveEvent(bool numBytes) {

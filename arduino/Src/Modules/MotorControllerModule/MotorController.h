@@ -13,6 +13,7 @@ public:
     */
     void driveFork(int y, int IRSensorWaarde);
     void driveMotor(int joystickInput, int sensor1, int sensor2, bool SAFETY_MODE, bool vorkOpen);
+    void emergencyStop();
 
 private:
     int directionPin;
