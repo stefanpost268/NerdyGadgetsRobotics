@@ -9,7 +9,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
-import java.util.Optional;
 
 public class OrderInfoDialog extends JDialog {
     private DefaultTableModel tableModel = new DefaultTableModel(new Object[]{"Product Nr", "Product", "Aantal", "Gewicht (kg)"}, 0);
@@ -75,8 +74,8 @@ public class OrderInfoDialog extends JDialog {
         leftPanel.add(getPeople());
         leftPanel.add(getComments());
 
-        leftPanel.setMinimumSize(new Dimension(500, 0));
-        scrollPane.setMinimumSize(new Dimension(100, 0));
+        leftPanel.setMinimumSize(new Dimension(350, 0));
+        scrollPane.setMinimumSize(new Dimension(250, 0));
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, scrollPane);
         splitPane.setResizeWeight(0.67);
@@ -101,14 +100,14 @@ public class OrderInfoDialog extends JDialog {
         panel.add(orderNumberLabel, gbc);
 
         // Order Number Value
-        gbc.gridx = 1;
-        gbc.gridy = 0;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
         panel.add(this.orderID, gbc);
 
         // Delivery Date Label
         JLabel deliveryDateLabel = new JLabel("Bezorg Datum: ");
-        gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridx = 1;
+        gbc.gridy = 0;
         panel.add(deliveryDateLabel, gbc);
 
         // Delivery Date Value
@@ -118,18 +117,17 @@ public class OrderInfoDialog extends JDialog {
 
         // Order State Label
         JLabel orderStateLabel = new JLabel("Bestelling Status: ");
-        gbc.gridx = 0;
-        gbc.gridy = 2;
+        gbc.gridx = 2;
+        gbc.gridy = 0;
         panel.add(orderStateLabel, gbc);
 
         // Order State Value
-        gbc.gridx = 1;
-        gbc.gridy = 2;
+        gbc.gridx = 2;
+        gbc.gridy = 1;
         panel.add(this.orderState, gbc);
 
         return panel;
     }
-
     private JPanel addCustomerInfo() {
         JPanel panel = new JPanel();
         panel.setLayout(new GridBagLayout());
@@ -137,29 +135,37 @@ public class OrderInfoDialog extends JDialog {
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(5, 5, 5, 5); // Padding between components
 
+        // Customer Name Label
+        JLabel customerNameLabel = new JLabel("Naam Klant: ");
         gbc.gridx = 0;
         gbc.gridy = 0;
-        panel.add(new JLabel("Naam Klant: "), gbc);
+        panel.add(customerNameLabel, gbc);
 
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        panel.add(this.customerName, gbc);
-
+        // Customer Name Value
         gbc.gridx = 0;
         gbc.gridy = 1;
-        panel.add(new JLabel("Telefoon nummer: "), gbc);
+        panel.add(this.customerName, gbc);
 
+        // Phone Number Label
+        JLabel phoneNumberLabel = new JLabel("Telefoon nummer: ");
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        panel.add(phoneNumberLabel, gbc);
+
+        // Phone Number Value
         gbc.gridx = 1;
         gbc.gridy = 1;
         panel.add(this.customerPhone, gbc);
 
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        panel.add(new JLabel("Adress: "), gbc);
+        // Address Label
+        JLabel addressLabel = new JLabel("Adress: ");
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        panel.add(addressLabel, gbc);
 
-        // Order State Value
-        gbc.gridx = 1;
-        gbc.gridy = 2;
+        // Address Value
+        gbc.gridx = 2;
+        gbc.gridy = 1;
         panel.add(this.customerAdres, gbc);
 
         return panel;
@@ -172,28 +178,37 @@ public class OrderInfoDialog extends JDialog {
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(5, 5, 5, 5); // Padding between components
 
+        // Contact Person Label
+        JLabel contactPersonLabel = new JLabel("Contact Persoon: ");
         gbc.gridx = 0;
         gbc.gridy = 0;
-        panel.add(new JLabel("Contact Persoon: "), gbc);
+        panel.add(contactPersonLabel, gbc);
 
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        panel.add(this.contactPerson, gbc);
-
+        // Contact Person Value
         gbc.gridx = 0;
         gbc.gridy = 1;
-        panel.add(new JLabel("Verkoop Medewerker: "), gbc);
+        panel.add(this.contactPerson, gbc);
 
+        // Sales Person Label
+        JLabel salesPersonLabel = new JLabel("Verkoop Medewerker: ");
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        panel.add(salesPersonLabel, gbc);
+
+        // Sales Person Value
         gbc.gridx = 1;
         gbc.gridy = 1;
         panel.add(this.salesPerson, gbc);
 
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        panel.add(new JLabel("Magazijn Medewerker: "), gbc);
+        // Picked By Person Label
+        JLabel pickedByPersonLabel = new JLabel("Magazijn Medewerker: ");
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        panel.add(pickedByPersonLabel, gbc);
 
-        gbc.gridx = 1;
-        gbc.gridy = 2;
+        // Picked By Person Value
+        gbc.gridx = 2;
+        gbc.gridy = 1;
         panel.add(this.pickedByPerson, gbc);
 
         return panel;
