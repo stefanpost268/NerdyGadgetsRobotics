@@ -3,14 +3,17 @@ package dialogs;
 import models.Customer;
 import models.Order;
 import models.OrderLines;
+import models.StockItem;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 import java.util.Optional;
 
 public class OrderInfoDialog extends JDialog {
-
+    private DefaultTableModel tableModel = new DefaultTableModel(new Object[]{"Product Nr", "Product", "Aantal", "Gewicht (kg)"}, 0);
+    private JTable ordersOnTable = new JTable(this.tableModel);
     private JLabel orderID = new JLabel();
     private JLabel shippingDate = new JLabel();
     private JLabel orderState = new JLabel();
@@ -28,10 +31,9 @@ public class OrderInfoDialog extends JDialog {
         Customer customer = order.getCustomer();
         List<OrderLines> orderLines = order.getOrderLines();
 
-        System.out.println(orderLines);
-
-        setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-        setSize(300, 200);
+        setLayout(new BorderLayout());
+        setSize(800, 600);
+        setResizable(false);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         this.orderID.setText(String.valueOf(order.getOrderID()));
@@ -51,10 +53,37 @@ public class OrderInfoDialog extends JDialog {
         this.internalComment.setText(order.getInternalComments());
         this.deliveryComment.setText(order.getDeliveryInstructions());
 
-        add(addOrderInfo());
-        add(addCustomerInfo());
-        add(getPeople());
-        add(getComments());
+        for(OrderLines orderLine : orderLines) {
+            StockItem stockItem = orderLine.getStockItem();
+            tableModel.addRow(new Object[]{
+                stockItem.getStockItemID(),
+                stockItem.getStockItemName(),
+                orderLine.getQuantity(),
+                stockItem.getTypicalWeightPerUnit()
+            });
+        }
+
+        JScrollPane scrollPane = new JScrollPane(this.ordersOnTable);
+
+        add(scrollPane, BorderLayout.EAST);
+
+        JPanel leftPanel = new JPanel();
+
+        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+        leftPanel.add(addOrderInfo());
+        leftPanel.add(addCustomerInfo());
+        leftPanel.add(getPeople());
+        leftPanel.add(getComments());
+
+        leftPanel.setMinimumSize(new Dimension(500, 0));
+        scrollPane.setMinimumSize(new Dimension(100, 0));
+
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, scrollPane);
+        splitPane.setResizeWeight(0.67);
+        splitPane.setEnabled(false);
+
+        add(splitPane, BorderLayout.CENTER);
+
         setVisible(true);
     }
 
