@@ -5,18 +5,19 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
-
 import models.StockItem;
+import repositories.StockItemRepository;
+import services.Formatter;
 
 public class ProductPage extends JPanel implements ActionListener {
 
+    private StockItemRepository stockItem;
     private JTextField searchField = new JTextField(20);
     private JButton searchButton = new JButton("Search");
     private JTable table;
-    private StockItem stockItem = new StockItem();
 
-    public ProductPage() {
+    public ProductPage(StockItemRepository stockItem) {
+        this.stockItem = stockItem;
         setLayout(new BorderLayout());
 
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -42,17 +43,24 @@ public class ProductPage extends JPanel implements ActionListener {
     }
 
     private void search() {
-        List<StockItem> stockItems;
+        Iterable<StockItem> stockItems;
         if(this.searchField.getText().isEmpty()) {
-            stockItems = this.stockItem.get();
+            stockItems = this.stockItem.findAll();
         } else {
-            stockItems = this.stockItem.like("StockItemName", this.searchField.getText()).get();
+            stockItems = this.stockItem.findByStockItemNameContaining(this.searchField.getText());
         }
 
-        DefaultTableModel model = new DefaultTableModel(
-                this.stockItem.toTableData(stockItems),
-                this.stockItem.fillable()
-        );
+        Object[][] data = Formatter.modelListToGenericObject(stockItems);
+
+        DefaultTableModel model;
+        if (stockItems.iterator().hasNext()) {
+            model = new DefaultTableModel(
+                    Formatter.modelListToGenericObject(stockItems),
+                    stockItems.iterator().next().getFieldNames().toArray()
+            );
+        } else {
+            model = new DefaultTableModel();
+        }
 
         if(this.table == null) {
             this.table = new JTable(model);

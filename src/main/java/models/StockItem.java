@@ -1,36 +1,40 @@
 package models;
 
+import jakarta.persistence.*;
+import java.util.Arrays;
 import java.util.List;
 
-public class StockItem extends BaseModel<StockItem> {
-    public Integer StockItemID;
-    public String StockItemName;
-    public Integer UnitPrice;
-    public Integer RecommendedRetailPrice;
-    public Integer TypicalWeightPerUnit;
-    public Integer QuantityPerOuter;
-    public String Size;
+@Entity
+@Table(name = "stockitems")
+public class StockItem {
 
-    @Override
-    public String[] fillable() {
-        return new String[] {
-            "StockItemID",
-            "StockItemName",
-            "UnitPrice",
-            "RecommendedRetailPrice",
-            "TypicalWeightPerUnit",
-            "QuantityPerOuter",
-            "Size"
-        };
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int StockItemID;
+
+    @Column(length = 100, nullable = false, unique = true)
+    private String stockItemName;
+
+    @Column(nullable = true)
+    private double UnitPrice;
+
+    @Column(nullable = true)
+    private double RecommendedRetailPrice;
+
+    @Column(nullable = false)
+    private double TypicalWeightPerUnit;
+
+    @Column(length = 11, nullable = false)
+    private int QuantityPerOuter;
+
+    @Column(length = 20, nullable = false)
+    private String Size;
+
+    public List<String> getFieldNames() {
+        return Arrays.asList("StockItemID", "StockItemName", "UnitPrice", "RecommendedRetailPrice", "TypicalWeightPerUnit", "QuantityPerOuter", "Size");
     }
 
-    @Override
-    public String getTableName() {
-        return "stockitems";
-    }
-
-    @Override
-    public StockItem createInstance() {
-        return new StockItem();
+    public List<Object> getFieldValues() {
+        return Arrays.asList(this.StockItemID, this.stockItemName, this.UnitPrice, this.RecommendedRetailPrice, this.TypicalWeightPerUnit, this.QuantityPerOuter, this.Size);
     }
 }
