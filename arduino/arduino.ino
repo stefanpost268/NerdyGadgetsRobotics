@@ -93,6 +93,6 @@ void receiveEvent(bool numBytes) {
 }
 
 void requestEvent() {
-  Wire.write(!SAFETY_MODE);
+  Wire.write(SAFETY_MODE);
 }
 
