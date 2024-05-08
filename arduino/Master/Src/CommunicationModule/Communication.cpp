@@ -9,7 +9,7 @@ Communication::Communication(int workerAdress) {
 }
 
 bool Communication::readVorkState(IRSensor sensor) {
-    if (sensor.readIRSensor() > 380) {
+    if (sensor.readIRSensor() < 150) {
         vorkOpen = true;
     } else {
         vorkOpen = false;
