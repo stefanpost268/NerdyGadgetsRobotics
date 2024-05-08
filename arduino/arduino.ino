@@ -37,6 +37,7 @@ void setup()
 
     Wire.begin(SLAVE_ADDRESS); // Initialize I2C communication with address
     Wire.onReceive(receiveEvent); // Set up a function to handle received data
+    Wire.onRequest(requestEvent); // Set up a function to handle requests for data
 }
 
 void loop()
