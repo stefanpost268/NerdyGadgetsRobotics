@@ -17,6 +17,9 @@ public class OrderInfoDialog extends JDialog {
     private JLabel contactPerson = new JLabel();
     private JLabel salesPerson = new JLabel();
     private JLabel pickedByPerson = new JLabel();
+    private JLabel comment = new JLabel();
+    private JLabel internalComment = new JLabel();
+    private JLabel deliveryComment = new JLabel();
 
     public OrderInfoDialog(Order order) {
         Customer customer = order.getCustomer();
@@ -38,10 +41,14 @@ public class OrderInfoDialog extends JDialog {
             this.pickedByPerson.setText(order.getPickedByPerson().getFullName());
         }
 
+        this.comment.setText(order.getComments());
+        this.internalComment.setText(order.getInternalComments());
+        this.deliveryComment.setText(order.getDeliveryInstructions());
 
         add(addOrderInfo());
         add(addCustomerInfo());
         add(getPeople());
+        add(getComments());
         setVisible(true);
     }
 
@@ -153,6 +160,40 @@ public class OrderInfoDialog extends JDialog {
         gbc.gridx = 1;
         gbc.gridy = 2;
         panel.add(this.pickedByPerson, gbc);
+
+        return panel;
+    }
+
+    private JPanel getComments() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(5, 5, 5, 5); // Padding between components
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        panel.add(new JLabel("Opmerkingen: "), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        panel.add(this.comment, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        panel.add(new JLabel("Interne Opmerkingen: "), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        panel.add(this.internalComment, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        panel.add(new JLabel("Bezorg Opmerkingen: "), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        panel.add(this.deliveryComment, gbc);
 
         return panel;
     }

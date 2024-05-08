@@ -59,4 +59,16 @@ public class Order {
     public People getPickedByPerson() {
         return PickedByPerson;
     }
+
+    public String getComments() {
+        return Comments;
+    }
+
+    public String getInternalComments() {
+        return InternalComments;
+    }
+
+    public String getDeliveryInstructions() {
+        return DeliveryInstructions;
+    }
 }
