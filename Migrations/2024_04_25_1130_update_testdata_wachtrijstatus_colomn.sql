@@ -4,3 +4,7 @@
 UPDATE orders
 SET Status = "Open"
 Where OrderID <= 15;
+
+ UPDATE orders
+ SET Status = 'In progress'
+ WHERE OrderID = 25;
