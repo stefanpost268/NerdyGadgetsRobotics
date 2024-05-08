@@ -4,6 +4,7 @@ package models;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -40,6 +41,9 @@ public class Order {
     @Column(nullable = true)
     private String InternalComments;
 
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
+    private List<OrderLines> orderLines;
+
     public int getOrderID() {
         return OrderID;
     }
@@ -70,5 +74,9 @@ public class Order {
 
     public String getDeliveryInstructions() {
         return DeliveryInstructions;
+    }
+
+    public List<OrderLines> getOrderLines() {
+        return orderLines;
     }
 }

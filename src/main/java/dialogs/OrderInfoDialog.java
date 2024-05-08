@@ -2,9 +2,12 @@ package dialogs;
 
 import models.Customer;
 import models.Order;
+import models.OrderLines;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
+import java.util.Optional;
 
 public class OrderInfoDialog extends JDialog {
 
@@ -23,6 +26,9 @@ public class OrderInfoDialog extends JDialog {
 
     public OrderInfoDialog(Order order) {
         Customer customer = order.getCustomer();
+        List<OrderLines> orderLines = order.getOrderLines();
+
+        System.out.println(orderLines);
 
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
         setSize(300, 200);
