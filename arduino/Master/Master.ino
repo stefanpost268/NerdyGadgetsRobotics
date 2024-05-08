@@ -10,6 +10,8 @@ MotorController motorcontroller = MotorController(12, 3, 9, A1);
 Joystick joystick = Joystick(A3);
 Communication communication = Communication(9);
 
+bool EmergencyButtonState = false;
+
 void setup()
 {
     Serial.begin(9600);
@@ -20,13 +22,14 @@ void loop()
     Wire.requestFrom(9, 1);
     if(Wire.available())
     {
-        Serial.println(Wire.read());
+        EmergencyButtonState = Wire.read();
     } 
 
     communication.sendVorkStateToWorker(sensor);
     
     motorcontroller.driveVork(
         joystick.readJoystick(),
-        sensor.readIRSensor()
+        sensor.readIRSensor(),
+        EmergencyButtonState
     );
 }

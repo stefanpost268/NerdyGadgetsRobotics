@@ -26,16 +26,21 @@ void MotorController::vorkBackwards(int y) {
     analogWrite(pwmPin, y);
 }
 
-void MotorController::driveVork(int y, int IRSensorWaarde) {
-    if (y < -50 && IRSensorWaarde > 140)
-    {
-        disableBrake();
-        vorkForwards(y);
-    }
-    else if (y > 50  && IRSensorWaarde < 390)
-    {
-        disableBrake();
-        vorkBackwards(y);
+void MotorController::driveVork(int y, int IRSensorWaarde, bool EmergencyButtonState) {
+    if (!EmergencyButtonState) {
+        if (y < -50 && IRSensorWaarde > 140)
+        {
+            disableBrake();
+            vorkForwards(y);
+        }
+        else if (y > 50  && IRSensorWaarde < 390)
+        {
+            disableBrake();
+            vorkBackwards(y);
+        }
+        else {
+            enableBrake();
+        }
     }
     else {
         enableBrake();
