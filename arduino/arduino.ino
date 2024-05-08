@@ -77,7 +77,7 @@ void loop()
     motorcontrollerxas.driveMotor(x, inductiveSensor1.readInductiveSensor(), inductiveSensor2.readInductiveSensor(), false, vorkOpen);
 
     // controls for y axes
-    motorcontrolleryas.driveMotor(y, inductiveSensor3.readInductiveSensor(), 1, false, vorkOpen);
+    motorcontrolleryas.driveMotor(y, inductiveSensor3.readInductiveSensor(), 1, false, 0);
 }
 
 void receiveEvent(bool numBytes) {
@@ -89,5 +89,9 @@ void receiveEvent(bool numBytes) {
   }else{
     SAFETY_MODE = true;
   }
+}
+
+void requestEvent() {
+  Wire.write(lightSensor.isActive());
 }
 
