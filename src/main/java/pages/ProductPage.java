@@ -50,8 +50,6 @@ public class ProductPage extends JPanel implements ActionListener {
             stockItems = this.stockItem.findByStockItemNameContaining(this.searchField.getText());
         }
 
-        Object[][] data = Formatter.modelListToGenericObject(stockItems);
-
         DefaultTableModel model;
         if (stockItems.iterator().hasNext()) {
             model = new DefaultTableModel(
