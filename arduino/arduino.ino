@@ -93,6 +93,6 @@ void receiveEvent(bool numBytes) {
 }
 
 void requestEvent() {
-  Wire.write(lightSensor.isActive());
+  Wire.write(!SAFETY_MODE);
 }
 
