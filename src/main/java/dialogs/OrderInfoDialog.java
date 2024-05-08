@@ -63,7 +63,7 @@ public class OrderInfoDialog extends JDialog {
         }
 
         JScrollPane scrollPane = new JScrollPane(this.ordersOnTable);
-
+        this.ordersOnTable.setEnabled(false);
         add(scrollPane, BorderLayout.EAST);
 
         JPanel leftPanel = new JPanel();
@@ -90,8 +90,9 @@ public class OrderInfoDialog extends JDialog {
         JPanel panel = new JPanel();
         panel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.anchor = GridBagConstraints.WEST;
+        gbc.anchor = GridBagConstraints.CENTER;
         gbc.insets = new Insets(5, 5, 5, 5); // Padding between components
+        gbc.weightx = 1.0;
 
         // Order Number Label
         JLabel orderNumberLabel = new JLabel("Bestelling Nummer: ");
@@ -126,14 +127,18 @@ public class OrderInfoDialog extends JDialog {
         gbc.gridy = 1;
         panel.add(this.orderState, gbc);
 
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
         return panel;
     }
     private JPanel addCustomerInfo() {
         JPanel panel = new JPanel();
         panel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.anchor = GridBagConstraints.WEST;
+        gbc.anchor = GridBagConstraints.CENTER;
         gbc.insets = new Insets(5, 5, 5, 5); // Padding between components
+        gbc.weightx = 1.0;
 
         // Customer Name Label
         JLabel customerNameLabel = new JLabel("Naam Klant: ");
@@ -168,6 +173,9 @@ public class OrderInfoDialog extends JDialog {
         gbc.gridy = 1;
         panel.add(this.customerAdres, gbc);
 
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
         return panel;
     }
 
@@ -175,8 +183,9 @@ public class OrderInfoDialog extends JDialog {
         JPanel panel = new JPanel();
         panel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.anchor = GridBagConstraints.WEST;
+        gbc.anchor = GridBagConstraints.CENTER;
         gbc.insets = new Insets(5, 5, 5, 5); // Padding between components
+        gbc.weightx = 1.0;
 
         // Contact Person Label
         JLabel contactPersonLabel = new JLabel("Contact Persoon: ");
@@ -211,6 +220,9 @@ public class OrderInfoDialog extends JDialog {
         gbc.gridy = 1;
         panel.add(this.pickedByPerson, gbc);
 
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
         return panel;
     }
 
@@ -218,7 +230,7 @@ public class OrderInfoDialog extends JDialog {
         JPanel panel = new JPanel();
         panel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.anchor = GridBagConstraints.WEST;
+        gbc.anchor = GridBagConstraints.CENTER;
         gbc.insets = new Insets(5, 5, 5, 5); // Padding between components
 
         gbc.gridx = 0;
