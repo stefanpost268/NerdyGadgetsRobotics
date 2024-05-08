@@ -50,12 +50,12 @@ public class DatabaseConnector {
 
     public List<Object[]> getQueueData() {
         List<Object[]> queueData = new ArrayList<>();
-        String query = "SELECT l.OrderID, COUNT(*), o.WachtrijStatus\n" +
+        String query = "SELECT l.OrderID, COUNT(*), o.Status\n" +
                 "FROM orderlines l\n" +
                 "JOIN orders o on o.OrderID = l.OrderID \n" +
-                "WHERE o.WachtrijStatus Not Like 'Done'\n" +
+                "WHERE o.Status Not Like 'Done'\n" +
                 "GROUP BY l.orderID\n" +
-                "ORDER BY o.WachtrijStatus, l.OrderID;";
+                "ORDER BY o.Status, l.OrderID;";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             ResultSet resultSet = statement.executeQuery();
@@ -63,7 +63,7 @@ public class DatabaseConnector {
             while (resultSet.next()) {
                 int orderID = resultSet.getInt("OrderID");
                 int quantity = resultSet.getInt("COUNT(*)");
-                String queueStatus = resultSet.getString("WachtrijStatus");
+                String queueStatus = resultSet.getString("Status");
                 queueData.add(new Object[]{orderID, quantity, queueStatus});
             }
 
@@ -79,7 +79,7 @@ public class DatabaseConnector {
         String query = "SELECT l.StockItemID, l.Description, l.quantity\n" +
                 "FROM orderlines l\n" +
                 "JOIN orders o on o.OrderID = l.OrderID \n" +
-                "WHERE o.WachtrijStatus = 'In progress'\n" +
+                "WHERE o.Status = 'In progress'\n" +
                 "ORDER BY l.OrderLineID;";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {

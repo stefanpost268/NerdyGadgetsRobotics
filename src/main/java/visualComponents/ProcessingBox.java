@@ -11,7 +11,7 @@ public class ProcessingBox extends JPanel {
     public ProcessingBox(List<Object[]> processingData) {
         setBackground(Color.LIGHT_GRAY);
         setLayout(new FlowLayout(FlowLayout.LEFT)); // align left
-        setBounds(670, 370, 320, 270);
+
 
         JLabel processingLabel = new JLabel("Producten processing in Bestelling");
         add(processingLabel);
@@ -25,7 +25,7 @@ public class ProcessingBox extends JPanel {
         processingTable.getTableHeader().setReorderingAllowed(false); // Stop user column swipe
 
         JScrollPane processingScrollPane = new JScrollPane(processingTable); // Add scroll to table
-        processingScrollPane.setPreferredSize(new Dimension(300, 230));
+        processingScrollPane.setPreferredSize(new Dimension(320, 270));
         add(processingScrollPane);
 
         fillProcessingTable(processingData);

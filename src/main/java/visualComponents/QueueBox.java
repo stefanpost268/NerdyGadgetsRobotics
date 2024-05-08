@@ -11,8 +11,7 @@ public class QueueBox extends JPanel {
     public QueueBox(List<Object[]> queueData) {
         setBackground(Color.LIGHT_GRAY);
         setLayout(new FlowLayout(FlowLayout.LEFT)); // align left
-        setBounds(670, 10, 320, 350);
-        JLabel queueLabel = new JLabel("Bestelling queue");
+        JLabel queueLabel = new JLabel("Bestelling wachtrij");
         add(queueLabel);
 
         //table model
@@ -24,7 +23,7 @@ public class QueueBox extends JPanel {
         JTable queueTable = new JTable(queueTableModel);
         queueTable.setDefaultEditor(Object.class, null); // read-only
         JScrollPane queueScrollPane = new JScrollPane(queueTable); // Add scroll to table
-        queueScrollPane.setPreferredSize(new Dimension(300, 310));
+        queueScrollPane.setPreferredSize(new Dimension(320, 310));
 
         queueTable.getTableHeader().setReorderingAllowed(false); // Stop user column swipe
         add(queueScrollPane);

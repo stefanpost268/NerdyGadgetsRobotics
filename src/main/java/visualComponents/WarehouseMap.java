@@ -11,9 +11,10 @@ public class WarehouseMap extends JPanel {
 
     private int gridHeight;
     private int gridWidth;
-    private int width = 670;
-    private int height = 415;
+    public int width = 570;
+    public int height = 265;
     private ArrayList<GridProduct> gridProducts = new ArrayList<>();
+
 
     public WarehouseMap(int gridHeight, int gridWidth) {
         this.gridHeight = gridHeight;
