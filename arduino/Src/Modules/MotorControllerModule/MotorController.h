@@ -12,7 +12,7 @@ public:
      * Function that drives the motor
     */
     void driveFork(int y, int IRSensorWaarde);
-    void driveMotor(int joystickInput, int sensor1, int sensor2, bool SAFETY_MODE, bool command);
+    void driveMotor(int joystickInput, int sensor1, int sensor2, bool SAFETY_MODE, bool vorkOpen);
 
 private:
     int directionPin;

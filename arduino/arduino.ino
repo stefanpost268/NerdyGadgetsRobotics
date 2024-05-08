@@ -26,7 +26,7 @@ bool SAFETY_MODE = false;
 int xas = A3;
 int yas = A2;
 
-bool command;
+bool vorkOpen;
 
 void setup()
 {
@@ -74,18 +74,18 @@ void loop()
     }
 
     // controls for x axes
-    motorcontrollerxas.driveMotor(x, inductiveSensor1.readInductiveSensor(), inductiveSensor2.readInductiveSensor(), SAFETY_MODE, 1);
+    motorcontrollerxas.driveMotor(x, inductiveSensor1.readInductiveSensor(), inductiveSensor2.readInductiveSensor(), false, vorkOpen);
 
     // controls for y axes
-    motorcontrolleryas.driveMotor(y, inductiveSensor3.readInductiveSensor(), 1, SAFETY_MODE, command);
+    motorcontrolleryas.driveMotor(y, inductiveSensor3.readInductiveSensor(), 1, false, vorkOpen);
 }
 
 void receiveEvent(bool numBytes) {
   if (Wire.available() > 0) {
-    bool command = Wire.read(); // Read the received command
+    vorkOpen = Wire.read(); // Read the received command
 
     Serial.print("Received command: ");
-    Serial.println(command);
+    Serial.println(vorkOpen);
   }else{
     SAFETY_MODE = true;
   }

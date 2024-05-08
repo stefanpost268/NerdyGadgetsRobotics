@@ -43,12 +43,12 @@ void MotorController::driveFork(int y, int IRSensorWaarde) {
     }
 }
 
-void MotorController::driveMotor(int joystickInput, int sensor1, int sensor2, bool SAFETY_MODE, bool command) {
-    if (joystickInput > 50 && command ==1 && SAFETY_MODE == false && sensor1 != 0) {
+void MotorController::driveMotor(int joystickInput, int sensor1, int sensor2, bool SAFETY_MODE, bool vorkOpen) {
+    if (joystickInput > 50 && vorkOpen == 0 && SAFETY_MODE == false && sensor1 != 0) {
         disableBrake();
         motorBackwards(joystickInput);
     }
-    else if (joystickInput < -50 && command ==1 && SAFETY_MODE == false && sensor2 != 0) {
+    else if (joystickInput < -50 && vorkOpen == 0 && SAFETY_MODE == false && sensor2 != 0) {
         disableBrake();
         motorForwards(joystickInput);
     }
