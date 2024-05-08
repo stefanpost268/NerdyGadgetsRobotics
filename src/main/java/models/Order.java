@@ -31,6 +31,10 @@ public class Order {
     @JoinColumn(name = "PickedByPersonID")
     private People PickedByPerson;
 
+    @ManyToOne()
+    @JoinColumn(name = "LastEditedBy", nullable = false)
+    private People LastEditedBy;
+
     @Column(nullable = true)
     private String Comments;
 
@@ -58,5 +62,21 @@ public class Order {
 
     public People getPickedByPerson() {
         return PickedByPerson;
+    }
+
+    public String getComments() {
+        return Comments;
+    }
+
+    public String getDeliveryInstructions() {
+        return DeliveryInstructions;
+    }
+
+    public String getInternalComments() {
+        return InternalComments;
+    }
+
+    public People getLastEditedBy() {
+        return LastEditedBy;
     }
 }

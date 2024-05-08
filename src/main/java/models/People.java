@@ -15,4 +15,8 @@ public class People {
     public String getFullName() {
         return FullName;
     }
+
+    public int getPersonID() {
+        return PersonID;
+    }
 }

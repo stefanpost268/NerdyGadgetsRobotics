@@ -1,3 +1,4 @@
+import models.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import pages.*;
@@ -12,6 +13,8 @@ public class Main extends JFrame {
     private StockItemRepository stockItemRepository;
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private OrderInsertRepository orderInsertRepository;
 
     public static void main(String[] args) {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
@@ -26,6 +29,9 @@ public class Main extends JFrame {
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new CardLayout());
+
+        Order order = new Order();
+        orderInsertRepository.insertOrder(order);
 
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.setUI(new BasicTabbedPaneUI());

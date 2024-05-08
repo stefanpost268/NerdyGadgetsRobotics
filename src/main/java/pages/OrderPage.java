@@ -15,11 +15,16 @@ public class OrderPage extends JPanel implements ActionListener {
     private JButton orderButton = new JButton("Open order id 1");
     private OrderInfoDialog infoDialog;
 
+    private JButton createOrderButton = new JButton("Bestelling aanmaken");
+
     public OrderPage(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
 
         this.orderButton.addActionListener(this);
         add(this.orderButton);
+
+        this.createOrderButton.addActionListener(this);
+        add(this.createOrderButton);
     }
 
     @Override
@@ -36,6 +41,10 @@ public class OrderPage extends JPanel implements ActionListener {
             }
 
             this.infoDialog = new OrderInfoDialog(order.get());
+        }
+
+        if(e.getSource() == this.createOrderButton) {
+
         }
     }
 }
