@@ -20,4 +20,12 @@ public class OrderLines {
 
     @Column(length = 11)
     private int Quantity;
+
+    public StockItem getStockItem() {
+        return stockItem;
+    }
+
+    public int getQuantity() {
+        return Quantity;
+    }
 }
