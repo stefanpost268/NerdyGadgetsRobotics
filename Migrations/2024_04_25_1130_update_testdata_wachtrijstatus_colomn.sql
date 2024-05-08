@@ -2,5 +2,5 @@
  
 -- De laatste 15 Orders op status "Open", voor testdata
 UPDATE orders
-SET WachtrijStatus = "Open"
+SET Status = "Open"
 Where OrderID <= 15;

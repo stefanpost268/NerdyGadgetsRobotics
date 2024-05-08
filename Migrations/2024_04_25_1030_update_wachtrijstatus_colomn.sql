@@ -2,4 +2,4 @@
  
 -- alle oude Orders op Status: 'Done'
 UPDATE orders
-SET WachtrijStatus = "Done";
+SET Status = "Done";

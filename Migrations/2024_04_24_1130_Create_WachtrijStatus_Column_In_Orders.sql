@@ -2,4 +2,4 @@
 
 -- Colom WachtrijStatus toegevoegd aan Orders
 ALTER TABLE nerdygadgets.Orders
-ADD WachtrijStatus VARCHAR(25) NOT NULL;
+ADD Status VARCHAR(25) NOT NULL;
