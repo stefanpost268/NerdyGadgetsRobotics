@@ -1,7 +1,7 @@
 package pages;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,6 +15,8 @@ public class ProductPage extends JPanel implements ActionListener {
     private JButton searchButton = new JButton("Zoeken");
     private JTable table;
     private StockItem stockItem = new StockItem();
+    private String[] defaultHeaders = {"Product ID", "Product Naam", "Inkoop prijs", "Verkoop prijs", "Gewicht", "Voorraad", "??Locatie??"};
+
 
     public ProductPage() {
         setLayout(new BorderLayout());
@@ -56,11 +58,23 @@ public class ProductPage extends JPanel implements ActionListener {
 
         if(this.table == null) {
             this.table = new JTable(model);
+            updateTableHeaders(defaultHeaders); // Set default headers
         } else {
             this.table.setModel(model);
         }
 
         this.table.repaint();
+    }
+
+    private void updateTableHeaders(String[] newHeaders) {
+        if (newHeaders.length == this.table.getColumnCount()) {
+            for (int i = 0; i < newHeaders.length; i++) {
+                TableColumn column = this.table.getColumnModel().getColumn(i);
+                column.setHeaderValue(newHeaders[i]);
+            }
+            // Update the table header
+            this.table.getTableHeader().repaint();
+        }
     }
 
     @Override
