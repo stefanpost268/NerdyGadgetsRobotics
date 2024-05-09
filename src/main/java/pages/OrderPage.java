@@ -25,7 +25,6 @@ public class OrderPage extends JPanel implements ActionListener {
         this.orderRepository = orderRepository;
 
         this.addOrderButton.addActionListener(this);
-//        add(this.orderButton);
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
         buttonPanel.add(this.addOrderButton );
@@ -91,12 +90,6 @@ public class OrderPage extends JPanel implements ActionListener {
             }
 
             this.infoDialog = new OrderInfoDialog(order.get());
-        if(e.getSource() == this.addOrderButton) {
-            OrderInfoDialog infoDialog = new OrderInfoDialog();
-            infoDialog.add(new JLabel("Order Info Dialog"));
-            infoDialog.setSize(300, 200);
-            infoDialog.setVisible(true);
-            infoDialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         }
     }
 }

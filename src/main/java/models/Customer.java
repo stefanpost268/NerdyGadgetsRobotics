@@ -36,15 +36,15 @@ public class Customer {
         return DeliveryPostalCode;
     }
 
-    @OneToMany()
-    @JoinColumn(name = "CustomerID")
-    private List<Order> orders;
+//    @OneToMany()
+//    @JoinColumn(name = "CustomerID")
+//    private List<Order> orders;
 
     public int getCustomerID() {
         return CustomerID;
     }
 
-    public String getCustomerName() {
-        return CustomerName;
-    }
+//    public String getCustomerName() {
+//        return CustomerName;
+//    }
 }
