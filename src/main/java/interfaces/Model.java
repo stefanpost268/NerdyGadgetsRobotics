@@ -1,5 +1,6 @@
 package interfaces;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface Model<T> {
@@ -13,7 +14,13 @@ public interface Model<T> {
             try {
                 Field field = instance.getClass().getDeclaredField(fillable[i]);
                 field.setAccessible(true);
-                field.set(instance, data[i]);
+
+                Object value = data[i];
+                if (field.getType().equals(BigDecimal.class) && value != null) {
+                    value = new BigDecimal(value.toString());
+                }
+
+                field.set(instance, value);
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 e.printStackTrace();
             }

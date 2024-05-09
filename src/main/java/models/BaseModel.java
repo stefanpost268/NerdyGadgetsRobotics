@@ -2,6 +2,8 @@ package models;
 
 import services.MysqlConnection;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.PreparedStatement;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
@@ -75,8 +77,15 @@ public abstract class BaseModel<T> implements Model<T> {
             T item = data.get(i);
             for (int j = 0; j < fillableFields.length; j++) {
                 try {
-                    Field field = item.getClass().getField(fillableFields[j]);
-                    tableData[i][j] = field.get(item);
+                    Field field = item.getClass().getDeclaredField(fillableFields[j]);
+                    field.setAccessible(true);
+                    Object value = field.get(item);
+
+                    // Convert BigDecimal to formatted string with two decimal places
+                    if (value instanceof BigDecimal) {
+                        value = ((BigDecimal) value).setScale(2, RoundingMode.HALF_UP);
+                    }
+                    tableData[i][j] = value;
                 } catch (NoSuchFieldException | IllegalAccessException e) {
                     e.printStackTrace();
                 }

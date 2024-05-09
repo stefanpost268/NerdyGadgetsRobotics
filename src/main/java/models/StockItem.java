@@ -1,12 +1,12 @@
 package models;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 public class StockItem extends BaseModel<StockItem> {
     public Integer StockItemID;
     public String StockItemName;
-    public Integer UnitPrice;
-    public Integer RecommendedRetailPrice;
+    public BigDecimal UnitPrice;
+    public BigDecimal RecommendedRetailPrice;
     public Integer TypicalWeightPerUnit;
     public Integer QuantityPerOuter;
     public String Size;
