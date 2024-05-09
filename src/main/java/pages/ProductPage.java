@@ -58,12 +58,13 @@ public class ProductPage extends JPanel implements ActionListener {
 
         if(this.table == null) {
             this.table = new JTable(model);
-            updateTableHeaders(defaultHeaders); // Set default headers
+
         } else {
             this.table.setModel(model);
         }
 
         this.table.repaint();
+        updateTableHeaders(defaultHeaders); // Set default headers
     }
 
     private void updateTableHeaders(String[] newHeaders) {
