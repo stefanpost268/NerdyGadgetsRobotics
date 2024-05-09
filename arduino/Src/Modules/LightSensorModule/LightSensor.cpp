@@ -8,7 +8,7 @@ LightSensor::LightSensor(int pin) {
 }
 
 bool LightSensor::isActive() {
-    return analogRead(pin) > 100;
+    return digitalRead(pin);
 }
 
 void LightSensor::emitWarehouseTiltedStatus() {
