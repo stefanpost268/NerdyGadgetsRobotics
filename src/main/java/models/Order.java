@@ -3,6 +3,7 @@ package models;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class Order {
     private int OrderID;
 
     @Column(nullable = false)
-    private Date ExpectedDeliveryDate;
+    private LocalDate ExpectedDeliveryDate;
 
     @ManyToOne()
     @JoinColumn(name = "CustomerID", nullable = false)
@@ -47,7 +48,7 @@ public class Order {
     public int getOrderID() {
         return OrderID;
     }
-    public Date getExpectedDeliveryDate() {
+    public LocalDate getExpectedDeliveryDate() {
         return ExpectedDeliveryDate;
     }
     public Customer getCustomer() {
