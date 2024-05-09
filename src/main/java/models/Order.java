@@ -7,6 +7,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
+import java.time.LocalDate;
 
 @Entity
 @DynamicInsert
@@ -17,7 +19,7 @@ public class Order {
     private int OrderID;
 
     @Column(nullable = false)
-    private Date ExpectedDeliveryDate;
+    private LocalDate ExpectedDeliveryDate;
 
     @ManyToOne()
     @JoinColumn(name = "CustomerID", nullable = false)
@@ -48,6 +50,9 @@ public class Order {
     @Column(nullable = true)
     private String InternalComments;
 
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
+    private List<OrderLines> orderLines;
+
     @Column(nullable = false)
     private Date OrderDate;
 
@@ -55,12 +60,12 @@ public class Order {
     private boolean IsUnderSupplyBackordered;
 
     @Column(nullable = false)
-    private Timestamp LastEditedWhen;
+    private Date LastEditedWhen;
 
     public int getOrderID() {
         return OrderID;
     }
-    public Date getExpectedDeliveryDate() {
+    public LocalDate getExpectedDeliveryDate() {
         return ExpectedDeliveryDate;
     }
     public Customer getCustomer() {
@@ -75,15 +80,27 @@ public class Order {
     public People getPickedByPerson() {
         return PickedByPerson;
     }
+
     public String getComments() {
         return Comments;
     }
-    public String getDeliveryInstructions() {
-        return DeliveryInstructions;
-    }
+
     public String getInternalComments() {
         return InternalComments;
     }
+
+    public String getDeliveryInstructions() {
+        return DeliveryInstructions;
+    }
+
+    public List<OrderLines> getOrderLines() {
+        return orderLines;
+    }
+
+    public String getOrderState() {
+        return "NOT IMPLEMENTED";
+    }
+
     public People getLastEditedBy() {
         return LastEditedBy;
     }
@@ -93,7 +110,7 @@ public class Order {
     public boolean isUnderSupplyBackordered() {
         return IsUnderSupplyBackordered;
     }
-    public Timestamp getLastEditedWhen() {
+    public Date getLastEditedWhen() {
         return LastEditedWhen;
     }
 
@@ -124,13 +141,13 @@ public class Order {
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
-    public void setExpectedDeliveryDate(Date expectedDeliveryDate) {
+    public void setExpectedDeliveryDate(LocalDate expectedDeliveryDate) {
         ExpectedDeliveryDate = expectedDeliveryDate;
     }
     public void setUnderSupplyBackordered(boolean underSupplyBackordered) {
         IsUnderSupplyBackordered = underSupplyBackordered;
     }
-    public void setLastEditedWhen(Timestamp lastEditedWhen) {
+    public void setLastEditedWhen(Date lastEditedWhen) {
         LastEditedWhen = lastEditedWhen;
     }
 }

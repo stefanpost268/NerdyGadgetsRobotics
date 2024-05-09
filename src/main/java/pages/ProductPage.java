@@ -13,7 +13,7 @@ public class ProductPage extends JPanel implements ActionListener {
 
     private StockItemRepository stockItem;
     private JTextField searchField = new JTextField(20);
-    private JButton searchButton = new JButton("Search");
+    private JButton searchButton = new JButton("Zoeken");
     private JTable table;
 
     public ProductPage(StockItemRepository stockItem) {
@@ -49,8 +49,6 @@ public class ProductPage extends JPanel implements ActionListener {
         } else {
             stockItems = this.stockItem.findByStockItemNameContaining(this.searchField.getText());
         }
-
-        Object[][] data = Formatter.modelListToGenericObject(stockItems);
 
         DefaultTableModel model;
         if (stockItems.iterator().hasNext()) {
