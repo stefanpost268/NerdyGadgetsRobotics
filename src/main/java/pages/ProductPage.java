@@ -54,7 +54,16 @@ public class ProductPage extends JPanel implements ActionListener {
         DefaultTableModel model = new DefaultTableModel(
                 this.stockItem.toTableData(stockItems),
                 this.stockItem.fillable()
-        );
+        ) {
+            @Override
+            public Object getValueAt(int row, int column) {
+                // weight at column index 4
+                if (column == 4 && super.getValueAt(row, column) != null) {
+                    return super.getValueAt(row, column) + " kg";
+                }
+                return super.getValueAt(row, column);
+            }
+        };
 
         if(this.table == null) {
             this.table = new JTable(model);
