@@ -12,92 +12,29 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int CustomerID;
 
-    @Column(nullable = false)
+    @Column(name = "CustomerName", unique = true)
     private String CustomerName;
 
-    @Column(nullable = false)
-    private int BillToCustomerID;
-
-    @Column(nullable = false)
-    private int CustomerCategoryID;
-
-    @Column(nullable = false)
-    private int BuyingGroupID;
-
-    @Column(nullable = false)
-    private int PrimaryContactPersonID;
-
-    @Column(nullable = false)
-    private int AlternateContactPersonID;
-
-    @Column(nullable = false)
-    private int DeliveryMethodID;
-
-    @Column(nullable = false)
-    private int DeliveryCityID;
-
-    @Column(nullable = false)
-    private int PostalCityID;
-
-    @Column(nullable = false)
-    private double CreditLimit;
-
-    @Column(nullable = false)
-    private String AccountOpenedDate;
-
-    @Column(nullable = false)
-    private double StandardDiscountPercentage;
-
-    @Column(nullable = false)
-    private int IsStatementSent;
-
-    @Column(nullable = false)
-    private int IsOnCreditHold;
-
-    @Column(nullable = false)
-    private int PaymentDays;
-
-    @Column(nullable = false)
+    @Column(name = "PhoneNumber")
     private String PhoneNumber;
 
-    @Column(nullable = false)
-    private String FaxNumber;
-
-    @Column(nullable = false)
-    private String DeliveryRun;
-
-    @Column(nullable = false)
-    private String RunPosition;
-
-    @Column(nullable = false)
-    private String WebsiteURL;
-
-    @Column(nullable = false)
-    private String DeliveryAddressLine1;
-
-    @Column(nullable = false)
-    private String DeliveryAddressLine2;
-
-    @Column(nullable = false)
+    @Column(name = "DeliveryPostalCode")
     private String DeliveryPostalCode;
 
-    @Column(nullable = false)
-    private String PostalAddressLine1;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Order> orders;
 
-    @Column(nullable = false)
-    private String PostalAddressLine2;
+    public String getCustomerName() {
+        return CustomerName;
+    }
 
-    @Column(nullable = false)
-    private String PostalPostalCode;
+    public String getPhoneNumber() {
+        return PhoneNumber;
+    }
 
-    @Column(nullable = false)
-    private String LastEditedBy;
-
-    @Column(nullable = false)
-    private String ValidFrom;
-
-    @Column(nullable = false)
-    private String ValidTo;
+    public String getDeliveryPostalCode() {
+        return DeliveryPostalCode;
+    }
 
     @OneToMany()
     @JoinColumn(name = "CustomerID")
@@ -109,9 +46,5 @@ public class Customer {
 
     public String getCustomerName() {
         return CustomerName;
-    }
-
-    public int getBillToCustomerID() {
-        return BillToCustomerID;
     }
 }
