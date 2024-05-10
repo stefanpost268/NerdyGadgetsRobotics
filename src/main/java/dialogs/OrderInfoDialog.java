@@ -58,7 +58,8 @@ public class OrderInfoDialog extends JDialog {
                 stockItem.getStockItemID(),
                 stockItem.getStockItemName(),
                 orderLine.getQuantity(),
-                stockItem.getTypicalWeightPerUnit()
+
+                stockItem.getTypicalWeightPerUnit() + " kg"
             });
         }
 
