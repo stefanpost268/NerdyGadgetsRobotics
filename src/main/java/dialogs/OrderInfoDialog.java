@@ -10,6 +10,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
+
 public class OrderInfoDialog extends JDialog {
     private DefaultTableModel tableModel = new DefaultTableModel(new Object[]{"Product Nr", "Product", "Aantal", "Gewicht (kg)"}, 0);
     private JTable ordersOnTable = new JTable(this.tableModel);
@@ -36,7 +37,7 @@ public class OrderInfoDialog extends JDialog {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         this.orderID.setText("# " + order.getOrderID());
-        this.shippingDate.setText(order.getExpectedDeliveryDate().toString());
+        this.shippingDate.setText(order.getFormattedDate());
         this.orderState.setText(order.getOrderState());
 
         this.customerName.setText(customer.getCustomerName());
