@@ -35,7 +35,7 @@ public class OrderInfoDialog extends JDialog {
         setResizable(false);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        this.orderID.setText(String.valueOf(order.getOrderID()));
+        this.orderID.setText("# " + order.getOrderID());
         this.shippingDate.setText(order.getExpectedDeliveryDate().toString());
         this.orderState.setText(order.getOrderState());
 
