@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseConnector {
-    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/nerdygadgets";
+    private static final String JDBC_URL = "jdbc:mariadb://localhost:3306/nerdygadgets";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "";
     private Connection connection;
@@ -13,7 +13,7 @@ public class DatabaseConnector {
     public DatabaseConnector() {
         try {
             // Register MySQL JDBC driver
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("org.mariadb.jdbc.Driver");
 
             //connect to the database
             connect();
