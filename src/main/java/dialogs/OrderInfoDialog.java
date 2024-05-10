@@ -44,8 +44,12 @@ public class OrderInfoDialog extends JDialog {
         this.customerAdres.setText(customer.getDeliveryPostalCode());
         this.contactPerson.setText(order.getContactPerson().getFullName());
         this.salesPerson.setText(order.getSalesperson().getFullName());
+
         if(order.getPickedByPerson() != null) {
             this.pickedByPerson.setText(order.getPickedByPerson().getFullName());
+        }
+        else {
+            this.pickedByPerson.setText("Geen medewerker gevonden");
         }
 
         this.comment.setText(order.getComments());
