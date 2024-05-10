@@ -1,22 +1,17 @@
 import helpers.DatabaseConnector;
-import org.flywaydb.core.Flyway;
 import pages.*;
 
-import javax.sql.DataSource;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import java.awt.CardLayout;
-import java.sql.SQLException;
 
 public class Main extends JFrame {
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) {
         new Main().gui();
     }
 
-    public void gui() throws SQLException {
+    public void gui() {
         DatabaseConnector database = new DatabaseConnector();
-        migrateDatabase(database.getDataSource());
-
 
         setTitle("NerdyGadgetsRobotics");
         setSize(1350, 720);
@@ -32,13 +27,5 @@ public class Main extends JFrame {
 
         add(tabbedPane);
         setVisible(true);
-    }
-
-    public static void migrateDatabase(DataSource dataSource) {
-        Flyway flyway = Flyway.configure()
-                .dataSource(dataSource)
-                .load();
-
-        System.out.println(flyway.info());
     }
 }

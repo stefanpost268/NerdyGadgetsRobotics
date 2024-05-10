@@ -15,7 +15,6 @@ dependencies {
     implementation("com.fazecast:jSerialComm:[2.0.0,3.0.0)")
     implementation("org.mariadb.jdbc:mariadb-java-client:3.3.3")
     implementation("org.xhtmlrenderer:flying-saucer-pdf:9.7.2")
-    implementation("org.flywaydb:flyway-core:6.5.7")
 }
 
 tasks.test {

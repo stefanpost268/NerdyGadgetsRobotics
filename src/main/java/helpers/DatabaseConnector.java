@@ -1,8 +1,5 @@
 package helpers;
 
-import org.mariadb.jdbc.MariaDbDataSource;
-
-import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,16 +9,6 @@ public class DatabaseConnector {
     private static final String USERNAME = "root";
     private static final String PASSWORD = "";
     private Connection connection;
-
-
-    public DataSource getDataSource() throws SQLException {
-        MariaDbDataSource dataSource = new MariaDbDataSource();
-        dataSource.setUrl(JDBC_URL);
-        dataSource.setUser(USERNAME);
-        dataSource.setPassword(PASSWORD);
-
-        return dataSource;
-    }
 
     public DatabaseConnector() {
         try {
