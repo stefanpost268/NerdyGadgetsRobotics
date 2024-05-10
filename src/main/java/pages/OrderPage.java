@@ -1,10 +1,13 @@
 package pages;
 
 import javax.swing.*;
+
+import dialogs.CreateOrderDialog;
 import dialogs.OrderInfoDialog;
 import models.Order;
 import repositories.OrderRepository;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Optional;
@@ -15,6 +18,7 @@ public class OrderPage extends JPanel implements ActionListener {
     private JButton orderButton = new JButton("Open Info Dialog");
     private JTextField orderTextField = new JTextField(5);
     private OrderInfoDialog infoDialog;
+    private CreateOrderDialog createOrderDialog;
 
     private JButton createOrderButton = new JButton("Bestelling aanmaken");
 
@@ -55,7 +59,13 @@ public class OrderPage extends JPanel implements ActionListener {
         }
 
         if(e.getSource() == this.createOrderButton) {
+            Optional<Order> order  = this.orderRepository.findById(1);
+            if(order.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Order ID bestaat niet", "Error: Bestelling bestaat niet", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
+            createOrderDialog = new CreateOrderDialog(order.get());
         }
     }
 }
