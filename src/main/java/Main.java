@@ -1,6 +1,5 @@
 import helpers.DatabaseConnector;
 import pages.*;
-
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import java.awt.CardLayout;
