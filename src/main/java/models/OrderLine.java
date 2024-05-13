@@ -36,10 +36,4 @@ public class OrderLine {
     @Column(nullable = false)
     private int PickedQuantity;
 
-
-
-
-
-
-
 }

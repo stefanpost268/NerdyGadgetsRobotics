@@ -44,7 +44,6 @@ public class Order {
     @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
     private List<OrderLines> orderLines;
 
-
     public Date getExpectedDeliveryDate() {
         return ExpectedDeliveryDate;
     }
@@ -94,7 +93,6 @@ public class Order {
         return customer;
     }
 
-
     public String getOrderDate() {
         return OrderDate;
     }
@@ -108,10 +106,4 @@ public class Order {
         return new Object[] {getOrderID(), getCustomer().getCustomerName(), getStatus(), getOrderLines().size(), getOrderDate()};
     }
 
-    @Override
-    public String toString() {
-        return "Order{" +
-                "OrderID=" + OrderID +
-                '}';
-    }
 }
