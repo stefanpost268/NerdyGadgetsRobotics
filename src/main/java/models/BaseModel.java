@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.sql.ResultSet;
 import interfaces.Model;
 
+@Deprecated
 public abstract class BaseModel<T> implements Model<T> {
     private static MariaDBConnection MARIADB;
     protected String rawSql = "";

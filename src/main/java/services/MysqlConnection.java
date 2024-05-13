@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class MysqlConnection {
-    private static final String URL = "jdbc:mysql://localhost:3306/nerdygadgets";
+    private static final String URL = "jdbc:mariadb://localhost:3306/nerdygadgets";
     private static final String USER = "root";
     private static final String PASSWORD = "";
     private Connection connection;
@@ -14,7 +14,7 @@ public class MysqlConnection {
      */
     public MysqlConnection() {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("org.mariadb.jdbc.Driver");
             this.connection = DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (Exception e) {
             e.printStackTrace();
