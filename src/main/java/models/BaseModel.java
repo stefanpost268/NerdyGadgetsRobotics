@@ -1,24 +1,25 @@
 package models;
 
-import services.MysqlConnection;
+import services.MariaDBConnection;
 import java.lang.reflect.Field;
 import java.sql.PreparedStatement;
 import java.sql.ResultSetMetaData;
-import java.sql.Statement;
 import java.util.List;
 import java.util.ArrayList;
 import java.sql.ResultSet;
 import interfaces.Model;
 
+@Deprecated
 public abstract class BaseModel<T> implements Model<T> {
-    private static MysqlConnection MYSQL;
+    private static MariaDBConnection MARIADB;
     protected String rawSql = "";
     private String searchValue = null;
 
     public BaseModel() {
-        if(MYSQL == null) {
-            MYSQL = new MysqlConnection();
+        if(MARIADB == null) {
+            MARIADB = new MariaDBConnection();
         }
+
     }
 
     /**
@@ -40,7 +41,7 @@ public abstract class BaseModel<T> implements Model<T> {
         List<T> results = new ArrayList<>();
 
         try {
-            PreparedStatement statement = MYSQL.getConnection().prepareStatement(query);
+            PreparedStatement statement = MARIADB.getConnection().prepareStatement(query);
             if(this.searchValue != null) {
                 statement.setString(1, this.searchValue);
             }
