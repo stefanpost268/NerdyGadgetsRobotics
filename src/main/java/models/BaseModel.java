@@ -133,9 +133,9 @@ public abstract class BaseModel<T> implements Model<T> {
             while (resultSet.next()) {
                 int stockItemID = resultSet.getInt("StockItemID");
                 String stockItemName = resultSet.getString("StockItemName");
-                int unitPrice = resultSet.getInt("UnitPrice");
-                int recommendedRetailPrice = resultSet.getInt("UnitPrice");
-                int typicalWeightPerUnit = resultSet.getInt("TypicalWeightPerUnit");
+                BigDecimal unitPrice = resultSet.getBigDecimal("UnitPrice");
+                BigDecimal recommendedRetailPrice = resultSet.getBigDecimal("RecommendedRetailPrice");
+                BigDecimal typicalWeightPerUnit = resultSet.getBigDecimal("TypicalWeightPerUnit");
                 int quantityOnHand = resultSet.getInt("QuantityOnHand");
                 productData.add(new Object[]{stockItemID, stockItemName, unitPrice, recommendedRetailPrice, typicalWeightPerUnit, quantityOnHand });
             }
