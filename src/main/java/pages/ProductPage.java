@@ -45,10 +45,10 @@ public class ProductPage extends JPanel implements ActionListener {
 
     private void search() {
         List<Object[]> stockItems;
-        if(this.searchField.getText().isEmpty()) {
-            stockItems = this.stockItem.getProductData();
+        if (this.searchField.getText().isEmpty()) {
+            stockItems = this.stockItem.getProductData("");
         } else {
-            stockItems = this.stockItem.like("StockItemName", this.searchField.getText()).getProductData();
+            stockItems = this.stockItem.getProductData(this.searchField.getText());
         }
 
         model = new DefaultTableModel(

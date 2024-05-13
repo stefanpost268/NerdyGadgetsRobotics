@@ -122,12 +122,22 @@ public abstract class BaseModel<T> implements Model<T> {
 
     //////////////////////
 
-    public List<Object[]> getProductData() {
+    public List<Object[]> getProductData(String searchTerm) {
         List<Object[]> productData = new ArrayList<>();
-        String query = "SELECT s.StockItemID, s.StockItemName, s.UnitPrice, s.RecommendedRetailPrice, s.TypicalWeightPerUnit, h.QuantityOnHand \n" +
-                "FROM StockItems s JOIN stockitemholdings h ON s.StockItemID = h.StockItemID; \n";
+        String query = "SELECT s.StockItemID, s.StockItemName, s.UnitPrice, s.RecommendedRetailPrice, s.TypicalWeightPerUnit, h.QuantityOnHand " +
+                "FROM StockItems s JOIN stockitemholdings h ON s.StockItemID = h.StockItemID ";
+
+        // If a search term is provided, add a WHERE clause to filter by StockItemName
+        if (!searchTerm.isEmpty()) {
+            query += "WHERE s.StockItemName LIKE ?";
+        }
 
         try (PreparedStatement statement = MYSQL.getConnection().prepareStatement(query)) {
+            // If a search term is provided, set the parameter for the prepared statement
+            if (!searchTerm.isEmpty()) {
+                statement.setString(1, "%" + searchTerm + "%");
+            }
+
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
@@ -137,7 +147,7 @@ public abstract class BaseModel<T> implements Model<T> {
                 BigDecimal recommendedRetailPrice = resultSet.getBigDecimal("RecommendedRetailPrice");
                 BigDecimal typicalWeightPerUnit = resultSet.getBigDecimal("TypicalWeightPerUnit");
                 int quantityOnHand = resultSet.getInt("QuantityOnHand");
-                productData.add(new Object[]{stockItemID, stockItemName, unitPrice, recommendedRetailPrice, typicalWeightPerUnit, quantityOnHand });
+                productData.add(new Object[]{stockItemID, stockItemName, unitPrice, recommendedRetailPrice, typicalWeightPerUnit, quantityOnHand});
             }
 
         } catch (SQLException e) {
@@ -147,6 +157,7 @@ public abstract class BaseModel<T> implements Model<T> {
 
         return productData;
     }
+
 }
 
 
