@@ -13,9 +13,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Optional;
+import java.util.Spliterator;
 
 public class CreateOrderDialog extends JDialog implements ActionListener {
-    private String[] orderStates = {"In behandeling", "Verzonden", "Geleverd"};
+    private String[] orderStates = {"In Wachtrij", "Afgerond"};
     private CustomerRepository customerRepository;
     private PeopleRepository peopleRepository;
 
@@ -52,7 +53,7 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        this.orderID.setText(String.valueOf(order.getOrderID()));
+        this.orderID.setText("AUTOINCREMENT");
         this.shippingDate.setText(order.getExpectedDeliveryDate().toString());
 
         this.customerName.setText(customer.getCustomerName());
@@ -321,10 +322,24 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
         }
     }
 
+    Customer getCustomerID(JTextField field) {
+        try {
+            int ID = Integer.parseInt(field.getText());
+            Optional<Customer> customer = customerRepository.findById(ID);
+            return customer.orElse(null);
+        } catch (NumberFormatException e) {
+            customerName.setBorder(BorderFactory.createLineBorder(Color.RED));
+            return null;
+        }
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == this.saveButton) {
-            System.out.println(new Order(getPersonID(customerName)));
+            if (getCustomerID(customerName) == null || getPersonID(salesPerson) == null || getPersonID(pickedByPerson) == null || getPersonID(contactPerson) == null) {
+                return;
+            }
+            System.out.println(new Order(getCustomerID(customerName), getPersonID(salesPerson), getPersonID(pickedByPerson), getPersonID(contactPerson), new java.sql.Date(new java.util.Date().getTime()), java.time.LocalDate.now(), false, comment.getText(), deliveryComment.getText(), internalComment.getText(), getPersonID(salesPerson), new java.util.Date(), orderStates[orderState.getSelectedIndex()]));
         }
 
         if(e.getSource() == this.closeButton) {

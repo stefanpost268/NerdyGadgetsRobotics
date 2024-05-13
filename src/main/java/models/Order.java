@@ -62,10 +62,17 @@ public class Order {
     @Column(nullable = false)
     private Date LastEditedWhen;
 
+
+
+
+
+    @Column(nullable = false)
+    private String Status;
+
     public Order() {
     }
 
-    public Order(Customer customer, People salesperson, People pickedByPerson, People contactPerson, Date orderDate, LocalDate expectedDeliveryDate, boolean isUnderSupplyBackordered, String comments, String deliveryInstructions, String internalComments, People lastEditedBy, Date lastEditedWhen) {
+    public Order(Customer customer, People salesperson, People pickedByPerson, People contactPerson, Date orderDate, LocalDate expectedDeliveryDate, boolean isUnderSupplyBackordered, String comments, String deliveryInstructions, String internalComments, People lastEditedBy, Date lastEditedWhen, String orderState) {
         this.customer = customer;
         Salesperson = salesperson;
         PickedByPerson = pickedByPerson;
@@ -78,6 +85,7 @@ public class Order {
         InternalComments = internalComments;
         LastEditedBy = lastEditedBy;
         LastEditedWhen = lastEditedWhen;
+        Status = orderState;
     }
 
     public int getOrderID() {
@@ -98,27 +106,21 @@ public class Order {
     public People getPickedByPerson() {
         return PickedByPerson;
     }
-
     public String getComments() {
         return Comments;
     }
-
     public String getInternalComments() {
         return InternalComments;
     }
-
     public String getDeliveryInstructions() {
         return DeliveryInstructions;
     }
-
     public List<OrderLines> getOrderLines() {
         return orderLines;
     }
-
     public String getOrderState() {
         return "NOT IMPLEMENTED";
     }
-
     public People getLastEditedBy() {
         return LastEditedBy;
     }
@@ -130,6 +132,9 @@ public class Order {
     }
     public Date getLastEditedWhen() {
         return LastEditedWhen;
+    }
+    public String getStatus() {
+        return Status;
     }
 
     public void setOrderDate(Date orderDate) {
@@ -167,5 +172,8 @@ public class Order {
     }
     public void setLastEditedWhen(Date lastEditedWhen) {
         LastEditedWhen = lastEditedWhen;
+    }
+    public void setStatus(String status) {
+        Status = status;
     }
 }
