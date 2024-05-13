@@ -88,7 +88,7 @@ public class Main extends JFrame {
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.setUI(new BasicTabbedPaneUI());
         tabbedPane.addTab("Dashboard", new DashboardPage(database.getQueueData(), database.getProcessingData()));
-        tabbedPane.addTab("Bestellingen", new OrderPage(this.orderRepository));
+        tabbedPane.addTab("Bestellingen", new OrderPage(this.orderRepository, this.customerRepository, this.peopleRepository));
         tabbedPane.addTab("Vooraad", new ProductPage(this.stockItemRepository));
         tabbedPane.setBorder(null);
 

@@ -62,6 +62,24 @@ public class Order {
     @Column(nullable = false)
     private Date LastEditedWhen;
 
+    public Order() {
+    }
+
+    public Order(Customer customer, People salesperson, People pickedByPerson, People contactPerson, Date orderDate, LocalDate expectedDeliveryDate, boolean isUnderSupplyBackordered, String comments, String deliveryInstructions, String internalComments, People lastEditedBy, Date lastEditedWhen) {
+        this.customer = customer;
+        Salesperson = salesperson;
+        PickedByPerson = pickedByPerson;
+        ContactPerson = contactPerson;
+        OrderDate = orderDate;
+        ExpectedDeliveryDate = expectedDeliveryDate;
+        IsUnderSupplyBackordered = isUnderSupplyBackordered;
+        Comments = comments;
+        DeliveryInstructions = deliveryInstructions;
+        InternalComments = internalComments;
+        LastEditedBy = lastEditedBy;
+        LastEditedWhen = lastEditedWhen;
+    }
+
     public int getOrderID() {
         return OrderID;
     }

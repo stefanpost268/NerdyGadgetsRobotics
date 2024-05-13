@@ -1,36 +1,50 @@
 package dialogs;
 
-import models.Customer;
-import models.Order;
-import models.OrderLines;
-import models.StockItem;
+import models.*;
+import repositories.CustomerRepository;
+import repositories.PeopleRepository;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.Optional;
 
-public class CreateOrderDialog extends JDialog {
+public class CreateOrderDialog extends JDialog implements ActionListener {
+    private String[] orderStates = {"In behandeling", "Verzonden", "Geleverd"};
+    private CustomerRepository customerRepository;
+    private PeopleRepository peopleRepository;
+
     private DefaultTableModel tableModel = new DefaultTableModel(new Object[]{"Product Nr", "Product", "Aantal", "Gewicht (kg)"}, 0);
     private JTable ordersOnTable = new JTable(this.tableModel);
     private JLabel orderID = new JLabel();
-    private JLabel shippingDate = new JLabel();
-    private JLabel orderState = new JLabel();
-    private JLabel customerName = new JLabel();
-    private JLabel customerPhone = new JLabel();
-    private JLabel customerAdres = new JLabel();
-    private JLabel contactPerson = new JLabel();
-    private JLabel salesPerson = new JLabel();
-    private JLabel pickedByPerson = new JLabel();
+    private JTextField shippingDate = new JTextField(10);
+    private JComboBox<String> orderState = new JComboBox<String>(orderStates);
+    private JTextField customerName = new JTextField(10);
+    private JTextField customerPhone = new JTextField(10);
+    private JTextField customerAdres = new JTextField(10);
+    private JTextField contactPerson = new JTextField(10);
+    private JTextField salesPerson = new JTextField(10);
+    private JTextField pickedByPerson = new JTextField(10);
     private JTextArea comment = new JTextArea(4, 20);
     private JTextArea internalComment = new JTextArea(4, 20);
     private JTextArea deliveryComment = new JTextArea(4, 20);
+    private JButton saveButton = new JButton("Opslaan");
+    private JButton closeButton = new JButton("Sluiten");
+    private JButton toevoegenButton = new JButton("Toevoegen");
+    private JLabel productIDLabel = new JLabel();
+    private JTextField productID = new JTextField(5);
+    private JSpinner productQuantity = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1));
 
-    public CreateOrderDialog(Order order) {
+    public CreateOrderDialog(Order order, CustomerRepository customerRepository, PeopleRepository peopleRepository) {
         Customer customer = order.getCustomer();
         List<OrderLines> orderLines = order.getOrderLines();
+        this.customerRepository = customerRepository;
+        this.peopleRepository = peopleRepository;
 
         setTitle("Bestelling aanmaken");
         setSize(800, 600);
@@ -40,7 +54,6 @@ public class CreateOrderDialog extends JDialog {
 
         this.orderID.setText(String.valueOf(order.getOrderID()));
         this.shippingDate.setText(order.getExpectedDeliveryDate().toString());
-        this.orderState.setText(order.getOrderState());
 
         this.customerName.setText(customer.getCustomerName());
         this.customerPhone.setText(customer.getPhoneNumber());
@@ -64,9 +77,16 @@ public class CreateOrderDialog extends JDialog {
                     stockItem.getTypicalWeightPerUnit()
             });
         }
+        JPanel rightPanel = new JPanel();
+        rightPanel.setLayout(new BorderLayout());
+
         JScrollPane scrollPane = new JScrollPane(this.ordersOnTable);
         this.ordersOnTable.setEnabled(false);
-        add(scrollPane, BorderLayout.EAST);
+        rightPanel.add(scrollPane, BorderLayout.NORTH);
+        rightPanel.add(addRightPanelFooter(), BorderLayout.SOUTH);
+
+        add(rightPanel, BorderLayout.EAST);
+        add(addFooter(), BorderLayout.SOUTH);
 
         JPanel leftPanel = new JPanel();
 
@@ -82,13 +102,41 @@ public class CreateOrderDialog extends JDialog {
         leftPanel.setMinimumSize(new Dimension(350, 0));
         scrollPane.setMinimumSize(new Dimension(250, 0));
 
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, scrollPane);
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
         splitPane.setResizeWeight(0.67);
         splitPane.setEnabled(false);
 
         add(splitPane, BorderLayout.CENTER);
 
         setVisible(true);
+    }
+
+    private JPanel addRightPanelFooter() {
+        JPanel rightPanelFooter = new JPanel();
+        JPanel rightPanelFooterButtons = new JPanel();
+        rightPanelFooter.setLayout(new BorderLayout());
+        rightPanelFooter.setBorder(new EmptyBorder(10, 10, 10, 10));
+        productIDLabel.setText("Product ID: ");
+
+        rightPanelFooter.add(toevoegenButton, BorderLayout.WEST);
+        rightPanelFooterButtons.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        rightPanelFooterButtons.add(productIDLabel);
+        rightPanelFooterButtons.add(productID);
+        rightPanelFooterButtons.add(productQuantity);
+        rightPanelFooter.add(rightPanelFooterButtons, BorderLayout.EAST);
+
+        return rightPanelFooter;
+    }
+
+    private JPanel addFooter() {
+        JPanel footer = new JPanel();
+        footer.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        closeButton.addActionListener(this);
+        saveButton.addActionListener(this);
+        footer.add(closeButton);
+        footer.add(saveButton);
+
+        return footer;
     }
 
     private JPanel addOrderInfo() {
@@ -246,23 +294,41 @@ public class CreateOrderDialog extends JDialog {
         panel.add(new JLabel("Opmerkingen: "), gbc);
         gbc.gridy = 2;
         panel.add(new JScrollPane(this.comment), gbc);
-        this.comment.setEnabled(false);
 
         // Comment 2
         gbc.gridy = 3;
         panel.add(new JLabel("Interne Opmerkingen: "), gbc);
         gbc.gridy = 4;
         panel.add(new JScrollPane(this.internalComment), gbc);
-        this.internalComment.setEnabled(false);
 
         // Comment 3
         gbc.gridy = 5;
         panel.add(new JLabel("Bezorg Opmerkingen: "), gbc);
         gbc.gridy = 6;
         panel.add(new JScrollPane(this.deliveryComment), gbc);
-        this.deliveryComment.setEnabled(false);
 
         return panel;
     }
 
+    People getPersonID(JTextField field) {
+        try {
+            int ID = Integer.parseInt(field.getText());
+            Optional<People> people = peopleRepository.findById(ID);
+            return people.orElse(null);
+        } catch (NumberFormatException e) {
+            contactPerson.setBorder(BorderFactory.createLineBorder(Color.RED));
+            return null;
+        }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == this.saveButton) {
+            System.out.println(new Order(getPersonID(customerName)));
+        }
+
+        if(e.getSource() == this.closeButton) {
+            setVisible(false);
+        }
+    }
 }
