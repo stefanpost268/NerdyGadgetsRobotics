@@ -18,6 +18,7 @@ public class OrderPage extends JPanel implements ActionListener {
     private JTextField orderTextField = new JTextField(5);
     private OrderInfoDialog infoDialog;
     private JButton addOrderButton = new JButton("Aanmaken Bestelling");
+    private JButton showOrderButton = new JButton("Bekijken Bestelling");
     private JTable table;
 
     public OrderPage(OrderRepository orderRepository) {
@@ -25,9 +26,12 @@ public class OrderPage extends JPanel implements ActionListener {
         this.orderRepository = orderRepository;
 
         this.addOrderButton.addActionListener(this);
+        this.showOrderButton.addActionListener(this);
+
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
-        buttonPanel.add(this.addOrderButton );
+        buttonPanel.add(this.addOrderButton);
+        buttonPanel.add(this.showOrderButton);
         add(buttonPanel, BorderLayout.PAGE_END);
 
         Iterable<Order> orders = this.orderRepository.findAllByDesc();
@@ -36,16 +40,12 @@ public class OrderPage extends JPanel implements ActionListener {
         orders.forEach(target::add);
 
         renderTable(target);
-        this.orderButton.addActionListener(this);
-        add(this.orderButton);
-        add(this.orderTextField);
     }
 
     private void renderTable(ArrayList<Order> orders) {
 
         this.table = new JTable();
 
-        this.table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         String[] columnNames = { "Bestel Nr","Naam","Status","Product aantal","Bestel datum" };
         Object[][] data = new Object[orders.size()][5];
@@ -54,6 +54,7 @@ public class OrderPage extends JPanel implements ActionListener {
             data[i] = order.toObjectArray();
         }
         this.table = new JTable(data, columnNames);
+        this.table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 
 
@@ -69,8 +70,8 @@ public class OrderPage extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == this.orderButton) {
-            String input = this.orderTextField.getText();
+        if(e.getSource() == this.showOrderButton) {
+            String input = this.table.getValueAt(this.table.getSelectedRow(), 0).toString();
             int orderId;
             try {
                 orderId = Integer.parseInt(input);
@@ -91,5 +92,7 @@ public class OrderPage extends JPanel implements ActionListener {
 
             this.infoDialog = new OrderInfoDialog(order.get());
         }
+
+
     }
 }

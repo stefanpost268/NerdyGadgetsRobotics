@@ -44,15 +44,11 @@ public class Order {
     @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
     private List<OrderLines> orderLines;
 
-    public int getOrderID() {
-        return OrderID;
-    }
+
     public Date getExpectedDeliveryDate() {
         return ExpectedDeliveryDate;
     }
-    public Customer getCustomer() {
-        return customer;
-    }
+
     public People getContactPerson() {
         return ContactPerson;
     }
@@ -90,14 +86,6 @@ public class Order {
     @Column()
     private String Status;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "OrderID")
-    private List<OrderLine> orderLines;
-
-    @ManyToOne
-    @JoinColumn(name = "CustomerID")
-    private Customer customer;
-
     public int getOrderID() {
         return OrderID;
     }
@@ -106,34 +94,6 @@ public class Order {
         return customer;
     }
 
-
-    public int getSalespersonPersonID() {
-        return SalespersonPersonID;
-    }
-
-    public int getContactPersonID() {
-        return ContactPersonID;
-    }
-
-    public int getPickedByPersonID() {
-        return PickedByPersonID;
-    }
-
-    public String getComments() {
-        return Comments;
-    }
-
-    public String getDeliveryInstructions() {
-        return DeliveryInstructions;
-    }
-
-    public String getInternalComments() {
-        return InternalComments;
-    }
-
-    public List<OrderLine> getOrderLines() {
-        return orderLines;
-    }
 
     public String getOrderDate() {
         return OrderDate;
