@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+import javax.swing.table.DefaultTableModel;
+import models.BaseModel;
 import models.StockItem;
 
 public class ProductPage extends JPanel implements ActionListener {
@@ -15,9 +17,7 @@ public class ProductPage extends JPanel implements ActionListener {
     private JButton searchButton = new JButton("Zoeken");
     private JTable table;
     private StockItem stockItem = new StockItem();
-    private String[] defaultHeaders = {"Product ID", "Product Naam", "Inkoop prijs", "Verkoop prijs", "Gewicht", "Voorraad", "??Locatie??"};
-
-
+    private DefaultTableModel model;
     public ProductPage() {
         setLayout(new BorderLayout());
 
@@ -44,16 +44,17 @@ public class ProductPage extends JPanel implements ActionListener {
     }
 
     private void search() {
-        List<StockItem> stockItems;
+        List<Object[]> stockItems;
         if(this.searchField.getText().isEmpty()) {
-            stockItems = this.stockItem.get();
+            stockItems = this.stockItem.getProductData();
         } else {
-            stockItems = this.stockItem.like("StockItemName", this.searchField.getText()).get();
+            stockItems = this.stockItem.like("StockItemName", this.searchField.getText()).getProductData();
         }
 
-        DefaultTableModel model = new DefaultTableModel(
-                this.stockItem.toTableData(stockItems),
-                this.stockItem.fillable()
+        model = new DefaultTableModel(
+                new Object[]{"Product ID", "Product Naam", "Inkoop prijs", "Verkoop prijs", "Gewicht", "Voorraad", "Locatie"}, 0
+//                this.stockItem.toTableData(stockItems),
+//                this.stockItem.fillable()
         ) {
             @Override
             public Object getValueAt(int row, int column) {
@@ -73,7 +74,13 @@ public class ProductPage extends JPanel implements ActionListener {
         }
 
         this.table.repaint();
-        updateTableHeaders(defaultHeaders); // Set default headers
+        fillProductTable(stockItems);
+    }
+
+    private void fillProductTable(List<Object[]> data) {
+        for (Object[] row : data) {
+            model.addRow(row);
+        }
     }
 
     private void updateTableHeaders(String[] newHeaders) {

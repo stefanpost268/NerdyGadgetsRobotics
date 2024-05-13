@@ -67,12 +67,12 @@ public abstract class BaseModel<T> implements Model<T> {
      * @param data
      * @return
      */
-    public Object[][] toTableData(List<T> data) {
+    public Object[][] toTableData(List<Object[]> data) {
         String[] fillableFields = fillable();
         Object[][] tableData = new Object[data.size()][fillableFields.length];
 
         for (int i = 0; i < data.size(); i++) {
-            T item = data.get(i);
+            Object[] item = data.get(i);
             for (int j = 0; j < fillableFields.length; j++) {
                 try {
                     Field field = item.getClass().getDeclaredField(fillableFields[j]);
