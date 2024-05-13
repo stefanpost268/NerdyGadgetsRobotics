@@ -4,12 +4,10 @@ import services.MysqlConnection;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.PreparedStatement;
-import java.sql.ResultSetMetaData;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.List;
 import java.util.ArrayList;
-import java.sql.ResultSet;
+
 import interfaces.Model;
 
 public abstract class BaseModel<T> implements Model<T> {
@@ -90,10 +88,12 @@ public abstract class BaseModel<T> implements Model<T> {
                     e.printStackTrace();
                 }
             }
-        }
+            }
 
         return tableData;
     }
+
+
 
     /**
      * Search specific column on relative records.
@@ -119,4 +119,34 @@ public abstract class BaseModel<T> implements Model<T> {
         this.searchValue = null;
         return data;
     }
+
+    //////////////////////
+
+    public List<Object[]> getProductData() {
+        List<Object[]> productData = new ArrayList<>();
+        String query = "SELECT s.StockItemID, s.StockItemName, s.UnitPrice, s.RecommendedRetailPrice, s.TypicalWeightPerUnit, h.QuantityOnHand \n" +
+                "FROM StockItems s JOIN stockitemholdings h ON s.StockItemID = h.StockItemID; \n";
+
+        try (PreparedStatement statement = MYSQL.getConnection().prepareStatement(query)) {
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                int stockItemID = resultSet.getInt("StockItemID");
+                String stockItemName = resultSet.getString("StockItemName");
+                int unitPrice = resultSet.getInt("UnitPrice");
+                int recommendedRetailPrice = resultSet.getInt("UnitPrice");
+                int typicalWeightPerUnit = resultSet.getInt("TypicalWeightPerUnit");
+                int quantityOnHand = resultSet.getInt("QuantityOnHand");
+                productData.add(new Object[]{stockItemID, stockItemName, unitPrice, recommendedRetailPrice, typicalWeightPerUnit, quantityOnHand });
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Failed to execute the query!");
+            e.printStackTrace();
+        }
+
+        return productData;
+    }
 }
+
+
