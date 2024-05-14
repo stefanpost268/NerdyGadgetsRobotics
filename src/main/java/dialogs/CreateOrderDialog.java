@@ -3,6 +3,7 @@ package dialogs;
 import models.*;
 import repositories.CustomerRepository;
 import repositories.PeopleRepository;
+import repositories.StockItemRepository;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -19,6 +20,7 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
     private String[] orderStates = {"In Wachtrij", "Afgerond"};
     private CustomerRepository customerRepository;
     private PeopleRepository peopleRepository;
+    private StockItemRepository stockitemRepository;
 
     private DefaultTableModel tableModel = new DefaultTableModel(new Object[]{"Product Nr", "Product", "Aantal", "Gewicht (kg)"}, 0);
     private JTable ordersOnTable = new JTable(this.tableModel);
@@ -41,11 +43,12 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
     private JTextField productID = new JTextField(5);
     private JSpinner productQuantity = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1));
 
-    public CreateOrderDialog(Order order, CustomerRepository customerRepository, PeopleRepository peopleRepository) {
+    public CreateOrderDialog(Order order, CustomerRepository customerRepository, PeopleRepository peopleRepository, StockItemRepository stockItemRepository) {
         Customer customer = order.getCustomer();
         List<OrderLines> orderLines = order.getOrderLines();
         this.customerRepository = customerRepository;
         this.peopleRepository = peopleRepository;
+        this.stockitemRepository = stockItemRepository;
 
         setTitle("Bestelling aanmaken");
         setSize(800, 600);
@@ -69,15 +72,6 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
         this.internalComment.setText(order.getInternalComments());
         this.deliveryComment.setText(order.getDeliveryInstructions());
 
-        for(OrderLines orderLine : orderLines) {
-            StockItem stockItem = orderLine.getStockItem();
-            tableModel.addRow(new Object[]{
-                    stockItem.getStockItemID(),
-                    stockItem.getStockItemName(),
-                    orderLine.getQuantity(),
-                    stockItem.getTypicalWeightPerUnit()
-            });
-        }
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new BorderLayout());
 
@@ -119,6 +113,7 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
         rightPanelFooter.setBorder(new EmptyBorder(10, 10, 10, 10));
         productIDLabel.setText("Product ID: ");
 
+        toevoegenButton.addActionListener(this);
         rightPanelFooter.add(toevoegenButton, BorderLayout.WEST);
         rightPanelFooterButtons.setLayout(new FlowLayout(FlowLayout.RIGHT));
         rightPanelFooterButtons.add(productIDLabel);
@@ -333,6 +328,26 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
         }
     }
 
+    public void createOrder() {
+        if (getCustomerID(customerName) == null || getPersonID(salesPerson) == null || getPersonID(pickedByPerson) == null || getPersonID(contactPerson) == null || shippingDate.getText().isEmpty()) {
+            return;
+        }
+        new Order(
+                getCustomerID(customerName),                        // CustomerID
+                getPersonID(salesPerson),                           // SalesPersonID
+                getPersonID(pickedByPerson),                        // PickedByPersonID
+                getPersonID(contactPerson),                         // ContactPersonID
+                new java.sql.Date(new java.util.Date().getTime()),  // OrderDate
+                java.time.LocalDate.now(),                          // ExpectedDeliveryDate
+                false,                                              // IsUnderSupplyBackorderd
+                comment.getText(),                                  // Comments
+                deliveryComment.getText(),                          // DeliveryInstructions
+                internalComment.getText(),                          // InternalComments
+                getPersonID(pickedByPerson),                        // LastEditedBy
+                new java.util.Date(),                               // LastEditedWhen
+                orderStates[orderState.getSelectedIndex()]);        // Status
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == this.saveButton) {
@@ -341,9 +356,18 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
             }
             System.out.println(new Order(getCustomerID(customerName), getPersonID(salesPerson), getPersonID(pickedByPerson), getPersonID(contactPerson), new java.sql.Date(new java.util.Date().getTime()), java.time.LocalDate.now(), false, comment.getText(), deliveryComment.getText(), internalComment.getText(), getPersonID(salesPerson), new java.util.Date(), orderStates[orderState.getSelectedIndex()]));
         }
-
         if(e.getSource() == this.closeButton) {
             setVisible(false);
+        }
+        if(e.getSource() == this.toevoegenButton) {
+            stockitemRepository.findById(Integer.parseInt(productID.getText())).ifPresent(stockItem -> {
+                tableModel.addRow(new Object[]{
+                        stockItem.getStockItemID(),
+                        stockItem.getStockItemName(),
+                        productQuantity.getValue(),
+                        stockItem.getTypicalWeightPerUnit()
+                });
+            });
         }
     }
 }

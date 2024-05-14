@@ -8,6 +8,7 @@ import models.Order;
 import repositories.CustomerRepository;
 import repositories.OrderRepository;
 import repositories.PeopleRepository;
+import repositories.StockItemRepository;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -19,6 +20,7 @@ public class OrderPage extends JPanel implements ActionListener {
     private OrderRepository orderRepository;
     private CustomerRepository customerRepository;
     private PeopleRepository peopleRepository;
+    private StockItemRepository stockitemRepository;
     private JButton orderButton = new JButton("Open Info Dialog");
     private JTextField orderTextField = new JTextField(5);
     private OrderInfoDialog infoDialog;
@@ -26,15 +28,11 @@ public class OrderPage extends JPanel implements ActionListener {
 
     private JButton createOrderButton = new JButton("Bestelling aanmaken");
 
-    public OrderPage(OrderRepository orderRepository, CustomerRepository customerRepository, PeopleRepository peopleRepository) {
+    public OrderPage(OrderRepository orderRepository, CustomerRepository customerRepository, PeopleRepository peopleRepository, StockItemRepository stockitemRepository) {
         this.orderRepository = orderRepository;
         this.customerRepository = customerRepository;
         this.peopleRepository = peopleRepository;
-
-        this.orderButton.addActionListener(this);
-        add(this.orderButton);
-        add(this.orderTextField);
-
+        this.stockitemRepository = stockitemRepository;
         this.createOrderButton.addActionListener(this);
         add(this.createOrderButton);
     }
@@ -70,7 +68,7 @@ public class OrderPage extends JPanel implements ActionListener {
                 JOptionPane.showMessageDialog(this, "Order ID bestaat niet", "Error: Bestelling bestaat niet", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            createOrderDialog = new CreateOrderDialog(order.get(), customerRepository, peopleRepository);
+            createOrderDialog = new CreateOrderDialog(order.get(), customerRepository, peopleRepository, stockitemRepository);
         }
     }
 }
