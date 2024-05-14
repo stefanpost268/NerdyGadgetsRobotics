@@ -31,7 +31,6 @@ public class DashboardPage extends JPanel {
         QueueBox queueBox = new QueueBox(queueData);
         queueBox.setPreferredSize(new Dimension(330, 340));
         panel.add(queueBox);
-
         ProcessingBox processingBox = new ProcessingBox(processingData);
         processingBox.setPreferredSize(new Dimension(330, 300));
         panel.add(processingBox);
@@ -40,6 +39,7 @@ public class DashboardPage extends JPanel {
 
 
         add(panel);
+
 
     }
 }

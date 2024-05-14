@@ -36,24 +36,19 @@ public class Order {
     @Column(nullable = true)
     private String Comments;
 
-    @Column(nullable = true)
+    @Column()
     private String DeliveryInstructions;
 
-    @Column(nullable = true)
+    @Column()
     private String InternalComments;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
     private List<OrderLines> orderLines;
 
-    public int getOrderID() {
-        return OrderID;
-    }
     public LocalDate getExpectedDeliveryDate() {
         return ExpectedDeliveryDate;
     }
-    public Customer getCustomer() {
-        return customer;
-    }
+
     public People getContactPerson() {
         return ContactPerson;
     }
@@ -84,4 +79,32 @@ public class Order {
     public String getOrderState() {
         return "NOT IMPLEMENTED";
     }
+
+    @Column()
+    private String OrderDate;
+
+    @Column()
+    private String Status;
+
+    public int getOrderID() {
+        return OrderID;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public String getOrderDate() {
+        return OrderDate;
+    }
+
+    public String getStatus() {
+        return Status;
+    }
+
+    public Object[] toObjectArray() {
+
+        return new Object[] {getOrderID(), getCustomer().getCustomerName(), getStatus(), getOrderLines().size(), getOrderDate()};
+    }
+
 }
