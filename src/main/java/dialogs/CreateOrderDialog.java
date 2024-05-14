@@ -191,7 +191,7 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
         gbc.weightx = 1.0;
 
         // Customer Name Label
-        JLabel customerNameLabel = new JLabel("Naam Klant: ");
+        JLabel customerNameLabel = new JLabel("Klant ID: ");
         gbc.gridx = 0;
         gbc.gridy = 0;
         panel.add(customerNameLabel, gbc);
@@ -238,7 +238,7 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
         gbc.weightx = 1.0;
 
         // Contact Person Label
-        JLabel contactPersonLabel = new JLabel("Contact Persoon: ");
+        JLabel contactPersonLabel = new JLabel("Contact Persoon ID: ");
         gbc.gridx = 0;
         gbc.gridy = 0;
         panel.add(contactPersonLabel, gbc);
@@ -249,7 +249,7 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
         panel.add(this.contactPerson, gbc);
 
         // Sales Person Label
-        JLabel salesPersonLabel = new JLabel("Verkoop Medewerker: ");
+        JLabel salesPersonLabel = new JLabel("Verkoop Medewerker ID: ");
         gbc.gridx = 1;
         gbc.gridy = 0;
         panel.add(salesPersonLabel, gbc);
@@ -260,7 +260,7 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
         panel.add(this.salesPerson, gbc);
 
         // Picked By Person Label
-        JLabel pickedByPersonLabel = new JLabel("Magazijn Medewerker: ");
+        JLabel pickedByPersonLabel = new JLabel("Magazijn Medewerker ID: ");
         gbc.gridx = 2;
         gbc.gridy = 0;
         panel.add(pickedByPersonLabel, gbc);
