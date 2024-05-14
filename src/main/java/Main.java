@@ -3,9 +3,13 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import pages.*;
 import repositories.*;
 import helpers.DatabaseConnector;
+import services.RouteCalculator;
+
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import java.awt.CardLayout;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Main extends JFrame {
 
@@ -15,6 +19,7 @@ public class Main extends JFrame {
     private OrderRepository orderRepository;
 
     public static void main(String[] args) {
+        System.out.println(RouteCalculator.calculateRoute(new ArrayList<>(Arrays.asList("A3", "B8", "C1"))));
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 
         Main main = context.getBean(Main.class);
