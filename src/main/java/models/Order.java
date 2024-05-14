@@ -45,9 +45,6 @@ public class Order {
     @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
     private List<OrderLines> orderLines;
 
-    public int getOrderID() {
-        return OrderID;
-    }
     public LocalDate getExpectedDeliveryDate() {
         return ExpectedDeliveryDate;
     }
