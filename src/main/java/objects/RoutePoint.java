@@ -45,4 +45,8 @@ public class RoutePoint {
     public void setBorderingPoints(ArrayList<RoutePoint> borderingPoints) {
         this.borderingPoints = borderingPoints;
     }
+
+    public String toString() {
+        return " " + x + y;
+    }
 }

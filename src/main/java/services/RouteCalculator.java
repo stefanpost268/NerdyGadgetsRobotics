@@ -56,11 +56,14 @@ public class RouteCalculator {
 
         RoutePoint currentPoint = startingPoint;
 
-        while (unvisitedPoints.size() > 0) {
+        while (!unvisitedPoints.isEmpty()) {
             int shortestDistance = 999999999;
             RoutePoint nextPoint = null;
-            if (currentPoint.getBorderingPoints().size() == 0) {
+            if (currentPoint.getBorderingPoints() == null) {
                 currentPoint.setBorderingPoints(unvisitedPoints);
+            }
+            for (int i = 0; i < currentPoint.getBorderingPoints().size(); i++) {
+                currentPoint.getBorderingPoints().get(i).setDistance(calculateDistanceBetweenPoints(currentPoint, currentPoint.getBorderingPoints().get(i)));
             }
             for (int i = 0; i < currentPoint.getBorderingPoints().size(); i++) {
                 if (currentPoint.getBorderingPoints().get(i).getDistance() < shortestDistance) {
