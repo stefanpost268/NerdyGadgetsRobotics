@@ -3,6 +3,7 @@ package models;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class Order {
     private int OrderID;
 
     @Column(nullable = false)
-    private Date ExpectedDeliveryDate;
+    private LocalDate ExpectedDeliveryDate;
 
     @ManyToOne()
     @JoinColumn(name = "CustomerID", nullable = false)
@@ -44,7 +45,10 @@ public class Order {
     @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
     private List<OrderLines> orderLines;
 
-    public Date getExpectedDeliveryDate() {
+    public int getOrderID() {
+        return OrderID;
+    }
+    public LocalDate getExpectedDeliveryDate() {
         return ExpectedDeliveryDate;
     }
 
