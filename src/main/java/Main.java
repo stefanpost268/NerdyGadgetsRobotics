@@ -19,7 +19,7 @@ public class Main extends JFrame {
     private OrderRepository orderRepository;
 
     public static void main(String[] args) {
-        System.out.println(RouteCalculator.calculateRoute(new ArrayList<>(Arrays.asList("A3", "B8", "C1"))));
+        System.out.println(RouteCalculator.calculateRoute(new ArrayList<>(Arrays.asList("A1", "E5", "C3"))));
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 
         Main main = context.getBean(Main.class);

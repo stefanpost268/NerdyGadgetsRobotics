@@ -42,7 +42,7 @@ public class RouteCalculator {
         //setting the starting point as close to the starting point of the robot
         int closestRoutePointId = 0;
         for (int i = 0; i < routePoints.size(); i++) {
-             if (routePoints.get(i).getX() + routePoints.get(i).getY() < routePoints.get(closestRoutePointId).getX() + routePoints.get(closestRoutePointId).getY()) {
+             if (routePoints.get(i).getX() - routePoints.get(i).getY() < routePoints.get(closestRoutePointId).getX() - routePoints.get(closestRoutePointId).getY()) {
                  closestRoutePointId = i;
              }
         }
