@@ -48,29 +48,4 @@ public class DatabaseConnector {
         }
     }
 
-    public List<Object[]> getProcessingData() {
-        List<Object[]> processingData = new ArrayList<>();
-        String query = "SELECT l.StockItemID, l.Description, l.quantity\n" +
-                "FROM orderlines l\n" +
-                "JOIN orders o on o.OrderID = l.OrderID \n" +
-                "WHERE o.Status = 'In progress'\n" +
-                "ORDER BY l.OrderLineID;";
-
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            ResultSet resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                int stockItemID = resultSet.getInt("StockItemID");
-                String description = resultSet.getString("Description");
-                int quantity = resultSet.getInt("Quantity");
-                processingData.add(new Object[]{stockItemID, description, quantity});
-            }
-
-        } catch (SQLException e) {
-            System.err.println("Failed to execute the query!");
-            e.printStackTrace();
-        }
-
-        return processingData;
-    }
 }
