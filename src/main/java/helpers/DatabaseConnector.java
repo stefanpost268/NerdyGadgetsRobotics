@@ -1,9 +1,13 @@
 package helpers;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * This class is used to connect to the database.
+ *
+ * @deprecated This class is deprecated and will be removed in the future. Please use spring data JPA instead.
+ */
+@Deprecated
 public class DatabaseConnector {
     private static final String JDBC_URL = "jdbc:mariadb://localhost:3306/nerdygadgets";
     private static final String USERNAME = "root";
