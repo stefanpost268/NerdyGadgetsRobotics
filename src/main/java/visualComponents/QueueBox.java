@@ -13,6 +13,7 @@ import java.util.List;
 
 public class QueueBox extends JPanel {
     private DefaultTableModel queueTableModel;
+    private Order orderInProgress = null;
 
     public QueueBox(OrderRepository orderRepository) {
         setBackground(Color.LIGHT_GRAY);
@@ -23,6 +24,9 @@ public class QueueBox extends JPanel {
         Page<Order> orders = orderRepository.findUnfinishedOrders(PageRequest.of(0, 100));
         List<Object[]> orderData = new ArrayList<>();
         for(Order order : orders.getContent()) {
+            if(orderInProgress == null && order.getStatus().equals("InProgress")) {
+                orderInProgress = order;
+            }
             Object[] orderArray = new Object[3];
             orderArray[0] = order.getOrderID();
             orderArray[1] = order.getOrderLines().size();
@@ -49,5 +53,9 @@ public class QueueBox extends JPanel {
         for (Object[] row : data) {
             queueTableModel.addRow(row);
         }
+    }
+
+    public Order getOrderInProgress() {
+        return orderInProgress;
     }
 }

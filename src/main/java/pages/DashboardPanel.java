@@ -5,7 +5,7 @@ import visualComponents.*;
 import javax.swing.*;
 import java.util.List;
 public class DashboardPanel extends JFrame {
-    public DashboardPanel(List<Object[]> processingData, OrderRepository orderRepository) {
+    public DashboardPanel(OrderRepository orderRepository) {
         setTitle("Dashboard");
         setSize(1010, 710);
         setLocationRelativeTo(null);
@@ -15,7 +15,7 @@ public class DashboardPanel extends JFrame {
         QueueBox queueBox = new QueueBox(orderRepository);
         add(queueBox);
 
-        ProcessingBox processingBox = new ProcessingBox(processingData);
+        ProcessingBox processingBox = new ProcessingBox(queueBox.getOrderInProgress());
         add(processingBox);
 
         setVisible(true);

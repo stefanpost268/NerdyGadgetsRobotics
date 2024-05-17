@@ -12,7 +12,7 @@ import java.awt.*;
 import java.util.List;
 
 public class DashboardPage extends JPanel {
-    public DashboardPage(List<Object[]> processingData, OrderRepository orderRepository) {
+    public DashboardPage(OrderRepository orderRepository) {
         setLayout(new GridLayout(1, 2));
         JPanel panelFirst = new JPanel();
         panelFirst.setLayout(new GridLayout(2, 1));
@@ -33,7 +33,7 @@ public class DashboardPage extends JPanel {
         queueBox.setPreferredSize(new Dimension(330, 340));
         panel.add(queueBox);
 
-        ProcessingBox processingBox = new ProcessingBox(processingData);
+        ProcessingBox processingBox = new ProcessingBox(queueBox.getOrderInProgress());
         processingBox.setPreferredSize(new Dimension(330, 300));
         panel.add(processingBox);
 

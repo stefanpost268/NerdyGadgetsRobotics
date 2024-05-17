@@ -22,8 +22,6 @@ public class Main extends JFrame {
     }
 
     public void gui() {
-        DatabaseConnector database = new DatabaseConnector();
-
         setTitle("NerdyGadgetsRobotics");
         setSize(1350, 720);
         setResizable(false);
@@ -32,7 +30,7 @@ public class Main extends JFrame {
 
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.setUI(new BasicTabbedPaneUI());
-        tabbedPane.addTab("Dashboard", new DashboardPage(database.getQueueData(), this.orderRepository));
+        tabbedPane.addTab("Dashboard", new DashboardPage(this.orderRepository));
         tabbedPane.addTab("Bestellingen", new OrderPage(this.orderRepository));
         tabbedPane.addTab("Vooraad", new ProductPage(this.stockItemRepository));
         tabbedPane.setBorder(null);
