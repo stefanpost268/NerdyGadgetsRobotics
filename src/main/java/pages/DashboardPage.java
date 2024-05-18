@@ -6,10 +6,8 @@ import visualComponents.ProcessingBox;
 import visualComponents.QueueBox;
 import visualComponents.WarehouseMap;
 import visualComponents.ExportPdfButton;
-
 import javax.swing.JPanel;
 import java.awt.*;
-import java.util.List;
 
 public class DashboardPage extends JPanel {
     public DashboardPage(OrderRepository orderRepository) {
