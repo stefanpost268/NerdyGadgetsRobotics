@@ -3,7 +3,6 @@ package pages;
 import dialogs.OrderInfoDialog;
 import models.Order;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import repositories.OrderRepository;
 
 import javax.swing.*;
@@ -53,8 +52,6 @@ public class OrderPage extends JPanel implements ActionListener {
         add(footerPanel, BorderLayout.PAGE_END);
 
         this.maxPages = this.orderRepository.count() / this.recordsOnPage;
-
-        refreshTable();
     }
 
     private void renderTable(ArrayList<Order> orders) {
@@ -102,7 +99,7 @@ public class OrderPage extends JPanel implements ActionListener {
         }
     }
 
-    private void refreshTable() {
+    public void refreshTable() {
         this.pageLabel.setText("Pagina: " + (this.page + 1) + " van " + this.maxPages);
         Iterable<Order> orders = this.orderRepository.findAllByDesc(PageRequest.of(this.page, this.recordsOnPage));
         ArrayList<Order> target = new ArrayList<>();
@@ -118,6 +115,10 @@ public class OrderPage extends JPanel implements ActionListener {
 
         if(this.infoDialog != null) {
             this.infoDialog.dispose();
+        }
+
+        if(order.isEmpty()) {
+            return;
         }
 
         this.infoDialog = new OrderInfoDialog(order.get());
