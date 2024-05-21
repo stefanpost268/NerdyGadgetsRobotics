@@ -2,6 +2,7 @@ package dialogs;
 
 import models.*;
 import repositories.CustomerRepository;
+import repositories.OrderLinesRepository;
 import repositories.PeopleRepository;
 import repositories.StockItemRepository;
 
@@ -12,6 +13,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Spliterator;
@@ -21,6 +23,7 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
     private CustomerRepository customerRepository;
     private PeopleRepository peopleRepository;
     private StockItemRepository stockitemRepository;
+    private OrderLinesRepository orderLinesRepository;
 
     private DefaultTableModel tableModel = new DefaultTableModel(new Object[]{"Product Nr", "Product", "Aantal", "Gewicht (kg)"}, 0);
     private JTable ordersOnTable = new JTable(this.tableModel);
@@ -43,12 +46,13 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
     private JTextField productID = new JTextField(5);
     private JSpinner productQuantity = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1));
 
-    public CreateOrderDialog(Order order, CustomerRepository customerRepository, PeopleRepository peopleRepository, StockItemRepository stockItemRepository) {
+    public CreateOrderDialog(Order order, CustomerRepository customerRepository, PeopleRepository peopleRepository, StockItemRepository stockItemRepository, OrderLinesRepository orderLinesRepository) {
         Customer customer = order.getCustomer();
         List<OrderLines> orderLines = order.getOrderLines();
         this.customerRepository = customerRepository;
         this.peopleRepository = peopleRepository;
         this.stockitemRepository = stockItemRepository;
+        this.orderLinesRepository = orderLinesRepository;
 
         setTitle("Bestelling aanmaken");
         setSize(800, 600);
@@ -332,7 +336,7 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
         if (getCustomerID(customerName) == null || getPersonID(salesPerson) == null || getPersonID(pickedByPerson) == null || getPersonID(contactPerson) == null || shippingDate.getText().isEmpty()) {
             return;
         }
-        new Order(
+        Order order = new Order(
                 getCustomerID(customerName),                        // CustomerID
                 getPersonID(salesPerson),                           // SalesPersonID
                 getPersonID(pickedByPerson),                        // PickedByPersonID
@@ -346,6 +350,30 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
                 getPersonID(pickedByPerson),                        // LastEditedBy
                 new java.util.Date(),                               // LastEditedWhen
                 orderStates[orderState.getSelectedIndex()]);        // Status
+    }
+
+    public void createOrderlines(Order order) {
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            Optional<StockItem> stockItem = stockitemRepository.findById((int) tableModel.getValueAt(i, 0));
+            if (stockItem.isEmpty()) {
+                System.out.println("StockItem bestaat niet");
+                return;
+            }
+
+            StockItem stockItem1 = stockItem.get();
+
+            OrderLines orderLines = new OrderLines();
+            orderLines.setOrderID(order);
+            orderLines.setStockItem(stockItem1);
+            orderLines.setDescription(stockItem1.getStockItemName());
+            orderLines.setPackageTypeID(stockItem1.getUnitPackageID());
+            orderLines.setQuantity((int) tableModel.getValueAt(i, 2));
+            orderLines.setPickedQuantity((int) tableModel.getValueAt(i, 2));
+            orderLines.setLastEditedBy(order.getLastEditedBy());
+            orderLines.setLastEditedWhen(new Date());
+
+            orderLinesRepository.save(orderLines);
+        }
     }
 
     @Override

@@ -5,10 +5,7 @@ import javax.swing.*;
 import dialogs.CreateOrderDialog;
 import dialogs.OrderInfoDialog;
 import models.Order;
-import repositories.CustomerRepository;
-import repositories.OrderRepository;
-import repositories.PeopleRepository;
-import repositories.StockItemRepository;
+import repositories.*;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -21,6 +18,8 @@ public class OrderPage extends JPanel implements ActionListener {
     private CustomerRepository customerRepository;
     private PeopleRepository peopleRepository;
     private StockItemRepository stockitemRepository;
+    private OrderLinesRepository orderlinesrepository;
+
     private JButton orderButton = new JButton("Open Info Dialog");
     private JTextField orderTextField = new JTextField(5);
     private OrderInfoDialog infoDialog;
@@ -28,11 +27,13 @@ public class OrderPage extends JPanel implements ActionListener {
 
     private JButton createOrderButton = new JButton("Bestelling aanmaken");
 
-    public OrderPage(OrderRepository orderRepository, CustomerRepository customerRepository, PeopleRepository peopleRepository, StockItemRepository stockitemRepository) {
+    public OrderPage(OrderRepository orderRepository, CustomerRepository customerRepository, PeopleRepository peopleRepository, StockItemRepository stockitemRepository, OrderLinesRepository orderlinesrepository) {
         this.orderRepository = orderRepository;
         this.customerRepository = customerRepository;
         this.peopleRepository = peopleRepository;
         this.stockitemRepository = stockitemRepository;
+        this.orderlinesrepository = orderlinesrepository;
+
         this.createOrderButton.addActionListener(this);
         add(this.createOrderButton);
     }
@@ -68,7 +69,7 @@ public class OrderPage extends JPanel implements ActionListener {
                 JOptionPane.showMessageDialog(this, "Order ID bestaat niet", "Error: Bestelling bestaat niet", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            createOrderDialog = new CreateOrderDialog(order.get(), customerRepository, peopleRepository, stockitemRepository);
+            createOrderDialog = new CreateOrderDialog(order.get(), customerRepository, peopleRepository, stockitemRepository, orderlinesrepository);
         }
     }
 }

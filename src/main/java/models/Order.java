@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @DynamicInsert
@@ -50,7 +51,7 @@ public class Order {
     @Column(nullable = true)
     private String InternalComments;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "orderID", fetch = FetchType.EAGER)
     private List<OrderLines> orderLines;
 
     @Column(nullable = false)
@@ -61,10 +62,6 @@ public class Order {
 
     @Column(nullable = false)
     private Date LastEditedWhen;
-
-
-
-
 
     @Column(nullable = false)
     private String Status;

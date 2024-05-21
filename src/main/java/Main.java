@@ -1,9 +1,6 @@
-import models.Customer;
-import models.Order;
-import models.People;
+import models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.stereotype.Component;
 import pages.*;
 import repositories.*;
 import helpers.DatabaseConnector;
@@ -26,6 +23,8 @@ public class Main extends JFrame {
     private PeopleRepository peopleRepository;
     @Autowired
     private CustomerRepository customerRepository;
+    @Autowired
+    private OrderLinesRepository orderLinesRepository;
 
     public static void main(String[] args) {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
@@ -35,6 +34,29 @@ public class Main extends JFrame {
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
         timestamp.setNanos(0);
         System.out.println(timestamp);
+    }
+
+    public void CreateOrderLines(Order order) {
+        Optional<StockItem> stockItem = stockItemRepository.findById(1);
+        if (stockItem.isEmpty()) {
+            System.out.println("StockItem bestaat niet");
+            return;
+        }
+
+        StockItem stockItem1 = stockItem.get();
+
+        OrderLines orderLines = new OrderLines();
+        orderLines.setOrderID(order);
+        orderLines.setStockItem(stockItem1);
+        orderLines.setDescription("Description");
+        orderLines.setPackageTypeID(stockItem1.getUnitPackageID());
+        orderLines.setQuantity(1);
+        orderLines.setPickedQuantity(1);
+        orderLines.setLastEditedBy(order.getLastEditedBy());
+        orderLines.setLastEditedWhen(new Date());
+
+        orderLinesRepository.save(orderLines);
+
     }
 
     public void execute() {
@@ -67,11 +89,14 @@ public class Main extends JFrame {
         order.setInternalComments("Internal Comments");//InternalComments
         order.setLastEditedBy(person);//LastEditedBy
         order.setLastEditedWhen(new Date());//LastEditedWhen
+        order.setStatus("NOT IMPLEMENTED");//Status
 
         order.setComments("Java Applicatie");
         order.setContactPerson(person);
 
         orderRepository.save(order);
+
+        CreateOrderLines(order);
     }
 
     public void gui() {
@@ -83,12 +108,12 @@ public class Main extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new CardLayout());
 
-        //this.execute();
+        this.execute();
 
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.setUI(new BasicTabbedPaneUI());
         tabbedPane.addTab("Dashboard", new DashboardPage(database.getQueueData(), database.getProcessingData()));
-        tabbedPane.addTab("Bestellingen", new OrderPage(this.orderRepository, this.customerRepository, this.peopleRepository, this.stockItemRepository));
+        tabbedPane.addTab("Bestellingen", new OrderPage(this.orderRepository, this.customerRepository, this.peopleRepository, this.stockItemRepository, this.orderLinesRepository));
         tabbedPane.addTab("Vooraad", new ProductPage(this.stockItemRepository));
         tabbedPane.setBorder(null);
 
