@@ -3,11 +3,8 @@ package models;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
-<<<<<<< HEAD
 
-=======
 import java.util.Arrays;
->>>>>>> c383daa5042580d5e7be6b7081d794c041b40919
 import java.util.List;
 
 import java.time.format.DateTimeFormatter;
@@ -72,7 +69,6 @@ public class Order {
         return ExpectedDeliveryDate;
     }
 
-<<<<<<< HEAD
     public String getFormattedDate() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", new Locale("nl", "NL"));
         String formattedDate = ExpectedDeliveryDate.format(formatter);
@@ -81,8 +77,6 @@ public class Order {
     public Customer getCustomer() {
         return customer;
     }
-=======
->>>>>>> c383daa5042580d5e7be6b7081d794c041b40919
     public People getContactPerson() {
         return ContactPerson;
     }
@@ -113,4 +107,25 @@ public class Order {
     public String getOrderState() {
         return "NOT IMPLEMENTED";
     }
+
+    @Column()
+    private String OrderDate;
+
+    public int getOrderID() {
+        return OrderID;
+    }
+
+    public String getOrderDate() {
+        return OrderDate;
+    }
+
+    public String getStatus() {
+        return Status;
+    }
+
+    public Object[] toObjectArray() {
+
+        return new Object[] {getOrderID(), getCustomer().getCustomerName(), getStatus(), getOrderLines().size(), getOrderDate()};
+    }
+
 }
