@@ -1,11 +1,16 @@
 package helpers;
 
-import models.Customer;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * This class is used to connect to the database.
+ *
+ * @deprecated This class is deprecated and will be removed in the future. Please use spring data JPA instead.
+ */
+@Deprecated
 public class DatabaseConnector {
     private static final String JDBC_URL = "jdbc:mariadb://localhost:3306/nerdygadgets";
     private static final String USERNAME = "root";
@@ -51,7 +56,7 @@ public class DatabaseConnector {
     }
 
     public String[] getCustomerData(int orderid) {
-        String[] customerData = new String[6]; // Array om CustomerID, CustomerName en PhoneNumber op te slaan
+        String[] customerData = new String[8]; // Array om CustomerID, CustomerName en PhoneNumber op te slaan
         String query = "SELECT c.CustomerName, c.PhoneNumber, c.DeliveryAddressLine2, c.PostalCityID, o.OrderID, o.OrderDate, ol.StockItemID, ol.Quantity, ol.Description FROM customers c JOIN orders o ON o.CustomerID = c.CustomerID JOIN orderlines ol ON ol.OrderID = o.OrderID WHERE o.OrderID = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {

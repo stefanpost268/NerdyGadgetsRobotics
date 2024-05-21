@@ -1,17 +1,11 @@
 package services;
 
 import helpers.DatabaseConnector;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.xhtmlrenderer.pdf.ITextRenderer;
-import javax.swing.*;
 import java.io.File;
-import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,7 +20,7 @@ public class PdfRenderer extends ITextRenderer {
             // Modify the HTML content in-memory
             String html = modifyHtmlContent(Files.readString(getHtmlFile().toPath()));
 
-            PdfRenderer renderer = new PdfRenderer(this.orderLinesRepository, this.customerRepository);
+            PdfRenderer renderer = new PdfRenderer();
 
             renderer.setDocumentFromString(html);
             renderer.layout();
