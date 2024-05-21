@@ -31,7 +31,9 @@ public class ProcessingBox extends JPanel {
         processingScrollPane.setPreferredSize(new Dimension(320, 270));
         add(processingScrollPane);
 
-        fillProcessingTable(order.getOrderLines());
+        if(order != null) {
+            fillProcessingTable(order.getOrderLines());
+        }
     }
 
     private void fillProcessingTable(List<OrderLines> data) {
