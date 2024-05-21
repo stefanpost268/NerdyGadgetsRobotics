@@ -35,4 +35,9 @@ public class Customer {
     public String getDeliveryPostalCode() {
         return DeliveryPostalCode;
     }
+
+    public int getCustomerID() {
+        return CustomerID;
+    }
+
 }

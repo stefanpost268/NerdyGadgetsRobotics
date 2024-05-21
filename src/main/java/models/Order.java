@@ -2,9 +2,12 @@ package models;
 
 
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
+<<<<<<< HEAD
 
+=======
+import java.util.Arrays;
+>>>>>>> c383daa5042580d5e7be6b7081d794c041b40919
 import java.util.List;
 
 import java.time.format.DateTimeFormatter;
@@ -15,6 +18,13 @@ import java.util.Locale;
 @Entity
 @Table(name = "orders")
 public class Order {
+    enum OrderEnum {
+        Open,
+        InProgress,
+        Done,
+        Error
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int OrderID;
@@ -41,23 +51,28 @@ public class Order {
     @Column(nullable = true)
     private String Comments;
 
-    @Column(nullable = true)
+    @Column()
     private String DeliveryInstructions;
 
-    @Column(nullable = true)
+    @Column()
     private String InternalComments;
+
+    @Column(name = "Status", nullable = false)
+    private String Status;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
     private List<OrderLines> orderLines;
 
-    public int getOrderID() {
-        return OrderID;
+    public List<String> getFieldNames() {
+        return Arrays.asList("OrderID", "ExpectedDeliveryDate", "Customer", "ContactPerson", "Salesperson", "PickedByPerson", "Comments", "InternalComments", "DeliveryInstructions", "OrderLines");
     }
+
     public LocalDate getExpectedDeliveryDate() {
 
         return ExpectedDeliveryDate;
     }
 
+<<<<<<< HEAD
     public String getFormattedDate() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", new Locale("nl", "NL"));
         String formattedDate = ExpectedDeliveryDate.format(formatter);
@@ -66,6 +81,8 @@ public class Order {
     public Customer getCustomer() {
         return customer;
     }
+=======
+>>>>>>> c383daa5042580d5e7be6b7081d794c041b40919
     public People getContactPerson() {
         return ContactPerson;
     }
@@ -97,4 +114,3 @@ public class Order {
         return "NOT IMPLEMENTED";
     }
 }
-
