@@ -12,8 +12,21 @@ public:
      * Function that drives the motor
     */
     void driveFork(int y, int IRSensorWaarde);
+    
+    /**
+     * Drive the motor
+    */
     void driveMotor(int joystickInput, int sensor1, int sensor2, bool SAFETY_MODE, bool vorkOpen);
+    
+    /**
+     * Function that stops the motor
+    */
     void emergencyStop();
+
+    /**
+     * Get current motor location
+    */
+    int getMotorLocation();
 
 private:
     int directionPin;

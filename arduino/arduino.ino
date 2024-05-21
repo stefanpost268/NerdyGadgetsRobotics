@@ -45,6 +45,8 @@ void setup()
 
 void loop()
 {
+    // Serial.println(motorcontrolleryas.getMotorLocation());
+
     //LightSensor 
     if (!lightSensor.isActive() && !SAFETY_MODE) { 
         jsonrobot.emitRobotState("STATE", "EMERGENCY_STOP", "warehouse is tilted");
@@ -89,9 +91,6 @@ void loop()
 void receiveEvent(bool numBytes) {
   if (Wire.available() > 0) {
     vorkOpen = Wire.read(); // Read the received command
-
-    Serial.print("Received command: ");
-    Serial.println(vorkOpen);
   }else{
     SAFETY_MODE = true;
   }

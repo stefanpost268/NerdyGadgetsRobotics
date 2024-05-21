@@ -77,3 +77,7 @@ void MotorController::enableBrake() {
 void MotorController::disableBrake() {
     digitalWrite(brakePin, LOW);
 }
+
+int MotorController::getMotorLocation() {
+    return analogRead(this->encoder1);
+}
