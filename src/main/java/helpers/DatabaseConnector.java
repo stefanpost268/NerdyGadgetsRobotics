@@ -1,5 +1,7 @@
 package helpers;
 
+import models.Customer;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +48,32 @@ public class DatabaseConnector {
             System.err.println("Failed to close the database connection!");
             e.printStackTrace();
         }
+    }
+
+    public String[] getCustomerData(int orderid) {
+        String[] customerData = new String[6]; // Array om CustomerID, CustomerName en PhoneNumber op te slaan
+        String query = "SELECT c.CustomerName, c.PhoneNumber, c.DeliveryAddressLine2, c.PostalCityID, o.OrderID, o.OrderDate, ol.StockItemID, ol.Quantity, ol.Description FROM customers c JOIN orders o ON o.CustomerID = c.CustomerID JOIN orderlines ol ON ol.OrderID = o.OrderID WHERE o.OrderID = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, orderid);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                customerData[0] = String.valueOf(resultSet.getInt("o.OrderID")); // CustomerID opslaan als String
+                customerData[1] = resultSet.getString("c.CustomerName"); // CustomerName opslaan
+                customerData[2] = resultSet.getString("c.PhoneNumber"); // PhoneNumber opslaan
+                customerData[3] =  resultSet.getString("c.DeliveryAddressLine2"); // adres opslaan
+                customerData[4] = resultSet.getString("c.PostalCityID"); // cityid opslaan
+                customerData[5] = resultSet.getString("o.OrderDate"); // orderdatum opslaan
+                customerData[6] = resultSet.getString("ol.StockItemID"); // stockItemID opslaan
+                customerData[7] = resultSet.getString("ol.Quantity"); // orderdatum opslaan
+            }
+        } catch (SQLException e) {
+            System.err.println("Failed to execute the query!");
+            e.printStackTrace();
+        }
+
+        return customerData;
     }
 
     public List<Object[]> getQueueData() {
