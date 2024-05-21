@@ -1,6 +1,6 @@
 package dialogs;
 
-import helpers.DatabaseChangeStock;
+import helpers.DatabaseConnector;
 import objects.ProductInfo;
 
 import javax.swing.*;
@@ -15,7 +15,7 @@ public class ChangeStock extends JDialog implements ActionListener {
     private JSpinner spinner;
     private JComboBox<String> cb;
     private ProductInfo productInfo = new ProductInfo();
-    private DatabaseChangeStock database = new DatabaseChangeStock();
+    private DatabaseConnector database = new DatabaseConnector();
     private int productID;
 
     public ChangeStock(JFrame frame, int productInfoID) {

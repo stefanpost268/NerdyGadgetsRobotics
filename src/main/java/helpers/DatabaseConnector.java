@@ -1,11 +1,17 @@
 package helpers;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import objects.ProductInfo;
 
+import java.sql.*;
+
+/**
+ * This class is used to connect to the database.
+ *
+ * @deprecated This class is deprecated and will be removed in the future. Please use spring data JPA instead.
+ */
+@Deprecated
 public class DatabaseConnector {
-    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/nerdygadgets";
+    private static final String JDBC_URL = "jdbc:mariadb://localhost:3306/nerdygadgets";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "";
     private Connection connection;
@@ -13,7 +19,7 @@ public class DatabaseConnector {
     public DatabaseConnector() {
         try {
             // Register MySQL JDBC driver
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("org.mariadb.jdbc.Driver");
 
             //connect to the database
             connect();
@@ -47,56 +53,55 @@ public class DatabaseConnector {
             e.printStackTrace();
         }
     }
-
-    public List<Object[]> getQueueData() {
-        List<Object[]> queueData = new ArrayList<>();
-        String query = "SELECT l.OrderID, COUNT(*), o.Status\n" +
-                "FROM orderlines l\n" +
-                "JOIN orders o on o.OrderID = l.OrderID \n" +
-                "WHERE o.Status Not Like 'Done'\n" +
-                "GROUP BY l.orderID\n" +
-                "ORDER BY o.Status, l.OrderID;";
+    public ProductInfo getProductInfo(ProductInfo productInfo) {
+        String query =
+                """
+                        SELECT StockItemName, TypicalWeightPerUnit, UnitPrice, RecommendedRetailPrice, QuantityOnHand, Location\s
+                        FROM stockitems i \s
+                        JOIN stockitemholdings h ON i.StockItemID = h.StockItemID\s
+                        WHERE i.StockItemID = ?;""";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setObject(1, productInfo.getStockItemID());
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                int orderID = resultSet.getInt("OrderID");
-                int quantity = resultSet.getInt("COUNT(*)");
-                String queueStatus = resultSet.getString("Status");
-                queueData.add(new Object[]{orderID, quantity, queueStatus});
+                productInfo.setStockItemName(resultSet.getString("StockItemName"));
+                productInfo.setTypicalWeightPerUnit(resultSet.getInt("TypicalWeightPerUnit"));
+                productInfo.setUnitPrice(resultSet.getDouble("UnitPrice"));
+                productInfo.setRecommendedRetailPrice(resultSet.getDouble("RecommendedRetailPrice"));
+                productInfo.setQuantityPerOuter(resultSet.getInt("QuantityOnHand"));
+                productInfo.setLocation(resultSet.getString("Location"));
+
+                System.out.println(productInfo.getStockItemName());
             }
+        } catch (SQLException e) {
+            System.err.println("Failed to execute the query!");
+            e.printStackTrace();
+        }
+        return productInfo;
+    }
+
+    public void changeLocationAndAmount(String locatie, int voorraad, int id) {
+        String query =
+                """
+                        UPDATE stockitems i  \s
+                        JOIN stockitemholdings h ON i.StockItemID = h.StockItemID\s
+                        SET Location = ?, QuantityOnHand = ?\s
+                        WHERE i.stockitemID = ?\s
+                        """;
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, locatie);
+            statement.setInt(2, voorraad);
+            statement.setObject(3, id);
+            statement.executeUpdate();
 
         } catch (SQLException e) {
             System.err.println("Failed to execute the query!");
             e.printStackTrace();
         }
 
-        return queueData;
     }
-    public List<Object[]> getProcessingData() {
-        List<Object[]> processingData = new ArrayList<>();
-        String query = "SELECT l.StockItemID, l.Description, l.quantity\n" +
-                "FROM orderlines l\n" +
-                "JOIN orders o on o.OrderID = l.OrderID \n" +
-                "WHERE o.Status = 'In progress'\n" +
-                "ORDER BY l.OrderLineID;";
 
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            ResultSet resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                int stockItemID = resultSet.getInt("StockItemID");
-                String description = resultSet.getString("Description");
-                int quantity = resultSet.getInt("Quantity");
-                processingData.add(new Object[]{stockItemID, description, quantity});
-            }
-
-        } catch (SQLException e) {
-            System.err.println("Failed to execute the query!");
-            e.printStackTrace();
-        }
-
-        return processingData;
-    }
 }
