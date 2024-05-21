@@ -4,15 +4,19 @@ import pages.*;
 import repositories.*;
 import helpers.DatabaseConnector;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import java.awt.CardLayout;
 
-public class Main extends JFrame {
+public class Main extends JFrame implements ChangeListener {
 
     @Autowired
     private StockItemRepository stockItemRepository;
     @Autowired
     private OrderRepository orderRepository;
+
+    private JTabbedPane tabbedPane;
 
     public static void main(String[] args) {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
@@ -28,7 +32,8 @@ public class Main extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new CardLayout());
 
-        JTabbedPane tabbedPane = new JTabbedPane();
+        this.tabbedPane = new JTabbedPane();
+        this.tabbedPane.addChangeListener(this);
         tabbedPane.setUI(new BasicTabbedPaneUI());
         tabbedPane.addTab("Dashboard", new DashboardPage(this.orderRepository));
         tabbedPane.addTab("Bestellingen", new OrderPage(this.orderRepository));
@@ -37,5 +42,15 @@ public class Main extends JFrame {
 
         add(tabbedPane);
         setVisible(true);
+    }
+
+    @Override
+    public void stateChanged(ChangeEvent e) {
+        if(e.getSource().equals(this.tabbedPane)) {
+            if(this.tabbedPane.getSelectedIndex() == 1) {
+                OrderPage orderPage = (OrderPage) tabbedPane.getSelectedComponent();
+                orderPage.refreshTable();
+            }
+        }
     }
 }
