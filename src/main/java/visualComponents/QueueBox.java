@@ -9,12 +9,13 @@ import java.util.List;
 
 public class QueueBox extends JPanel implements ActionListener {
     private DefaultTableModel queueTableModel;
+    JButton executeButton = new JButton("Verwerken");
+    JTable queueTable;
 
     public QueueBox(List<Object[]> queueData) {
         setBackground(Color.LIGHT_GRAY);
         setLayout(new FlowLayout(FlowLayout.LEFT)); // align left
         JLabel queueLabel = new JLabel("Bestelling wachtrij");
-        JButton executeButton = new JButton("Verwerken");
         executeButton.addActionListener(this);
         add(queueLabel);
 
@@ -24,7 +25,7 @@ public class QueueBox extends JPanel implements ActionListener {
         );
 
         //Create table
-        JTable queueTable = new JTable(queueTableModel);
+        queueTable = new JTable(queueTableModel);
         queueTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         queueTable.setDefaultEditor(Object.class, null); // read-only
         JScrollPane queueScrollPane = new JScrollPane(queueTable); // Add scroll to table
@@ -49,6 +50,8 @@ public class QueueBox extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("Button clicked");
+        if(e.getSource() == executeButton) {
+            int orderNumber = (int) queueTable.getValueAt(queueTable.getSelectedRow(), 0);
+        }
     }
 }
