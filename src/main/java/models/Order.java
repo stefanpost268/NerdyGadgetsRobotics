@@ -4,12 +4,20 @@ package models;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "orders")
 public class Order {
+    enum OrderEnum {
+        Open,
+        InProgress,
+        Done,
+        Error
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int OrderID;
@@ -42,8 +50,15 @@ public class Order {
     @Column()
     private String InternalComments;
 
+    @Column(name = "Status", nullable = false)
+    private String Status;
+
     @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
     private List<OrderLines> orderLines;
+
+    public List<String> getFieldNames() {
+        return Arrays.asList("OrderID", "ExpectedDeliveryDate", "Customer", "ContactPerson", "Salesperson", "PickedByPerson", "Comments", "InternalComments", "DeliveryInstructions", "OrderLines");
+    }
 
     public LocalDate getExpectedDeliveryDate() {
         return ExpectedDeliveryDate;
@@ -82,9 +97,6 @@ public class Order {
 
     @Column()
     private String OrderDate;
-
-    @Column()
-    private String Status;
 
     public int getOrderID() {
         return OrderID;
