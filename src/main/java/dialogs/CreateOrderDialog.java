@@ -375,14 +375,23 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
             orderLines.setStockItem(stockItem1);
             orderLines.setDescription(stockItem1.getStockItemName());
             orderLines.setPackageTypeID(stockItem1.getUnitPackageID());
-            orderLines.setQuantity((int) tableModel.getValueAt(i, 2));
-            orderLines.setPickedQuantity((int) tableModel.getValueAt(i, 2));
+            orderLines.setQuantity(getTableQuantity(i));
+            orderLines.setPickedQuantity(getTableQuantity(i));
             orderLines.setLastEditedBy(order.getLastEditedBy());
             orderLines.setLastEditedWhen(new Date());
 
             orderLinesRepository.save(orderLines);
         }
         setVisible(false);
+    }
+
+    private int getTableQuantity(int i) {
+        try {
+            return (int) tableModel.getValueAt(i, 2);
+        } catch (Exception e) {
+            return Integer.parseInt(tableModel.getValueAt(i, 2).toString());
+        }
+
     }
 
     private void addStockitemToTable() {
