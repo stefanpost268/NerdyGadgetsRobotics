@@ -3,7 +3,6 @@ package services;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 import java.io.File;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 public class PdfRenderer extends ITextRenderer {
