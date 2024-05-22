@@ -22,7 +22,8 @@ public class QueueBox extends JPanel implements ActionListener {
     JTable queueTable;
     OrderRepository orderRepository;
 
-    public QueueBox(List<Object[]> queueData) {
+    public QueueBox(List<Object[]> queueData, OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
         setBackground(Color.LIGHT_GRAY);
         setLayout(new FlowLayout(FlowLayout.LEFT)); // align left
         JLabel queueLabel = new JLabel("Bestelling wachtrij");
@@ -62,19 +63,16 @@ public class QueueBox extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == executeButton) {
             int orderNumber = (int) queueTable.getValueAt(queueTable.getSelectedRow(), 0);
-
-            Order order = orderRepository.findById(orderNumber).orElse(null);
-
-            if (order == null) {
-                return;
+            Optional<Order> optionalOrder = orderRepository.findById(orderNumber);
+            if (!optionalOrder.isPresent()) {
+                return; // Order not found, exit the method
             }
 
+            Order order = optionalOrder.get();
+
             //setting status to InProgress
-//            order.setStatus("InProgress");
-//            orderRepository.save(order);
-
-
-
+            order.setStatus("InProgress");
+            orderRepository.save(order);
 
             List<OrderLines> orderLines = order.getOrderLines();
 
@@ -83,8 +81,6 @@ public class QueueBox extends JPanel implements ActionListener {
             for (OrderLines orderLine : orderLines) {
                 locations.add(orderLine.getStockItem().getItemLocation());
             }
-
-
 
            System.out.println( RouteCalculator.calculateRoute(locations));
         }
