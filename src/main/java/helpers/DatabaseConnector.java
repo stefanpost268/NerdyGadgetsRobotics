@@ -56,7 +56,7 @@ public class DatabaseConnector {
     }
 
     public String[] getCustomerData(int orderid) {
-        String[] customerData = new String[8]; // Array om CustomerID, CustomerName en PhoneNumber op te slaan
+        String[] customerData = new String[9]; // Array om CustomerID, CustomerName en PhoneNumber op te slaan
         String query = "SELECT c.CustomerName, c.PhoneNumber, c.DeliveryAddressLine2, c.PostalCityID, o.OrderID, o.OrderDate, ol.StockItemID, ol.Quantity, ol.Description FROM customers c JOIN orders o ON o.CustomerID = c.CustomerID JOIN orderlines ol ON ol.OrderID = o.OrderID WHERE o.OrderID = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -72,6 +72,7 @@ public class DatabaseConnector {
                 customerData[5] = resultSet.getString("o.OrderDate"); // orderdatum opslaan
                 customerData[6] = resultSet.getString("ol.StockItemID"); // stockItemID opslaan
                 customerData[7] = resultSet.getString("ol.Quantity"); // orderdatum opslaan
+                customerData[8] = resultSet.getString("ol.Description"); // orderdatum opslaan
             }
         } catch (SQLException e) {
             System.err.println("Failed to execute the query!");
@@ -80,6 +81,29 @@ public class DatabaseConnector {
 
         return customerData;
     }
+
+    public List<Object[]> getOrderlines(int orderid) {
+        List<Object[]> customerDataList = new ArrayList<>();
+        String query = "SELECT StockItemID, Quantity, Description FROM orderlines WHERE OrderID = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, orderid);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                int StockItemID = resultSet.getInt("StockItemID");
+                int Quantity = resultSet.getInt("Quantity");
+                String description = resultSet.getString("Description");
+                customerDataList.add(new Object[]{StockItemID, Quantity, description});
+            }
+        } catch (SQLException e) {
+            System.err.println("Failed to execute the query!");
+            e.printStackTrace();
+        }
+
+        return customerDataList;
+    }
+
 
     public List<Object[]> getQueueData() {
         List<Object[]> queueData = new ArrayList<>();
