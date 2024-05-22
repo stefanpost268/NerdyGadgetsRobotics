@@ -1,5 +1,10 @@
 package visualComponents;
 
+import models.Order;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import repositories.OrderRepository;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -21,16 +26,31 @@ public class QueueBox extends JPanel implements ActionListener {
     JButton executeButton = new JButton("Verwerken");
     JTable queueTable;
     OrderRepository orderRepository;
+    private Order orderInProgress = null;
 
-    public QueueBox(List<Object[]> queueData, OrderRepository orderRepository) {
+
+    public QueueBox(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
+
         setBackground(Color.LIGHT_GRAY);
         setLayout(new FlowLayout(FlowLayout.LEFT)); // align left
         JLabel queueLabel = new JLabel("Bestelling wachtrij");
         executeButton.addActionListener(this);
         add(queueLabel);
 
-        //table model
+        Page<Order> orders = orderRepository.findUnfinishedOrders(PageRequest.of(0, 100));
+        List<Object[]> orderData = new ArrayList<>();
+        for(Order order : orders.getContent()) {
+            if(orderInProgress == null && order.getStatus().equals("InProgress")) {
+                orderInProgress = order;
+            }
+            Object[] orderArray = new Object[3];
+            orderArray[0] = order.getOrderID();
+            orderArray[1] = order.getOrderLines().size();
+            orderArray[2] = order.getStatus();
+            orderData.add(orderArray);
+        }
+
         queueTableModel = new DefaultTableModel(
                 new Object[]{"Bestel Nr", "Product aantal", "Status"}, 0
         );
@@ -43,12 +63,9 @@ public class QueueBox extends JPanel implements ActionListener {
         queueScrollPane.setPreferredSize(new Dimension(320, 270));
 
         queueTable.getTableHeader().setReorderingAllowed(false); // Stop user column swipe
+        fillQueueTable(orderData);
         add(queueScrollPane);
 
-
-
-
-        fillQueueTable(queueData);
         //adding button to the bottom of the table
         add(executeButton);
     }
@@ -84,5 +101,7 @@ public class QueueBox extends JPanel implements ActionListener {
 
            System.out.println( RouteCalculator.calculateRoute(locations));
         }
+    public Order getOrderInProgress() {
+        return orderInProgress;
     }
 }

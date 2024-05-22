@@ -1,5 +1,9 @@
 package visualComponents;
 
+import models.Order;
+import models.OrderLines;
+import models.StockItem;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -8,10 +12,9 @@ import java.util.List;
 public class ProcessingBox extends JPanel {
     private DefaultTableModel processingTableModel;
 
-    public ProcessingBox(List<Object[]> processingData) {
+    public ProcessingBox(Order order) {
         setBackground(Color.LIGHT_GRAY);
         setLayout(new FlowLayout(FlowLayout.LEFT)); // align left
-
 
         JLabel processingLabel = new JLabel("Producten processing in Bestelling");
         add(processingLabel);
@@ -28,12 +31,22 @@ public class ProcessingBox extends JPanel {
         processingScrollPane.setPreferredSize(new Dimension(320, 270));
         add(processingScrollPane);
 
-        fillProcessingTable(processingData);
+        if(order != null) {
+            fillProcessingTable(order.getOrderLines());
+        }
     }
 
-    private void fillProcessingTable(List<Object[]> data) {
-        for (Object[] row : data) {
-            processingTableModel.addRow(row);
+    private void fillProcessingTable(List<OrderLines> data) {
+        for (OrderLines row : data) {
+            StockItem stockItem = row.getStockItem();
+            Object[] rowData = new Object[] {
+                    stockItem.getStockItemID(),
+                    stockItem.getStockItemName(),
+                    row.getQuantity(),
+                    "NOT IMPLEMENTED"
+            };
+
+            processingTableModel.addRow(rowData);
         }
     }
 }
