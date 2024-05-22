@@ -9,16 +9,30 @@ import java.util.List;
 
 import javax.swing.table.DefaultTableModel;
 import models.BaseModel;
+import java.util.List;
+
+import javax.swing.table.DefaultTableModel;
+import models.BaseModel;
+
 import models.StockItem;
+import repositories.StockItemRepository;
+import services.Formatter;
 
 public class ProductPage extends JPanel implements ActionListener {
 
+    private StockItemRepository stockItem;
     private JTextField searchField = new JTextField(20);
     private JButton searchButton = new JButton("Zoeken");
     private JTable table;
+<<<<<<< HEAD
     private StockItem stockItem = new StockItem();
     private DefaultTableModel model;
     public ProductPage() {
+=======
+
+    public ProductPage(StockItemRepository stockItem) {
+        this.stockItem = stockItem;
+>>>>>>> c383daa5042580d5e7be6b7081d794c041b40919
         setLayout(new BorderLayout());
 
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -44,6 +58,7 @@ public class ProductPage extends JPanel implements ActionListener {
     }
 
     private void search() {
+<<<<<<< HEAD
         List<Object[]> stockItems;
         if (this.searchField.getText().isEmpty()) {
             stockItems = this.stockItem.getProductData("");
@@ -65,6 +80,24 @@ public class ProductPage extends JPanel implements ActionListener {
                 return super.getValueAt(row, column);
             }
         };
+=======
+        Iterable<StockItem> stockItems;
+        if(this.searchField.getText().isEmpty()) {
+            stockItems = this.stockItem.findAll();
+        } else {
+            stockItems = this.stockItem.findByStockItemNameContaining(this.searchField.getText());
+        }
+
+        DefaultTableModel model;
+        if (stockItems.iterator().hasNext()) {
+            model = new DefaultTableModel(
+                    Formatter.modelListToGenericObject(stockItems),
+                    stockItems.iterator().next().getFieldNames().toArray()
+            );
+        } else {
+            model = new DefaultTableModel();
+        }
+>>>>>>> c383daa5042580d5e7be6b7081d794c041b40919
 
         if(this.table == null) {
             this.table = new JTable(model);
