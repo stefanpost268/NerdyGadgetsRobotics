@@ -14,10 +14,10 @@
 LightSensor lightSensor = LightSensor(2);
 EmergencyButton emergencyButton = EmergencyButton(5, 10);
 JsonRobot jsonrobot = JsonRobot();
-InductiveSensor inductiveSensorLinks = InductiveSensor(4);
-InductiveSensor inductiveSensorRechts = InductiveSensor(7);
-InductiveSensor inductiveSensorOnder = InductiveSensor(6);
-InductiveSensor klikSensorBoven = InductiveSensor(1);
+InductiveSensor inductiveSensorLeft = InductiveSensor(4);
+InductiveSensor inductiveSensorRight = InductiveSensor(7);
+InductiveSensor inductiveSensorBelow = InductiveSensor(6);
+InductiveSensor clickSensorTop = InductiveSensor(1);
 MotorController motorcontrollerxas = MotorController(12, 3, 9, A1, 1);
 MotorController motorcontrolleryas = MotorController(13, 11, 8, A0, 1);
 
@@ -82,16 +82,16 @@ void loop()
       }
     }
     // controls for x axes
-    motorcontrollerxas.driveMotor(x, inductiveSensorRechts.readInductiveSensor(), inductiveSensorLinks.readInductiveSensor(), SAFETY_MODE, vorkOpen);
+    motorcontrollerxas.driveMotor(x, inductiveSensorRight.readInductiveSensor(), inductiveSensorLeft.readInductiveSensor(), SAFETY_MODE, vorkOpen);
 
     // controls for y axes
-    motorcontrolleryas.driveMotor(y, inductiveSensorOnder.readInductiveSensor(), klikSensorBoven.readInductiveSensor(), SAFETY_MODE, 0);
+    motorcontrolleryas.driveMotor(y, inductiveSensorBelow.readInductiveSensor(), clickSensorTop.readInductiveSensor(), SAFETY_MODE, 0);
 }
 
 void receiveEvent(bool numBytes) {
   if (Wire.available() > 0) {
     vorkOpen = Wire.read(); // Read the received command
-  }else{
+  } else {
     SAFETY_MODE = true;
   }
 }

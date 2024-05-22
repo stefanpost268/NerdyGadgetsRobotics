@@ -6,6 +6,6 @@ InductiveSensor::InductiveSensor(int InductiveSensorPin) {
     pinMode(InductiveSensorPin, INPUT_PULLUP);
 }
 
-int InductiveSensor::readInductiveSensor() {
-    return digitalRead(InductiveSensorPin);
+bool InductiveSensor::readInductiveSensor() {
+    return digitalRead(InductiveSensorPin) == 1;
 }
