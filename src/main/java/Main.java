@@ -36,69 +36,6 @@ public class Main extends JFrame {
         System.out.println(timestamp);
     }
 
-    public void CreateOrderLines(Order order) {
-        Optional<StockItem> stockItem = stockItemRepository.findById(1);
-        if (stockItem.isEmpty()) {
-            System.out.println("StockItem bestaat niet");
-            return;
-        }
-
-        StockItem stockItem1 = stockItem.get();
-
-        OrderLines orderLines = new OrderLines();
-        orderLines.setOrderID(order);
-        orderLines.setStockItem(stockItem1);
-        orderLines.setDescription("Description");
-        orderLines.setPackageTypeID(stockItem1.getUnitPackageID());
-        orderLines.setQuantity(1);
-        orderLines.setPickedQuantity(1);
-        orderLines.setLastEditedBy(order.getLastEditedBy());
-        orderLines.setLastEditedWhen(new Date());
-
-        orderLinesRepository.save(orderLines);
-
-    }
-
-    public void execute() {
-        Optional<People> people = peopleRepository.findById(1);
-        if (people.isEmpty()) {
-            System.out.println("Persoon bestaat niet");
-            return;
-        }
-        Optional<Customer> customer = customerRepository.findById(1);
-        if (customer.isEmpty()) {
-            System.out.println("Klant bestaat niet");
-            return;
-        }
-
-        People person = people.get();
-        Customer klant = customer.get();
-
-        // Nieuwe order aanmaken
-        Order order = new Order();
-
-        order.setCustomer(klant);//CustomerID
-        order.setSalesperson(person);//SalesPersonID
-        order.setPickedByPerson(person);//PickedByPersonID
-        order.setContactPerson(person);//ContactPersonID
-        order.setOrderDate(new java.sql.Date(new Date().getTime()));//OrderDate
-        order.setExpectedDeliveryDate(LocalDate.now());//ExpectedDeliveryDate
-        order.setUnderSupplyBackordered(false);//IsUnderSupplyBackorderd
-        order.setComments("Verstuurd via de Java Applicatie");//Comments
-        order.setDeliveryInstructions("Delivery Instructions");//DeliveryInstructions
-        order.setInternalComments("Internal Comments");//InternalComments
-        order.setLastEditedBy(person);//LastEditedBy
-        order.setLastEditedWhen(new Date());//LastEditedWhen
-        order.setStatus("NOT IMPLEMENTED");//Status
-
-        order.setComments("Java Applicatie");
-        order.setContactPerson(person);
-
-        orderRepository.save(order);
-
-        CreateOrderLines(order);
-    }
-
     public void gui() {
         DatabaseConnector database = new DatabaseConnector();
 
@@ -107,8 +44,6 @@ public class Main extends JFrame {
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new CardLayout());
-
-        this.execute();
 
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.setUI(new BasicTabbedPaneUI());

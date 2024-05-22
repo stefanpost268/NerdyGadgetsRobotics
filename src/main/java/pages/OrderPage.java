@@ -69,7 +69,7 @@ public class OrderPage extends JPanel implements ActionListener {
                 JOptionPane.showMessageDialog(this, "Order ID bestaat niet", "Error: Bestelling bestaat niet", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            createOrderDialog = new CreateOrderDialog(order.get(), customerRepository, peopleRepository, stockitemRepository, orderlinesrepository);
+            createOrderDialog = new CreateOrderDialog(order.get(), customerRepository, peopleRepository, stockitemRepository, orderlinesrepository, orderRepository);
         }
     }
 }
