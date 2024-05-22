@@ -136,7 +136,7 @@ public abstract class BaseModel<T> implements Model<T> {
             query += "WHERE s.StockItemName LIKE ?";
         }
 
-        try (PreparedStatement statement = MYSQL.getConnection().prepareStatement(query)) {
+        try (PreparedStatement statement = MARIADB.getConnection().prepareStatement(query)) {
             // If a search term is provided, set the parameter for the prepared statement
             if (!searchTerm.isEmpty()) {
                 statement.setString(1, "%" + searchTerm + "%");
