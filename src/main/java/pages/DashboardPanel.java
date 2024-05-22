@@ -3,7 +3,8 @@ package pages;
 import repositories.OrderRepository;
 import visualComponents.*;
 import javax.swing.*;
-import java.util.List;
+
+@Deprecated
 public class DashboardPanel extends JFrame {
     public DashboardPanel(OrderRepository orderRepository) {
         setTitle("Dashboard");
