@@ -116,7 +116,7 @@ public class Order {
         return orderLines;
     }
     public String getOrderState() {
-        return "NOT IMPLEMENTED";
+        return Status;
     }
     public People getLastEditedBy() {
         return LastEditedBy;
