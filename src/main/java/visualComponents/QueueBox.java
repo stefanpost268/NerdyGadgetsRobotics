@@ -5,12 +5,22 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+
+import models.Order;
+import models.OrderLines;
+import models.StockItem;
+import repositories.OrderRepository;
+import services.RouteCalculator;
 
 public class QueueBox extends JPanel implements ActionListener {
     private DefaultTableModel queueTableModel;
     JButton executeButton = new JButton("Verwerken");
     JTable queueTable;
+    OrderRepository orderRepository;
 
     public QueueBox(List<Object[]> queueData) {
         setBackground(Color.LIGHT_GRAY);
@@ -52,6 +62,31 @@ public class QueueBox extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == executeButton) {
             int orderNumber = (int) queueTable.getValueAt(queueTable.getSelectedRow(), 0);
+
+            Order order = orderRepository.findById(orderNumber).orElse(null);
+
+            if (order == null) {
+                return;
+            }
+
+            //setting status to InProgress
+//            order.setStatus("InProgress");
+//            orderRepository.save(order);
+
+
+
+
+            List<OrderLines> orderLines = order.getOrderLines();
+
+            ArrayList<String> locations = new ArrayList<>();
+
+            for (OrderLines orderLine : orderLines) {
+                locations.add(orderLine.getStockItem().getItemLocation());
+            }
+
+
+
+           System.out.println( RouteCalculator.calculateRoute(locations));
         }
     }
 }
