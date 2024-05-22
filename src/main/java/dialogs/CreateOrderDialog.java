@@ -1,5 +1,6 @@
 package dialogs;
 
+import helpers.CustomJTable;
 import models.*;
 import org.springframework.cglib.core.Local;
 import repositories.*;
@@ -25,7 +26,7 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
     private OrderRepository orderRepository;
 
     private DefaultTableModel tableModel = new DefaultTableModel(new Object[]{"Product Nr", "Product", "Aantal", "Gewicht (kg)"}, 0);
-    private JTable ordersOnTable = new JTable(this.tableModel);
+    private CustomJTable ordersOnTable = new CustomJTable(this.tableModel);
     private JLabel orderID = new JLabel();
     private JTextField shippingDate = new JTextField(10);
     private JComboBox<String> orderState = new JComboBox<String>(orderStates);
@@ -41,13 +42,13 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
     private JButton saveButton = new JButton("Opslaan");
     private JButton closeButton = new JButton("Sluiten");
     private JButton toevoegenButton = new JButton("Toevoegen");
+    private JButton removeStockitem = new JButton("Verwijderen");
     private JLabel productIDLabel = new JLabel();
+    private JLabel productQuantityLabel = new JLabel("Aantal: ");
     private JTextField productID = new JTextField(5);
     private JSpinner productQuantity = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1));
 
     public CreateOrderDialog(Order order, CustomerRepository customerRepository, PeopleRepository peopleRepository, StockItemRepository stockItemRepository, OrderLinesRepository orderLinesRepository, OrderRepository orderRepository) {
-        Customer customer = order.getCustomer();
-        List<OrderLines> orderLines = order.getOrderLines();
         this.customerRepository = customerRepository;
         this.peopleRepository = peopleRepository;
         this.stockitemRepository = stockItemRepository;
@@ -59,28 +60,12 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
         setResizable(false);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
-
         this.orderID.setText("AUTOINCREMENT");
-        this.shippingDate.setText(order.getExpectedDeliveryDate().toString());
-
-        this.customerName.setText(customer.getCustomerName());
-        this.customerPhone.setText(customer.getPhoneNumber());
-        this.customerAdres.setText(customer.getDeliveryPostalCode());
-        this.contactPerson.setText(order.getContactPerson().getFullName());
-        this.salesPerson.setText(order.getSalesperson().getFullName());
-        if(order.getPickedByPerson() != null) {
-            this.pickedByPerson.setText(order.getPickedByPerson().getFullName());
-        }
-
-        this.comment.setText(order.getComments());
-        this.internalComment.setText(order.getInternalComments());
-        this.deliveryComment.setText(order.getDeliveryInstructions());
-
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new BorderLayout());
+        this.ordersOnTable.setFillsViewportHeight(true);
 
         JScrollPane scrollPane = new JScrollPane(this.ordersOnTable);
-        this.ordersOnTable.setEnabled(false);
         rightPanel.add(scrollPane, BorderLayout.NORTH);
         rightPanel.add(addRightPanelFooter(), BorderLayout.SOUTH);
 
@@ -113,17 +98,24 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
     private JPanel addRightPanelFooter() {
         JPanel rightPanelFooter = new JPanel();
         JPanel rightPanelFooterButtons = new JPanel();
-        rightPanelFooter.setLayout(new BorderLayout());
+        JPanel rightPanelStockitemID = new JPanel();
+        JPanel rightPanelQuantity = new JPanel();
+        rightPanelFooter.setLayout(new GridLayout(2, 2));
         rightPanelFooter.setBorder(new EmptyBorder(10, 10, 10, 10));
+        rightPanelStockitemID.setLayout(new FlowLayout(FlowLayout.LEFT));
+        rightPanelQuantity.setLayout(new FlowLayout(FlowLayout.LEFT));
         productIDLabel.setText("Product ID: ");
 
+        removeStockitem.addActionListener(this);
         toevoegenButton.addActionListener(this);
         rightPanelFooter.add(toevoegenButton, BorderLayout.WEST);
-        rightPanelFooterButtons.setLayout(new FlowLayout(FlowLayout.RIGHT));
-        rightPanelFooterButtons.add(productIDLabel);
-        rightPanelFooterButtons.add(productID);
-        rightPanelFooterButtons.add(productQuantity);
-        rightPanelFooter.add(rightPanelFooterButtons, BorderLayout.EAST);
+        rightPanelFooter.add(removeStockitem, BorderLayout.CENTER);
+        rightPanelStockitemID.add(productIDLabel);
+        rightPanelStockitemID.add(productID);
+        rightPanelFooter.add(rightPanelStockitemID);
+        rightPanelQuantity.add(productQuantityLabel);
+        rightPanelQuantity.add(productQuantity);
+        rightPanelFooter.add(rightPanelQuantity);
 
         return rightPanelFooter;
     }
@@ -159,7 +151,7 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
         panel.add(this.orderID, gbc);
 
         // Delivery Date Label
-        JLabel deliveryDateLabel = new JLabel("Bezorg Datum: ");
+        JLabel deliveryDateLabel = new JLabel("Bezorg Datum (yyyy-mm-dd): ");
         gbc.gridx = 1;
         gbc.gridy = 0;
         panel.add(deliveryDateLabel, gbc);
@@ -414,6 +406,23 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
         }
     }
 
+    private void showOrderEvent() {
+        try {
+            String input = this.ordersOnTable.getValueAt(this.ordersOnTable.getSelectedRow(), 0).toString();
+            int StockitemId = Integer.parseInt(input);
+
+            Optional<Order> Stockitem = this.orderRepository.findById(StockitemId);
+
+            if (Stockitem.isEmpty()) {
+                return;
+            }
+
+            tableModel.removeRow(this.ordersOnTable.getSelectedRow());
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return;
+        }
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == this.saveButton) {
@@ -424,6 +433,9 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
         }
         if(e.getSource() == this.toevoegenButton) {
             addStockitemToTable();
+        }
+        if(e.getSource() == this.removeStockitem) {
+            showOrderEvent();
         }
     }
 }
