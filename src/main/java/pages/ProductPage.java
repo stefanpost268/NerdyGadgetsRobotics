@@ -1,19 +1,15 @@
 package pages;
 
 import javax.swing.*;
-import javax.swing.table.*;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import java.util.List;
+import java.util.ArrayList;
 
 import javax.swing.table.DefaultTableModel;
-import models.BaseModel;
-import java.util.List;
-
-import javax.swing.table.DefaultTableModel;
-import models.BaseModel;
-
 import models.StockItem;
 import repositories.StockItemRepository;
 import services.Formatter;
@@ -24,15 +20,10 @@ public class ProductPage extends JPanel implements ActionListener {
     private JTextField searchField = new JTextField(20);
     private JButton searchButton = new JButton("Zoeken");
     private JTable table;
-<<<<<<< HEAD
-    private StockItem stockItem = new StockItem();
-    private DefaultTableModel model;
-    public ProductPage() {
-=======
 
     public ProductPage(StockItemRepository stockItem) {
         this.stockItem = stockItem;
->>>>>>> c383daa5042580d5e7be6b7081d794c041b40919
+
         setLayout(new BorderLayout());
 
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -58,31 +49,8 @@ public class ProductPage extends JPanel implements ActionListener {
     }
 
     private void search() {
-<<<<<<< HEAD
-        List<Object[]> stockItems;
-        if (this.searchField.getText().isEmpty()) {
-            stockItems = this.stockItem.getProductData("");
-        } else {
-            stockItems = this.stockItem.getProductData(this.searchField.getText());
-        }
-
-        model = new DefaultTableModel(
-                new Object[]{"Product ID", "Product Naam", "Inkoop prijs", "Verkoop prijs", "Gewicht", "Voorraad", "Locatie"}, 0
-//                this.stockItem.toTableData(stockItems),
-//                this.stockItem.fillable()
-        ) {
-            @Override
-            public Object getValueAt(int row, int column) {
-                // weight at column index 4
-                if (column == 4 && super.getValueAt(row, column) != null) {
-                    return super.getValueAt(row, column) + " kg";
-                }
-                return super.getValueAt(row, column);
-            }
-        };
-=======
         Iterable<StockItem> stockItems;
-        if(this.searchField.getText().isEmpty()) {
+        if (this.searchField.getText().isEmpty()) {
             stockItems = this.stockItem.findAll();
         } else {
             stockItems = this.stockItem.findByStockItemNameContaining(this.searchField.getText());
@@ -90,41 +58,47 @@ public class ProductPage extends JPanel implements ActionListener {
 
         DefaultTableModel model;
         if (stockItems.iterator().hasNext()) {
-            model = new DefaultTableModel(
-                    Formatter.modelListToGenericObject(stockItems),
-                    stockItems.iterator().next().getFieldNames().toArray()
-            );
+            List<Object[]> dataList = new ArrayList<>();
+            for (StockItem item : stockItems) {
+                Object[] row = new Object[7]; // Adjust the size to the number of columns
+                row[0] = item.getStockItemID();
+                row[1] = item.getStockItemName();
+                row[2] = item.getUnitPrice();
+                row[3] = item.getRecommendedRetailPrice();
+                row[4] = item.getTypicalWeightPerUnit();
+                row[5] = (item.getStockItemHolding() != null) ? item.getStockItemHolding().getQuantityOnHand() : null;
+                row[6] = item.getSize();
+                // Retrieve QuantityOnHand from StockItemHolding
+                dataList.add(row);
+            }
+
+            Object[][] data = new Object[dataList.size()][];
+            dataList.toArray(data);
+
+            String[] columnIdentifiers = {"Product ID", "Product Naam", "Inkoop prijs", "Verkoop prijs", "Gewicht", "Voorraad", "Aantal op voorraad"};
+        model = new DefaultTableModel(data, columnIdentifiers) {
+                @Override
+                public Object getValueAt(int row, int column) {
+                    // weight at column index 4
+                    if (column == 4 && super.getValueAt(row, column) != null) {
+                        return super.getValueAt(row, column) + " kg";
+                    }
+                    return super.getValueAt(row, column);
+                }
+            };
+
+            model.setColumnIdentifiers(columnIdentifiers);
+
         } else {
             model = new DefaultTableModel();
         }
->>>>>>> c383daa5042580d5e7be6b7081d794c041b40919
-
         if(this.table == null) {
             this.table = new JTable(model);
 
         } else {
             this.table.setModel(model);
         }
-
         this.table.repaint();
-        fillProductTable(stockItems);
-    }
-
-    private void fillProductTable(List<Object[]> data) {
-        for (Object[] row : data) {
-            model.addRow(row);
-        }
-    }
-
-    private void updateTableHeaders(String[] newHeaders) {
-        if (newHeaders.length == this.table.getColumnCount()) {
-            for (int i = 0; i < newHeaders.length; i++) {
-                TableColumn column = this.table.getColumnModel().getColumn(i);
-                column.setHeaderValue(newHeaders[i]);
-            }
-            // Update the table header
-            this.table.getTableHeader().repaint();
-        }
     }
 
     @Override
