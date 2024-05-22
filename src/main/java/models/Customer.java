@@ -21,9 +21,6 @@ public class Customer {
     @Column(name = "DeliveryPostalCode")
     private String DeliveryPostalCode;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Order> orders;
-
     public String getCustomerName() {
         return CustomerName;
     }
