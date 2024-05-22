@@ -1,5 +1,6 @@
 package visualComponents;
 
+import TimerTasks.QueueTimerTask;
 import models.Order;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,9 +24,9 @@ import services.RouteCalculator;
 
 public class QueueBox extends JPanel implements ActionListener {
     private DefaultTableModel queueTableModel;
-    JButton executeButton = new JButton("Verwerken");
-    JTable queueTable;
-    OrderRepository orderRepository;
+    private JButton executeButton = new JButton("Verwerken");
+    private JTable queueTable;
+    private OrderRepository orderRepository;
     private Order orderInProgress = null;
 
 
@@ -78,7 +79,7 @@ public class QueueBox extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == executeButton) {
+        if (e.getSource() == executeButton) {
             int orderNumber = (int) queueTable.getValueAt(queueTable.getSelectedRow(), 0);
             Optional<Order> optionalOrder = orderRepository.findById(orderNumber);
             if (!optionalOrder.isPresent()) {
@@ -99,8 +100,16 @@ public class QueueBox extends JPanel implements ActionListener {
                 locations.add(orderLine.getStockItem().getItemLocation());
             }
 
-           System.out.println( RouteCalculator.calculateRoute(locations));
+            System.out.println(RouteCalculator.calculateRoute(locations));
+
+            DefaultTableModel queueTableModel = (DefaultTableModel) queueTable.getModel();
+            Page<Order> orders = orderRepository.findUnfinishedOrders(PageRequest.of(0, 100));
+
+            //setting row to InProgress
+            queueTableModel.setValueAt("InProgress", queueTable.getSelectedRow(), 2);
+            queueTableModel.fireTableDataChanged();
         }
+    }
     public Order getOrderInProgress() {
         return orderInProgress;
     }

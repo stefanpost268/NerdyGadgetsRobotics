@@ -8,9 +8,11 @@ import models.Order;
 
 public interface OrderRepository extends CrudRepository<Order, Integer>
 {
-    @Query("SELECT o FROM Order o WHERE o.Status != 'Done'")
+    @Query("SELECT o FROM Order o WHERE o.status != 'Done'")
     Page<Order> findUnfinishedOrders(Pageable pageable);
 
     @Query("SELECT o FROM Order o ORDER BY o.OrderDate DESC")
     Page<Order> findAllByDesc(Pageable pageable);
+
+    Order findFirstByStatusLike(String Status);
 }

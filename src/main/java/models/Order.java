@@ -54,8 +54,8 @@ public class Order {
     @Column()
     private String InternalComments;
 
-    @Column(name = "Status", nullable = false)
-    private String Status;
+    @Column(name = "status", nullable = false)
+    private String status;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
     private List<OrderLines> orderLines;
@@ -120,11 +120,11 @@ public class Order {
     }
 
     public String getStatus() {
-        return Status;
+        return status;
     }
 
     public void setStatus(String status) {
-        Status = status;
+        this.status = status;
     }
 
     public Object[] toObjectArray() {
