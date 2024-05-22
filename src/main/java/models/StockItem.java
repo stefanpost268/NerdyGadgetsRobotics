@@ -1,6 +1,8 @@
 package models;
 
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,7 +28,7 @@ public class StockItem {
     private double RecommendedRetailPrice;
 
     @Column(nullable = false)
-    private double TypicalWeightPerUnit;
+    private BigDecimal TypicalWeightPerUnit;
 
     @Column(length = 11, nullable = false)
     private int QuantityPerOuter;
@@ -46,7 +48,7 @@ public class StockItem {
         return stockItemName;
     }
 
-    public double getTypicalWeightPerUnit() {
+    public BigDecimal getTypicalWeightPerUnit() {
         return TypicalWeightPerUnit;
     }
 

@@ -9,7 +9,13 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import java.time.LocalDate;
+
 import java.util.Set;
+
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
+
 
 @Entity
 @DynamicInsert
@@ -89,7 +95,14 @@ public class Order {
         return OrderID;
     }
     public LocalDate getExpectedDeliveryDate() {
+
         return ExpectedDeliveryDate;
+    }
+
+    public String getFormattedDate() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", new Locale("nl", "NL"));
+        String formattedDate = ExpectedDeliveryDate.format(formatter);
+        return formattedDate;
     }
     public Customer getCustomer() {
         return customer;
