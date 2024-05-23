@@ -1,9 +1,6 @@
 package visualComponents;
 
-import dialogs.OrderInfoDialog;
 import helpers.DatabaseConnector;
-import models.Order;
-import models.OrderLines;
 import services.PdfRenderer;
 
 import javax.swing.*;
@@ -15,12 +12,13 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Optional;
 
 public class pakketbonbutton extends JPanel {
     private final JButton pakketbon = new JButton("Export pakketbon");
 
-    private final PdfRenderer pdfRenderer = new PdfRenderer();
+
+    private int OrderID;
+
 
     public pakketbonbutton() {
         super();
@@ -47,19 +45,24 @@ public class pakketbonbutton extends JPanel {
                 String[] columnNames = {"OrderID", "PickingCompletedWhen", "Aantal Producten"};
                 Object[][] data = orderlines.toArray(new Object[0][]);
                 DefaultTableModel tableModel = new DefaultTableModel(data, columnNames);
+
                 JTable table = new JTable(tableModel);
                 JScrollPane scrollPane = new JScrollPane(table);
                 JPanel panel = new JPanel(new BorderLayout());
                 panel.add(scrollPane, BorderLayout.CENTER);
 
+
                 int selection = JOptionPane.showOptionDialog(null, panel, "bon exporteren", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
 
                 if (selection == 1) {
+                    String input = table.getValueAt(table.getSelectedRow(), 0).toString();
+                    OrderID = Integer.parseInt(input);
                     savePdf();
                 }
             }
         });
     }
+
 
 
     private void savePdf() {
@@ -78,7 +81,6 @@ public class pakketbonbutton extends JPanel {
 
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             String filePath = fileChooser.getSelectedFile().getAbsolutePath();
-            // add .pdf if not defined
             if (!filePath.toLowerCase().endsWith(".pdf")) {
                 filePath += ".pdf";
             }
@@ -94,7 +96,8 @@ public class pakketbonbutton extends JPanel {
                     return;
                 }
             }
-            pdfRenderer.download(filePath);
+            PdfRenderer renderer = new PdfRenderer(OrderID);
+            renderer.download(filePath);
         }
     }
 }
