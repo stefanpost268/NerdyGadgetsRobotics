@@ -36,9 +36,6 @@ public class Main extends JFrame implements ChangeListener {
 
         Main main = context.getBean(Main.class);
         main.gui();
-        Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().withNano(0));
-        timestamp.setNanos(0);
-        System.out.println(timestamp);
     }
 
     public void gui() {

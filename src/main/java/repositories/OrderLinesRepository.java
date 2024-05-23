@@ -1,8 +1,8 @@
 package repositories;
 
-import models.OrderLines;
+import models.OrderLine;
 import org.springframework.data.repository.CrudRepository;
 
-public interface OrderLinesRepository extends CrudRepository<OrderLines, Integer> {
+public interface OrderLinesRepository extends CrudRepository<OrderLine, Integer> {
 
 }

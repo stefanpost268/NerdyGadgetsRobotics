@@ -2,7 +2,7 @@ package dialogs;
 
 import models.Customer;
 import models.Order;
-import models.OrderLines;
+import models.OrderLine;
 import models.StockItem;
 
 import javax.swing.*;
@@ -34,7 +34,7 @@ public class OrderInfoDialog extends JDialog {
 
     public OrderInfoDialog(Order order) {
         Customer customer = order.getCustomer();
-        List<OrderLines> orderLines = order.getOrderLines();
+        List<OrderLine> orderLines = order.getOrderLines();
 
         setLayout(new BorderLayout());
         setSize(800, 600);
@@ -62,7 +62,7 @@ public class OrderInfoDialog extends JDialog {
         this.internalComment.setText(order.getInternalComments());
         this.deliveryComment.setText(order.getDeliveryInstructions());
 
-        for(OrderLines orderLine : orderLines) {
+        for(OrderLine orderLine : orderLines) {
             StockItem stockItem = orderLine.getStockItem();
             tableModel.addRow(new Object[]{
                 stockItem.getStockItemID(),

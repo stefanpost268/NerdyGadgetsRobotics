@@ -3,14 +3,11 @@ package models;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.DynamicInsert;
-import org.springframework.format.annotation.DateTimeFormat;
-import java.sql.Timestamp;
 
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.time.LocalDate;
-import java.util.Set;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -68,23 +65,23 @@ public class Order {
     private String Status;
 
     @OneToMany(mappedBy = "orderID", fetch = FetchType.EAGER)
-    private List<OrderLines> orderLines;
+    private List<OrderLine> orderLines;
 
 
     public Order(Customer customer, People salesperson, People pickedByPerson, People contactPerson, Date orderDate, LocalDate expectedDeliveryDate, boolean isUnderSupplyBackordered, String comments, String deliveryInstructions, String internalComments, People lastEditedBy, Date lastEditedWhen, String orderState) {
-        this.customer = customer;
-        Salesperson = salesperson;
-        PickedByPerson = pickedByPerson;
-        ContactPerson = contactPerson;
-        OrderDate = orderDate;
-        ExpectedDeliveryDate = expectedDeliveryDate;
-        IsUnderSupplyBackordered = isUnderSupplyBackordered;
-        Comments = comments;
-        DeliveryInstructions = deliveryInstructions;
-        InternalComments = internalComments;
-        LastEditedBy = lastEditedBy;
-        LastEditedWhen = lastEditedWhen;
-        Status = orderState;
+        setCustomer(customer);
+        setSalesperson(salesperson);
+        setPickedByPerson(pickedByPerson);
+        setContactPerson(contactPerson);
+        setOrderDate(orderDate);
+        setExpectedDeliveryDate(expectedDeliveryDate);
+        setUnderSupplyBackordered(isUnderSupplyBackordered);
+        setComments(comments);
+        setDeliveryInstructions(deliveryInstructions);
+        setInternalComments(internalComments);
+        setLastEditedBy(lastEditedBy);
+        setLastEditedWhen(lastEditedWhen);
+        setStatus(orderState);
     }
 
     @Column(nullable = false)
@@ -134,7 +131,7 @@ public class Order {
     public String getDeliveryInstructions() {
         return DeliveryInstructions;
     }
-    public List<OrderLines> getOrderLines() {
+    public List<OrderLine> getOrderLines() {
         return orderLines;
     }
     public String getOrderState() {

@@ -1,8 +1,7 @@
 package dialogs;
 
-import helpers.CustomJTable;
+import visualComponents.CreateOrderJTable;
 import models.*;
-import org.springframework.cglib.core.Local;
 import repositories.*;
 
 import javax.swing.*;
@@ -12,9 +11,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 public class CreateOrderDialog extends JDialog implements ActionListener {
@@ -26,7 +23,7 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
     private OrderRepository orderRepository;
 
     private DefaultTableModel tableModel = new DefaultTableModel(new Object[]{"Product Nr", "Product", "Aantal", "Gewicht (kg)"}, 0);
-    private CustomJTable ordersOnTable = new CustomJTable(this.tableModel);
+    private CreateOrderJTable ordersOnTable = new CreateOrderJTable(this.tableModel);
     private JLabel orderID = new JLabel();
     private JTextField shippingDate = new JTextField(10);
     private JComboBox<String> orderState = new JComboBox<String>(orderStates);
@@ -370,7 +367,7 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
 
             StockItem stockItem1 = stockItem.get();
 
-            OrderLines orderLines = new OrderLines();
+            OrderLine orderLines = new OrderLine();
             orderLines.setOrderID(order);
             orderLines.setStockItem(stockItem1);
             orderLines.setDescription(stockItem1.getStockItemName());
