@@ -9,6 +9,7 @@
 #include "Src/Modules/EmergencyButtonModule/EmergencyButton.h"
 #include "Src/Modules/InductiveSensorModule/InductiveSensor.h"
 #include "Src/Modules/MotorControllerModule/MotorController.h"
+#include"Src/Modules/ShowRobotStateModule/ShowRobotState.h"
 
 // lightSensor
 LightSensor lightSensor = LightSensor(2);
@@ -20,8 +21,12 @@ InductiveSensor inductiveSensorOnder = InductiveSensor(6);
 InductiveSensor klikSensorBoven = InductiveSensor(1);
 MotorController motorcontrollerxas = MotorController(12, 3, 9, A1, 1);
 MotorController motorcontrolleryas = MotorController(13, 11, 8, A0, 1);
+ShowRobotState showRobotState = ShowRobotState(5, 6, 7, 8);
+
 
 bool SAFETY_MODE = false;
+bool MANUAL = true;
+bool AUTOMATIC = false;
 
 int xas = A3;
 int yas = A2;
@@ -66,7 +71,36 @@ void loop()
         jsonrobot.emitRobotState("STATE", "MANUAL_MODE", "Reset button was pressed");
             SAFETY_MODE = false;
         }
-  
+
+    if(showRobotState.IsSwitchToAutomaticPressed() ){
+              jsonrobot.emitRobotState("STATE", "AUTOMATIC", "Emergency button was pressed");
+      AUTOMATIC = true;
+      
+    }
+
+  // switch between states
+    if(AUTOMATIC){
+      SAFETY_MODE = false;
+      MANUAL = false;
+    } else if(SAFETY_MODE){
+      AUTOMATIC = false;
+      MANUAL = false;
+    } else if(MANUAL){
+      SAFETY_MODE = false;
+      AUTOMATIC = false;
+    }
+
+    //ShowRobotState
+    if(MANUAL){
+      showRobotState.setColor(255,50, 0);  // orange Color
+    }
+    if(AUTOMATIC){
+      showRobotState.setColor(0, 255, 0);  // green Color
+    }
+    if(SAFETY_MODE){
+      showRobotState.setColor(255, 0, 0);  // Red Color
+    }
+
         x = 0;
         y = 0;
     }
