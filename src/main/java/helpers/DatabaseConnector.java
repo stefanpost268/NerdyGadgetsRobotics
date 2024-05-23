@@ -56,7 +56,7 @@ public class DatabaseConnector {
     }
 
     public String[] getCustomerData(int orderid) {
-        String[] customerData = new String[9]; // Array om CustomerID, CustomerName en PhoneNumber op te slaan
+        String[] customerData = new String[9];
         String query = "SELECT c.CustomerName, c.PhoneNumber, c.DeliveryAddressLine2, c.PostalCityID, o.OrderID, o.OrderDate, ol.StockItemID, ol.Quantity, ol.Description FROM customers c JOIN orders o ON o.CustomerID = c.CustomerID JOIN orderlines ol ON ol.OrderID = o.OrderID WHERE o.OrderID = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -104,6 +104,26 @@ public class DatabaseConnector {
         return customerDataList;
     }
 
+    public List<Object[]> finishorders(){
+        List<Object[]> orderlines = new ArrayList<>();
+        String query = "SELECT ol.OrderID, o.PickingCompletedWhen, SUM(ol.Quantity) AS aantalproducten FROM orders o JOIN  orderlines ol ON ol.OrderID = o.OrderID GROUP BY  ol.OrderID,o.PickingCompletedWhen;";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                int OrderID = resultSet.getInt("OrderID");
+                Timestamp pickingCompletedWhen = resultSet.getTimestamp("PickingCompletedWhen");
+                int aantalProducten = resultSet.getInt("aantalproducten");
+                orderlines.add(new Object[]{OrderID, pickingCompletedWhen, aantalProducten});
+            }
+        } catch (SQLException e) {
+            System.err.println("Failed to execute the query!");
+            e.printStackTrace();
+        }
+
+        return orderlines;
+    }
 
     public List<Object[]> getQueueData() {
         List<Object[]> queueData = new ArrayList<>();
