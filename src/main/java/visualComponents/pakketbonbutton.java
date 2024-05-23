@@ -97,21 +97,4 @@ public class pakketbonbutton extends JPanel {
             pdfRenderer.download(filePath);
         }
     }
-
-    private void showOrderEvent() {
-        String input = this.table.getValueAt(this.table.getSelectedRow(), 0).toString();
-        int orderId = Integer.parseInt(input);
-
-        Optional<Order> order  = this.orderRepository.findById(orderId);
-
-        if(this.infoDialog != null) {
-            this.infoDialog.dispose();
-        }
-
-        if(order.isEmpty()) {
-            return;
-        }
-
-        this.infoDialog = new OrderInfoDialog(order.get());
-    }
 }
