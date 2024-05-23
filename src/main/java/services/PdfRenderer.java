@@ -41,11 +41,9 @@ public class PdfRenderer extends ITextRenderer {
     private String modifyHtmlContent(String htmlContent) {
         DatabaseConnector database = new DatabaseConnector();
 
-        // zoeken wat je wilt vervangen
         Pattern pattern = Pattern.compile("\\{\\{([^{}]*)\\}\\}");
         Matcher matcher = pattern.matcher(htmlContent);
 
-        // maak een string van de html
         StringBuilder modifiedHtmlContent = new StringBuilder();
 
 
@@ -87,7 +85,6 @@ public class PdfRenderer extends ITextRenderer {
             lastIndex = matcher.end();
         }
 
-        // Append the remaining content after the last match
         modifiedHtmlContent.append(htmlContent.substring(lastIndex));
 
         return modifiedHtmlContent.toString();
