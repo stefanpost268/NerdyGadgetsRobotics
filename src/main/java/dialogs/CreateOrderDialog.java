@@ -48,7 +48,7 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
     private JTextField productID = new JTextField(5);
     private JSpinner productQuantity = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1));
 
-    public CreateOrderDialog(Order order, CustomerRepository customerRepository, PeopleRepository peopleRepository, StockItemRepository stockItemRepository, OrderLinesRepository orderLinesRepository, OrderRepository orderRepository) {
+    public CreateOrderDialog(CustomerRepository customerRepository, PeopleRepository peopleRepository, StockItemRepository stockItemRepository, OrderLinesRepository orderLinesRepository, OrderRepository orderRepository) {
         this.customerRepository = customerRepository;
         this.peopleRepository = peopleRepository;
         this.stockitemRepository = stockItemRepository;
@@ -375,23 +375,14 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
             orderLines.setStockItem(stockItem1);
             orderLines.setDescription(stockItem1.getStockItemName());
             orderLines.setPackageTypeID(stockItem1.getUnitPackageID());
-            orderLines.setQuantity(getTableQuantity(i));
-            orderLines.setPickedQuantity(getTableQuantity(i));
+            orderLines.setQuantity((int) tableModel.getValueAt(i, 2));
+            orderLines.setPickedQuantity((int) tableModel.getValueAt(i, 2));
             orderLines.setLastEditedBy(order.getLastEditedBy());
             orderLines.setLastEditedWhen(new Date());
 
             orderLinesRepository.save(orderLines);
         }
         setVisible(false);
-    }
-
-    private int getTableQuantity(int i) {
-        try {
-            return (int) tableModel.getValueAt(i, 2);
-        } catch (Exception e) {
-            return Integer.parseInt(tableModel.getValueAt(i, 2).toString());
-        }
-
     }
 
     private void addStockitemToTable() {

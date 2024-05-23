@@ -17,11 +17,12 @@ public class OrderInfoDialog extends JDialog {
 
     private JLabel orderID = new JLabel();
     private JTextField shippingDate = new JTextField();
-    private JLabel orderState = new JLabel();
+
 
     private JLabel customerName = new JLabel();
     private JLabel customerPhone = new JLabel();
     private JLabel customerAdres = new JLabel();
+    private JLabel orderState = new JLabel();
 
     private JLabel contactPerson = new JLabel();
     private JLabel salesPerson = new JLabel();

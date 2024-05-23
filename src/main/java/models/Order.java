@@ -4,12 +4,12 @@ package models;
 import jakarta.persistence.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.springframework.format.annotation.DateTimeFormat;
-
 import java.sql.Timestamp;
+
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.time.LocalDate;
-
 import java.util.Set;
 
 import java.time.format.DateTimeFormatter;
@@ -21,6 +21,13 @@ import java.util.Locale;
 @DynamicInsert
 @Table(name = "orders")
 public class Order {
+    enum OrderEnum {
+        Open,
+        InProgress,
+        Done,
+        Error
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int OrderID;
@@ -51,29 +58,18 @@ public class Order {
     @Column(nullable = true)
     private String Comments;
 
-    @Column(nullable = true)
+    @Column()
     private String DeliveryInstructions;
 
-    @Column(nullable = true)
+    @Column()
     private String InternalComments;
+
+    @Column(name = "Status", nullable = false)
+    private String Status;
 
     @OneToMany(mappedBy = "orderID", fetch = FetchType.EAGER)
     private List<OrderLines> orderLines;
 
-    @Column(nullable = false)
-    private Date OrderDate;
-
-    @Column(nullable = false)
-    private boolean IsUnderSupplyBackordered;
-
-    @Column(nullable = false)
-    private Date LastEditedWhen;
-
-    @Column(nullable = false)
-    private String Status;
-
-    public Order() {
-    }
 
     public Order(Customer customer, People salesperson, People pickedByPerson, People contactPerson, Date orderDate, LocalDate expectedDeliveryDate, boolean isUnderSupplyBackordered, String comments, String deliveryInstructions, String internalComments, People lastEditedBy, Date lastEditedWhen, String orderState) {
         this.customer = customer;
@@ -91,9 +87,22 @@ public class Order {
         Status = orderState;
     }
 
-    public int getOrderID() {
-        return OrderID;
+    @Column(nullable = false)
+    private Date OrderDate;
+
+    @Column(nullable = false)
+    private boolean IsUnderSupplyBackordered;
+
+    @Column(nullable = false)
+    private Date LastEditedWhen;
+
+    public Order() {
     }
+
+    public List<String> getFieldNames() {
+        return Arrays.asList("OrderID", "ExpectedDeliveryDate", "Customer", "ContactPerson", "Salesperson", "PickedByPerson", "Comments", "InternalComments", "DeliveryInstructions", "OrderLines");
+    }
+
     public LocalDate getExpectedDeliveryDate() {
 
         return ExpectedDeliveryDate;
@@ -129,8 +138,18 @@ public class Order {
         return orderLines;
     }
     public String getOrderState() {
-        return Status;
+        return "NOT IMPLEMENTED";
     }
+
+    public int getOrderID() {
+        return OrderID;
+    }
+
+    public Object[] toObjectArray() {
+
+        return new Object[] {getOrderID(), getCustomer().getCustomerName(), getStatus(), getOrderLines().size(), getOrderDate()};
+    }
+
     public People getLastEditedBy() {
         return LastEditedBy;
     }
