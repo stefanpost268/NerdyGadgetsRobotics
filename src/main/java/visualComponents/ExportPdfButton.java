@@ -9,8 +9,9 @@ import java.io.File;
 
 public class ExportPdfButton extends JPanel {
     private JButton exportPdfButton = new JButton("Export PDF");
-    private final PdfRenderer pdfRenderer = new PdfRenderer();
+    private final PdfRenderer pdfRenderer = new PdfRenderer(this.OrderID);
 
+    private int OrderID;
     public ExportPdfButton() {
         super();
 
