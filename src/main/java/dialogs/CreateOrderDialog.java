@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class CreateOrderDialog extends JDialog implements ActionListener {
-    private String[] orderStates = {"In Wachtrij", "Afgerond"};
+    private String[] orderStates = {"Open", "InProgess", "Done", "Error"};
     private CustomerRepository customerRepository;
     private PeopleRepository peopleRepository;
     private StockItemRepository stockitemRepository;
