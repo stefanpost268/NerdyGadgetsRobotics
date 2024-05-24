@@ -6,7 +6,7 @@ public:
     /**
      * Constructor
     */
-    MotorController(int directionPin, int pwmPin, int brakePin, int encoder1, float speedmultiplier);
+    MotorController(int directionPin, int pwmPin, int brakePin, int encoder1, int encoder2, float speedmultiplier);
 
     /**
      * Function that drives the motor
@@ -28,12 +28,19 @@ public:
     */
     int getMotorLocation();
 
+    /**
+     * Function that reads the encoder and sets the motor location
+    */
+    void readEncoder();
+
 private:
     int directionPin;
     int pwmPin;
     int brakePin;
     int encoder1;
+    int encoder2;
     float speedmultiplier;
+    int motorLocation;
 
 
     /**

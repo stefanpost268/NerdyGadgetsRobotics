@@ -1,11 +1,12 @@
 #include <Arduino.h>
 #include "MotorController.h"
 
-MotorController::MotorController(int directionPin, int pwmPin, int brakePin, int encoder1, float speedmultiplier) {
+MotorController::MotorController(int directionPin, int pwmPin, int brakePin, int encoder1, int encoder2, float speedmultiplier) {
     this->directionPin = directionPin;
     this->pwmPin = pwmPin;
     this->brakePin = brakePin;
     this->encoder1 = encoder1;
+    this->encoder2 = encoder2;
     this->speedmultiplier = speedmultiplier;
     setup();
 }
@@ -15,6 +16,7 @@ void MotorController::setup() {
     pinMode(pwmPin, OUTPUT);
     pinMode(brakePin, OUTPUT);
     pinMode(encoder1, INPUT);
+    pinMode(encoder2, INPUT);
 }
 
 void MotorController::motorForwards(int joystickInput) {
@@ -25,6 +27,20 @@ void MotorController::motorForwards(int joystickInput) {
 void MotorController::motorBackwards(int joystickInput) {
     digitalWrite(directionPin, HIGH);
     analogWrite(pwmPin, (joystickInput));
+}
+
+void MotorController::readEncoder() {
+    bool encoder1 = analogRead(this->encoder1);
+    bool encoder2 = analogRead(this->encoder2);
+
+    if (encoder1 == encoder2) {
+        motorLocation++;
+        Serial.println("Locatie omhoog");
+    }
+    else {
+        motorLocation--;
+        Serial.println("Locatie omlaag");
+    }
 }
 
 void MotorController::driveFork(int y, int IRSensorWaarde) {
@@ -79,5 +95,5 @@ void MotorController::disableBrake() {
 }
 
 int MotorController::getMotorLocation() {
-    return analogRead(this->encoder1);
+    return motorLocation;
 }

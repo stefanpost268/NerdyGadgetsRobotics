@@ -18,8 +18,8 @@ InductiveSensor inductiveSensorLeft = InductiveSensor(4);
 InductiveSensor inductiveSensorRight = InductiveSensor(7);
 InductiveSensor inductiveSensorBelow = InductiveSensor(6);
 InductiveSensor clickSensorTop = InductiveSensor(1);
-MotorController motorcontrollerxas = MotorController(12, 3, 9, A1, 1);
-MotorController motorcontrolleryas = MotorController(13, 11, 8, A0, 1);
+MotorController motorcontrollerxas = MotorController(12, 3, 9, 2, 5, 1);
+MotorController motorcontrolleryas = MotorController(13, 11, 8, A0, A0, 1);
 
 bool SAFETY_MODE = false;
 
@@ -38,28 +38,35 @@ void setup()
     pinMode(yas, INPUT);
     pinMode(xas, INPUT);
 
+    pinMode(2, INPUT_PULLUP);
+    pinMode(3, INPUT_PULLUP);
+
     Wire.begin(SLAVE_ADDRESS); // Initialize I2C communication with address
     Wire.onReceive(receiveEvent); // Set up a function to handle received data
     Wire.onRequest(requestEvent); // Set up a function to handle requests for data
+
+    attachInterrupt(digitalPinToInterrupt(2), []() {
+        motorcontrollerxas.readEncoder();
+    }, CHANGE);
+
 }
 
 void loop()
 {
-    // Serial.println(motorcontrolleryas.getMotorLocation());
 
     //LightSensor 
-    if (!lightSensor.isActive() && !SAFETY_MODE) { 
-        jsonrobot.emitRobotState("STATE", "EMERGENCY_STOP", "warehouse is tilted");
-        SAFETY_MODE = true;
-        motorcontrollerxas.emergencyStop();
-        motorcontrolleryas.emergencyStop();
+    // if (!lightSensor.isActive() && !SAFETY_MODE) { 
+    //     jsonrobot.emitRobotState("STATE", "EMERGENCY_STOP", "warehouse is tilted");
+    //     SAFETY_MODE = true;
+    //     motorcontrollerxas.emergencyStop();
+    //     motorcontrolleryas.emergencyStop();
         
-    }
+    // }
 
     //EmergencyStop
     if (emergencyButton.isEmergencyStopPressed() && !SAFETY_MODE && !emergencyButton.isResetPressed()) { 
-        jsonrobot.emitRobotState("STATE", "EMERGENCY_STOP", "Emergency button was pressed");
-        SAFETY_MODE = true;
+        // jsonrobot.emitRobotState("STATE", "EMERGENCY_STOP", "Emergency button was pressed");
+        // SAFETY_MODE = true;
     }
 
     //reset
@@ -77,8 +84,8 @@ void loop()
       y = map(analogRead(yas), 0, 1023, -255, 255);
 
       if (!lightSensor.isActive()) {
-          lightSensor.emitWarehouseTiltedStatus();
-          SAFETY_MODE = true;
+          // lightSensor.emitWarehouseTiltedStatus();
+          // SAFETY_MODE = true;
       }
     }
     // controls for x axes
