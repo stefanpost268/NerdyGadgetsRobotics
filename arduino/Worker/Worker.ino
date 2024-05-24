@@ -9,6 +9,7 @@
 #include "Src/Modules/EmergencyButtonModule/EmergencyButton.h"
 #include "Src/Modules/InductiveSensorModule/InductiveSensor.h"
 #include "Src/Modules/MotorControllerModule/MotorController.h"
+#include "../Master/Src/MotorEncoderModule/MotorEncoder.h"
 
 // lightSensor
 LightSensor lightSensor = LightSensor(2);
@@ -18,8 +19,9 @@ InductiveSensor inductiveSensorLeft = InductiveSensor(4);
 InductiveSensor inductiveSensorRight = InductiveSensor(7);
 InductiveSensor inductiveSensorBelow = InductiveSensor(6);
 InductiveSensor clickSensorTop = InductiveSensor(1);
-MotorController motorcontrollerxas = MotorController(12, 3, 9, 2, 5, 1);
-MotorController motorcontrolleryas = MotorController(13, 11, 8, A0, A0, 1);
+MotorController motorcontrollerxas = MotorController(12, 3, 9, 1);
+MotorController motorcontrolleryas = MotorController(13, 11, 8, 1);
+MotorEncoder motorencoder = MotorEncoder(2, 5);
 
 bool SAFETY_MODE = false;
 
@@ -43,7 +45,7 @@ void setup()
     Wire.onRequest(requestEvent); // Set up a function to handle requests for data
 
     attachInterrupt(digitalPinToInterrupt(2), []() {
-        motorcontrollerxas.readEncoder();
+        motorencoder.readEncoder();
     }, RISING);
 
 }
@@ -91,8 +93,8 @@ void loop()
     // controls for y axes
     motorcontrolleryas.driveMotor(y, inductiveSensorBelow.readInductiveSensor(), clickSensorTop.readInductiveSensor(), SAFETY_MODE, 0);
 
-    Serial.print("Motor location: ");
-    Serial.println(motorcontrollerxas.getMotorLocation());
+    Serial.print("Motor location x: ");
+    Serial.println(motorencoder.getMotorLocation());
 }
 
 void receiveEvent(bool numBytes) {

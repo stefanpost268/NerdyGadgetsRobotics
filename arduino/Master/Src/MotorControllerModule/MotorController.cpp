@@ -1,11 +1,10 @@
 #include <Arduino.h>
 #include "MotorController.h"
 
-MotorController::MotorController(int directionPin, int pwmPin, int brakePin, int encoder1) {
+MotorController::MotorController(int directionPin, int pwmPin, int brakePin) {
     this->directionPin = directionPin;
     this->pwmPin = pwmPin;
     this->brakePin = brakePin;
-    this->encoder1 = encoder1;
     setup();
 }
 
@@ -13,7 +12,6 @@ void MotorController::setup() {
     pinMode(directionPin, OUTPUT);
     pinMode(pwmPin, OUTPUT);
     pinMode(brakePin, OUTPUT);
-    pinMode(encoder1, INPUT);
 }
 
 void MotorController::vorkForwards(int y) {

@@ -29,16 +29,6 @@ void MotorController::motorBackwards(int joystickInput) {
     analogWrite(pwmPin, (joystickInput));
 }
 
-void MotorController::readEncoder() {
-    if (digitalRead(this->encoder1) == digitalRead(this->encoder2)) {
-        motorLocation++;
-    }
-    else {
-        motorLocation--;
-    }
-    return;
-}
-
 void MotorController::driveFork(int y, int IRSensorWaarde) {
     if (y < -50 && IRSensorWaarde > 140)
     {
@@ -88,8 +78,4 @@ void MotorController::enableBrake() {
 
 void MotorController::disableBrake() {
     digitalWrite(brakePin, LOW);
-}
-
-int MotorController::getMotorLocation() {
-    return motorLocation;
 }
