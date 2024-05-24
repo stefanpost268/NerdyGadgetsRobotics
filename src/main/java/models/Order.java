@@ -3,6 +3,7 @@ package models;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.IdGeneratorType;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -18,15 +19,9 @@ import java.util.Locale;
 @DynamicInsert
 @Table(name = "orders")
 public class Order {
-    enum OrderEnum {
-        Open,
-        InProgress,
-        Done,
-        Error
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "OrderID") // Specify the column name as uppercase
     private int OrderID;
 
     @Column(nullable = false)
@@ -64,9 +59,8 @@ public class Order {
     @Column(name = "Status", nullable = false)
     private String Status;
 
-    @OneToMany(mappedBy = "orderID", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
     private List<OrderLine> orderLines;
-
 
     public Order(Customer customer, People salesperson, People pickedByPerson, People contactPerson, Date orderDate, LocalDate expectedDeliveryDate, boolean isUnderSupplyBackordered, String comments, String deliveryInstructions, String internalComments, People lastEditedBy, Date lastEditedWhen, String orderState) {
         setCustomer(customer);
@@ -82,6 +76,10 @@ public class Order {
         setLastEditedBy(lastEditedBy);
         setLastEditedWhen(lastEditedWhen);
         setStatus(orderState);
+    }
+
+    private void setOrderId(long orderId) {
+        OrderID = (int) orderId;
     }
 
     @Column(nullable = false)

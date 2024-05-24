@@ -13,8 +13,8 @@ public class OrderLine {
     private int OrderLineID;
 
     @ManyToOne
-    @JoinColumn(name = "OrderID", nullable = false)
-    private Order orderID;
+    @JoinColumn(name = "OrderId", referencedColumnName = "OrderID", nullable = false)
+    private Order order;
 
     @ManyToOne
     @JoinColumn(name = "StockItemID", nullable = false)
@@ -51,21 +51,18 @@ public class OrderLine {
         return Quantity;
     }
 
-    public Order getOrderID() {
-        return orderID;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setOrderID(Order orderID) {
-        this.orderID = orderID;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
     public void setStockItem(StockItem stockItem) {
         this.stockItem = stockItem;
     }
 
-    public String getDescription() {
-        return Description;
-    }
 
     public void setDescription(String description) {
         Description = description;
