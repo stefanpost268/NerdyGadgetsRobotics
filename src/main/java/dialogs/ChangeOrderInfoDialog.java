@@ -1,6 +1,5 @@
 package dialogs;
 
-import helpers.ChangeOrderInfoDatabase;
 import objects.OrderInfo;
 
 import javax.swing.*;
@@ -20,7 +19,6 @@ public class ChangeOrderInfoDialog extends JDialog implements ActionListener {
     private JTextArea deliveryComment = new JTextArea(4, 20);
 
     private OrderInfo orderInfo = new OrderInfo();
-    private ChangeOrderInfoDatabase changeOrderInfoDatabase = new ChangeOrderInfoDatabase();
 
 
     public ChangeOrderInfoDialog(JFrame frame, int orderID) {
