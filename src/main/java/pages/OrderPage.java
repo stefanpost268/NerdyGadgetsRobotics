@@ -1,12 +1,15 @@
 package pages;
 
+
+import dialogs.CreateOrderDialog;
 import dialogs.OrderInfoDialog;
 import models.Order;
 import org.springframework.data.domain.PageRequest;
-import repositories.OrderRepository;
+import repositories.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,6 +22,11 @@ public class OrderPage extends JPanel implements ActionListener {
     private int recordsOnPage = 37;
     private long maxPages = 0;
     private OrderRepository orderRepository;
+    private CustomerRepository customerRepository;
+    private PeopleRepository peopleRepository;
+    private StockItemRepository stockitemRepository;
+    private OrderLinesRepository orderlinesrepository;
+
     private OrderInfoDialog infoDialog;
     private JButton addOrderButton = new JButton("Aanmaken Bestelling");
     private JButton showOrderButton = new JButton("Bekijken Bestelling");
@@ -27,9 +35,13 @@ public class OrderPage extends JPanel implements ActionListener {
     private JButton previousPageButton = new JButton("Vorige");
     private JTable table;
 
-    public OrderPage(OrderRepository orderRepository) {
+    public OrderPage(OrderRepository orderRepository, CustomerRepository customerRepository, PeopleRepository peopleRepository, StockItemRepository stockitemRepository, OrderLinesRepository orderlinesrepository) {
         setLayout(new BorderLayout());
         this.orderRepository = orderRepository;
+        this.customerRepository = customerRepository;
+        this.peopleRepository = peopleRepository;
+        this.stockitemRepository = stockitemRepository;
+        this.orderlinesrepository = orderlinesrepository;
 
         this.addOrderButton.addActionListener(this);
         this.showOrderButton.addActionListener(this);
@@ -96,6 +108,12 @@ public class OrderPage extends JPanel implements ActionListener {
                 this.page--;
                 refreshTable();
             }
+        }
+        if (e.getSource().equals(this.addOrderButton)) {
+            if(this.infoDialog != null) {
+                this.infoDialog.dispose();
+            }
+            new CreateOrderDialog(this.customerRepository, this.peopleRepository, this.stockitemRepository, this.orderlinesrepository, this.orderRepository);
         }
     }
 

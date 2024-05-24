@@ -21,7 +21,7 @@ public class Customer {
     @Column(name = "DeliveryPostalCode")
     private String DeliveryPostalCode;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Order> orders;
 
     public String getCustomerName() {

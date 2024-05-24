@@ -17,6 +17,10 @@ public class StockItem {
     @Column(length = 100, nullable = false, unique = true)
     private String stockItemName;
 
+    @ManyToOne
+    @JoinColumn(name = "UnitPackageID", nullable = false)
+    private PackageType UnitPackageID;
+
     @Column(nullable = true)
     private double UnitPrice;
 
@@ -46,5 +50,13 @@ public class StockItem {
 
     public BigDecimal getTypicalWeightPerUnit() {
         return TypicalWeightPerUnit;
+    }
+
+    public PackageType getUnitPackageID() {
+        return UnitPackageID;
+    }
+
+    public void setUnitPackageID(PackageType unitPackageID) {
+        UnitPackageID = unitPackageID;
     }
 }

@@ -2,7 +2,7 @@ package dialogs;
 
 import models.Customer;
 import models.Order;
-import models.OrderLines;
+import models.OrderLine;
 import models.StockItem;
 
 import javax.swing.*;
@@ -14,22 +14,27 @@ import java.util.List;
 public class OrderInfoDialog extends JDialog {
     private DefaultTableModel tableModel = new DefaultTableModel(new Object[]{"Product Nr", "Product", "Aantal", "Gewicht (kg)"}, 0);
     private JTable ordersOnTable = new JTable(this.tableModel);
+
     private JLabel orderID = new JLabel();
-    private JLabel shippingDate = new JLabel();
-    private JLabel orderState = new JLabel();
+    private JTextField shippingDate = new JTextField();
+
+
     private JLabel customerName = new JLabel();
     private JLabel customerPhone = new JLabel();
     private JLabel customerAdres = new JLabel();
+    private JLabel orderState = new JLabel();
+
     private JLabel contactPerson = new JLabel();
     private JLabel salesPerson = new JLabel();
     private JLabel pickedByPerson = new JLabel();
+
     private JTextArea comment = new JTextArea(4, 20);
     private JTextArea internalComment = new JTextArea(4, 20);
     private JTextArea deliveryComment = new JTextArea(4, 20);
 
     public OrderInfoDialog(Order order) {
         Customer customer = order.getCustomer();
-        List<OrderLines> orderLines = order.getOrderLines();
+        List<OrderLine> orderLines = order.getOrderLines();
 
         setLayout(new BorderLayout());
         setSize(800, 600);
@@ -57,7 +62,7 @@ public class OrderInfoDialog extends JDialog {
         this.internalComment.setText(order.getInternalComments());
         this.deliveryComment.setText(order.getDeliveryInstructions());
 
-        for(OrderLines orderLine : orderLines) {
+        for(OrderLine orderLine : orderLines) {
             StockItem stockItem = orderLine.getStockItem();
             tableModel.addRow(new Object[]{
                 stockItem.getStockItemID(),
@@ -121,9 +126,10 @@ public class OrderInfoDialog extends JDialog {
         panel.add(deliveryDateLabel, gbc);
 
         // Delivery Date Value
+        JTextField deliveryDate = new JTextField();
         gbc.gridx = 1;
         gbc.gridy = 1;
-        panel.add(this.shippingDate, gbc);
+        panel.add(deliveryDate, gbc);
 
         // Order State Label
         JLabel orderStateLabel = new JLabel("Bestelling Status: ");
@@ -132,9 +138,10 @@ public class OrderInfoDialog extends JDialog {
         panel.add(orderStateLabel, gbc);
 
         // Order State Value
+        JComboBox<String> orderState = new JComboBox<>(new String[]{"In wachtrij", "Afgerond", "Bezig"});
         gbc.gridx = 2;
         gbc.gridy = 1;
-        panel.add(this.orderState, gbc);
+        panel.add(orderState, gbc);
 
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.fill = GridBagConstraints.HORIZONTAL;
