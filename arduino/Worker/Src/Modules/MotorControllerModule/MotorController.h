@@ -22,7 +22,24 @@ public:
      * Function that stops the motor
     */
     void emergencyStop();
-    
+
+    /**
+     * Function that gets the motor location
+    */
+    int getMotorLocation();
+
+    /**
+     * Get current motor coordinate based on motor location
+     * @param max The maximum value of the coordinate its important that this is the coordinate of the motor at the end of the warehouse
+     * @param columnCount The amount of columns in the warehouse
+    */
+    int getMotorLocationAsCoordinate(int max, int columnCount);
+
+    /**
+     * Function that reads the encoder and sets the motor location
+    */
+    void readEncoder();
+
 private:
     int directionPin;
     int pwmPin;

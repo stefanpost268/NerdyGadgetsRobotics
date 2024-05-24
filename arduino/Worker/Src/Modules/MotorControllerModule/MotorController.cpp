@@ -79,3 +79,22 @@ void MotorController::enableBrake() {
 void MotorController::disableBrake() {
     digitalWrite(brakePin, LOW);
 }
+
+int MotorController::getMotorLocation() {
+    return motorLocation;
+}
+
+int MotorController::getMotorLocationAsCoordinate(int max, int columnCount) {
+        
+        int columnSize = max / columnCount;
+
+        for (size_t i = 0; i <= columnCount; i++)
+        {
+            if (motorLocation > columnSize * i && motorLocation < columnSize * (i + 1))
+            {
+                return i + 1;
+            }
+            
+        }
+        return 0; 
+    }
