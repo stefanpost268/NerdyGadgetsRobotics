@@ -15,8 +15,8 @@ void MotorController::setup() {
     pinMode(directionPin, OUTPUT);
     pinMode(pwmPin, OUTPUT);
     pinMode(brakePin, OUTPUT);
-    pinMode(encoder1, INPUT);
-    pinMode(encoder2, INPUT);
+    pinMode(encoder1, INPUT_PULLUP);
+    pinMode(encoder2, INPUT_PULLUP);
 }
 
 void MotorController::motorForwards(int joystickInput) {
@@ -30,17 +30,13 @@ void MotorController::motorBackwards(int joystickInput) {
 }
 
 void MotorController::readEncoder() {
-    bool encoder1 = analogRead(this->encoder1);
-    bool encoder2 = analogRead(this->encoder2);
-
-    if (encoder1 == encoder2) {
+    if (digitalRead(this->encoder1) == digitalRead(this->encoder2)) {
         motorLocation++;
-        Serial.println("Locatie omhoog");
     }
     else {
         motorLocation--;
-        Serial.println("Locatie omlaag");
     }
+    return;
 }
 
 void MotorController::driveFork(int y, int IRSensorWaarde) {

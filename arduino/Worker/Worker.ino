@@ -38,16 +38,13 @@ void setup()
     pinMode(yas, INPUT);
     pinMode(xas, INPUT);
 
-    pinMode(2, INPUT_PULLUP);
-    pinMode(3, INPUT_PULLUP);
-
     Wire.begin(SLAVE_ADDRESS); // Initialize I2C communication with address
     Wire.onReceive(receiveEvent); // Set up a function to handle received data
     Wire.onRequest(requestEvent); // Set up a function to handle requests for data
 
     attachInterrupt(digitalPinToInterrupt(2), []() {
         motorcontrollerxas.readEncoder();
-    }, CHANGE);
+    }, RISING);
 
 }
 
@@ -93,6 +90,9 @@ void loop()
 
     // controls for y axes
     motorcontrolleryas.driveMotor(y, inductiveSensorBelow.readInductiveSensor(), clickSensorTop.readInductiveSensor(), SAFETY_MODE, 0);
+
+    Serial.print("Motor location: ");
+    Serial.println(motorcontrollerxas.getMotorLocation());
 }
 
 void receiveEvent(bool numBytes) {
@@ -106,4 +106,7 @@ void receiveEvent(bool numBytes) {
 void requestEvent() {
   Wire.write(SAFETY_MODE);
 }
+
+// right: 4662
+// right
 

@@ -32,7 +32,7 @@ public:
      * Function that reads the encoder and sets the motor location
     */
     void readEncoder();
-
+    
 private:
     int directionPin;
     int pwmPin;
