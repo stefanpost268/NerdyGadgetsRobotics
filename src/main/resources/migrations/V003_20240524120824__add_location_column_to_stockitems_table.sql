@@ -1,0 +1,2 @@
+ALTER TABLE stockitems
+ADD COLUMN locatie VARCHAR(20);
