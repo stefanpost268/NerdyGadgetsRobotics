@@ -8,7 +8,7 @@
 
 IRSensor sensor = IRSensor(A2);
 MotorController motorcontroller = MotorController(12, 3, 9);
-MotorEncoder motorencoder = MotorEncoder(2, 4);
+MotorEncoder motorencoder = MotorEncoder(2, 5);
 Joystick joystick = Joystick(A3);
 Communication communication = Communication(9);
 
@@ -38,6 +38,8 @@ void loop()
         EmergencyButtonState
     );
 
+    Serial.println(motorencoder.getMotorLocationAsCoordinate(2000, 5));
     Serial.print("Motor location y: ");
     Serial.println(motorencoder.getMotorLocation());
+    
 }

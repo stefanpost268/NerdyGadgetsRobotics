@@ -1,12 +1,10 @@
 #include <Arduino.h>
 #include "MotorController.h"
 
-MotorController::MotorController(int directionPin, int pwmPin, int brakePin, int encoder1, int encoder2, float speedmultiplier) {
+MotorController::MotorController(int directionPin, int pwmPin, int brakePin, float speedmultiplier) {
     this->directionPin = directionPin;
     this->pwmPin = pwmPin;
     this->brakePin = brakePin;
-    this->encoder1 = encoder1;
-    this->encoder2 = encoder2;
     this->speedmultiplier = speedmultiplier;
     setup();
 }
@@ -15,8 +13,7 @@ void MotorController::setup() {
     pinMode(directionPin, OUTPUT);
     pinMode(pwmPin, OUTPUT);
     pinMode(brakePin, OUTPUT);
-    pinMode(encoder1, INPUT_PULLUP);
-    pinMode(encoder2, INPUT_PULLUP);
+
 }
 
 void MotorController::motorForwards(int joystickInput) {
@@ -29,18 +26,6 @@ void MotorController::motorBackwards(int joystickInput) {
     analogWrite(pwmPin, (joystickInput));
 }
 
-void MotorController::readEncoder() {
-    bool encoder1 = digitalRead(this->encoder1);
-    bool encoder2 = digitalRead(this->encoder2);
-
-    if (encoder1 == encoder2) {
-        motorLocation++;
-    }
-    else if (motorLocation > 0)
-     {
-        motorLocation--;
-    }
-}
 
 void MotorController::driveFork(int y, int IRSensorWaarde) {
     if (y < -50 && IRSensorWaarde > 140)
@@ -62,7 +47,7 @@ void MotorController::driveMotor(int joystickInput, int sensor1, int sensor2, bo
     if (!SAFETY_MODE) {
         if (sensor2 == 0)
         {
-            motorLocation = 0;
+            // motorLocation = 0;
         }
       
         
@@ -99,21 +84,5 @@ void MotorController::disableBrake() {
     digitalWrite(brakePin, LOW);
 }
 
-int MotorController::getMotorLocation() {
-    return motorLocation;
-}
 
-int MotorController::getMotorLocationAsCoordinate(int max, int columnCount) {
-        
-        int columnSize = max / columnCount;
 
-        for (size_t i = 0; i <= columnCount; i++)
-        {
-            if (motorLocation > columnSize * i && motorLocation < columnSize * (i + 1))
-            {
-                return i + 1;
-            }
-            
-        }
-        return 0; 
-    }

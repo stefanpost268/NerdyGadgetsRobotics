@@ -9,7 +9,7 @@
 #include "Src/Modules/EmergencyButtonModule/EmergencyButton.h"
 #include "Src/Modules/InductiveSensorModule/InductiveSensor.h"
 #include "Src/Modules/MotorControllerModule/MotorController.h"
-#include "../Master/Src/MotorEncoderModule/MotorEncoder.h"
+#include "Src/Modules/MotorEncoderModule/MotorEncoder.h"
 
 // lightSensor
 LightSensor lightSensor = LightSensor(2);
@@ -21,7 +21,8 @@ InductiveSensor inductiveSensorBelow = InductiveSensor(6);
 InductiveSensor clickSensorTop = InductiveSensor(1);
 MotorController motorcontrollerxas = MotorController(12, 3, 9, 1);
 MotorController motorcontrolleryas = MotorController(13, 11, 8, 1);
-MotorEncoder motorencoder = MotorEncoder(2, 5);
+MotorEncoder motorencoderxas = MotorEncoder(2, 5);
+
 
 bool SAFETY_MODE = false;
 
@@ -52,8 +53,8 @@ void setup()
 
 void loop()
 {
-    Serial.println(motorcontrollerxas.getMotorLocationAsCoordinate(6410, 5));
-    Serial.println(motorcontrollerxas.getMotorLocation());
+    Serial.println(motorencoder.getMotorLocationAsCoordinate(3110, 5));
+    Serial.println(motorencoder.getMotorLocation());
 
 
 
