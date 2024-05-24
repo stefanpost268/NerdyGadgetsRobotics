@@ -31,6 +31,8 @@ int yas = A2;
 int x = 0;
 int y = 0;
 
+int yasLocation = 0;
+
 bool vorkOpen;
 int Encoder1;
 int Data[2];
@@ -54,10 +56,6 @@ void setup()
 
 void loop()
 {
-//
-
-
-
     //LightSensor 
     // if (!lightSensor.isActive() && !SAFETY_MODE) { 
     //     jsonrobot.emitRobotState("STATE", "EMERGENCY_STOP", "warehouse is tilted");
@@ -97,22 +95,27 @@ void loop()
 
     // controls for y axes
     motorcontrolleryas.driveMotor(y, inductiveSensorBelow.readInductiveSensor(), clickSensorTop.readInductiveSensor(), SAFETY_MODE, 0);
+};
 
-    Serial.print("Motor location x: ");
-    Serial.print(motorencoder.getMotorLocation());
-    Serial.print(", ");
-    Serial.println(Data[1]);
-}
-
-void receiveEvent(int numBytes) {
-  if (Wire.available() > 0) {
-    Data[0] = Wire.read(); // Read the received command
-    Data[1] = Wire.read(); // Read the received command
-    vorkOpen = Data[0];
-    Encoder1 = Data[1];
-  } else {
-    SAFETY_MODE = true;
+void receiveEvent(int placeholder) {
+  String message = ""; 
+  while (Wire.available()) {
+    char letter = Wire.read(); 
+    message += letter;
   }
+
+  // split string with :
+  int index = message.indexOf(":");
+  String label = message.substring(0, index);
+  String value = message.substring(index + 1);
+
+  if(label == "v") {
+    vorkOpen = value.toInt();
+  }
+  if(label == "y") {
+    yasLocation = value.toInt();
+  }
+  Serial.println(yasLocation);
 }
 
 void requestEvent() {
