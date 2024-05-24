@@ -30,16 +30,15 @@ void MotorController::motorBackwards(int joystickInput) {
 }
 
 void MotorController::readEncoder() {
-    bool encoder1 = analogRead(this->encoder1);
-    bool encoder2 = analogRead(this->encoder2);
+    bool encoder1 = digitalRead(this->encoder1);
+    bool encoder2 = digitalRead(this->encoder2);
 
     if (encoder1 == encoder2) {
         motorLocation++;
-        Serial.println("Locatie omhoog");
     }
-    else {
+    else if (motorLocation > 0)
+     {
         motorLocation--;
-        Serial.println("Locatie omlaag");
     }
 }
 
@@ -97,3 +96,18 @@ void MotorController::disableBrake() {
 int MotorController::getMotorLocation() {
     return motorLocation;
 }
+
+int MotorController::getMotorLocationAsCoordinate(int max, int columnCount) {
+        
+        int columnSize = max / columnCount;
+
+        for (size_t i = 0; i <= columnCount; i++)
+        {
+            if (motorLocation > columnSize * i && motorLocation < columnSize * (i + 1))
+            {
+                return i + 1;
+            }
+            
+        }
+        return 0; 
+    }

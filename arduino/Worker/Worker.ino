@@ -53,6 +53,10 @@ void setup()
 
 void loop()
 {
+    Serial.println(motorcontrollerxas.getMotorLocationAsCoordinate(6410, 5));
+    Serial.println(motorcontrollerxas.getMotorLocation());
+
+
 
     //LightSensor 
     // if (!lightSensor.isActive() && !SAFETY_MODE) { 
