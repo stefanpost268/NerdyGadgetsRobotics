@@ -26,7 +26,7 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
     private CreateOrderJTable ordersOnTable = new CreateOrderJTable(this.tableModel);
     private JLabel orderID = new JLabel();
     private JTextField shippingDate = new JTextField(10);
-    private JComboBox<String> orderState = new JComboBox<String>(orderStates);
+    private JComboBox<String> orderState = new JComboBox<>(orderStates);
     private JTextField customerName = new JTextField(10);
     private JTextField customerPhone = new JTextField(10);
     private JTextField customerAdres = new JTextField(10);
@@ -135,17 +135,6 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.insets = new Insets(5, 5, 5, 5); // Padding between components
         gbc.weightx = 1.0;
-
-        // Order Number Label
-        JLabel orderNumberLabel = new JLabel("Bestelling Nummer: ");
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        panel.add(orderNumberLabel, gbc);
-
-        // Order Number Value
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        panel.add(this.orderID, gbc);
 
         // Delivery Date Label
         JLabel deliveryDateLabel = new JLabel("Bezorg Datum (yyyy-mm-dd): ");
@@ -282,18 +271,23 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
         gbc.gridy = 1;
         panel.add(new JLabel("Opmerkingen: "), gbc);
         gbc.gridy = 2;
+        gbc.gridwidth = 3; // Make the JTextArea span three columns
         panel.add(new JScrollPane(this.comment), gbc);
 
         // Comment 2
         gbc.gridy = 3;
+        gbc.gridwidth = 1; // Reset the gridwidth for the JLabel
         panel.add(new JLabel("Interne Opmerkingen: "), gbc);
         gbc.gridy = 4;
+        gbc.gridwidth = 3; // Make the JTextArea span three columns
         panel.add(new JScrollPane(this.internalComment), gbc);
 
         // Comment 3
         gbc.gridy = 5;
+        gbc.gridwidth = 1; // Reset the gridwidth for the JLabel
         panel.add(new JLabel("Bezorg Opmerkingen: "), gbc);
         gbc.gridy = 6;
+        gbc.gridwidth = 3; // Make the JTextArea span three columns
         panel.add(new JScrollPane(this.deliveryComment), gbc);
 
         return panel;
