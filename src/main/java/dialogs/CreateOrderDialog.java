@@ -28,8 +28,6 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
     private JTextField shippingDate = new JTextField(10);
     private JComboBox<String> orderState = new JComboBox<>(orderStates);
     private JTextField customerName = new JTextField(10);
-    private JTextField customerPhone = new JTextField(10);
-    private JTextField customerAdres = new JTextField(10);
     private JTextField contactPerson = new JTextField(10);
     private JTextField salesPerson = new JTextField(10);
     private JTextField pickedByPerson = new JTextField(10);
@@ -45,7 +43,13 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
     private JTextField productID = new JTextField(5);
     private JSpinner productQuantity = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1));
 
-    public CreateOrderDialog(CustomerRepository customerRepository, PeopleRepository peopleRepository, StockItemRepository stockItemRepository, OrderLinesRepository orderLinesRepository, OrderRepository orderRepository) {
+    public CreateOrderDialog(
+            CustomerRepository customerRepository,
+            PeopleRepository peopleRepository,
+            StockItemRepository stockItemRepository,
+            OrderLinesRepository orderLinesRepository,
+            OrderRepository orderRepository
+    ) {
         this.customerRepository = customerRepository;
         this.peopleRepository = peopleRepository;
         this.stockitemRepository = stockItemRepository;
@@ -94,7 +98,6 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
 
     private JPanel addRightPanelFooter() {
         JPanel rightPanelFooter = new JPanel();
-        JPanel rightPanelFooterButtons = new JPanel();
         JPanel rightPanelStockitemID = new JPanel();
         JPanel rightPanelQuantity = new JPanel();
         rightPanelFooter.setLayout(new GridLayout(2, 2));
@@ -243,32 +246,56 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
         JPanel panel = new JPanel();
         panel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
-        gbc.insets = new Insets(5, 5, 5, 5); // Padding between components
 
         // Comment 1
-        gbc.gridy = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 1;
         panel.add(new JLabel("Opmerkingen: "), gbc);
-        gbc.gridy = 2;
-        gbc.gridwidth = 3; // Make the JTextArea span three columns
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 3;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
         panel.add(new JScrollPane(this.comment), gbc);
 
         // Comment 2
-        gbc.gridy = 3;
-        gbc.gridwidth = 1; // Reset the gridwidth for the JLabel
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 1;
+        gbc.weightx = 0;
+        gbc.weighty = 0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(new JLabel("Interne Opmerkingen: "), gbc);
-        gbc.gridy = 4;
-        gbc.gridwidth = 3; // Make the JTextArea span three columns
+
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 3;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
         panel.add(new JScrollPane(this.internalComment), gbc);
 
         // Comment 3
-        gbc.gridy = 5;
-        gbc.gridwidth = 1; // Reset the gridwidth for the JLabel
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridwidth = 1;
+        gbc.weightx = 0;
+        gbc.weighty = 0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(new JLabel("Bezorg Opmerkingen: "), gbc);
-        gbc.gridy = 6;
-        gbc.gridwidth = 3; // Make the JTextArea span three columns
+
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        gbc.gridwidth = 3;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
         panel.add(new JScrollPane(this.deliveryComment), gbc);
 
         return panel;
@@ -313,19 +340,19 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
             return;
         }
         Order order = new Order(
-                getCustomerID(customerName),                                                        // CustomerID
-                getPersonID(salesPerson),                                                           // SalesPersonID
-                getPersonID(pickedByPerson),                                                        // PickedByPersonID
-                getPersonID(contactPerson),                                                         // ContactPersonID
-                new java.sql.Date(new java.util.Date().getTime()),                                  // OrderDate
+                getCustomerID(customerName),
+                getPersonID(salesPerson),
+                getPersonID(pickedByPerson),
+                getPersonID(contactPerson),
+                new java.sql.Date(new java.util.Date().getTime()),
                 LocalDate.parse(shippingDate.getText()), // ExpectedDeliveryDate
-                false,                                                                              // IsUnderSupplyBackorderd
-                comment.getText(),                                                                  // Comments
-                deliveryComment.getText(),                                                          // DeliveryInstructions
-                internalComment.getText(),                                                          // InternalComments
-                getPersonID(pickedByPerson),                                                        // LastEditedBy
-                new java.util.Date(),                                                               // LastEditedWhen
-                orderStates[orderState.getSelectedIndex()]);                                        // Status
+                false,
+                comment.getText(),
+                deliveryComment.getText(),
+                internalComment.getText(),
+                getPersonID(pickedByPerson),
+                new java.util.Date(),
+                orderStates[orderState.getSelectedIndex()]);
 
         orderRepository.save(order);
 
