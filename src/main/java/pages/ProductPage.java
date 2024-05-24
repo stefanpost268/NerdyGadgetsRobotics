@@ -4,10 +4,17 @@ import dialogs.ChangeStock;
 import models.StockItem;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import java.util.List;
+import java.util.ArrayList;
+
+import javax.swing.table.DefaultTableModel;
+import models.StockItem;
+
 import repositories.StockItemRepository;
 import services.Formatter;
 
@@ -22,12 +29,13 @@ public class ProductPage extends JPanel implements ActionListener {
 
     public ProductPage(StockItemRepository stockItem) {
         this.stockItem = stockItem;
+
         setLayout(new BorderLayout());
 
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         searchPanel.add(this.searchField);
         searchPanel.add(this.searchButton);
-        searchPanel.add(Box.createHorizontalStrut(936)); //set margin so button is right side of screen
+        searchPanel.add(Box.createHorizontalStrut(836)); //set margin so button is right side of screen
         searchPanel.add(this.action);
         add(searchPanel, BorderLayout.PAGE_START);
         this.action.addActionListener(this);
@@ -52,7 +60,7 @@ public class ProductPage extends JPanel implements ActionListener {
     private void search() {
 
         Iterable<StockItem> stockItems;
-        if(this.searchField.getText().isEmpty()) {
+        if (this.searchField.getText().isEmpty()) {
             stockItems = this.stockItem.findAll();
 
         } else {
@@ -61,20 +69,48 @@ public class ProductPage extends JPanel implements ActionListener {
 
         DefaultTableModel model;
         if (stockItems.iterator().hasNext()) {
-            model = new DefaultTableModel(
-                    Formatter.modelListToGenericObject(stockItems),
-                    stockItems.iterator().next().getFieldNames().toArray()
-            );
+            List<Object[]> dataList = new ArrayList<>();
+            for (StockItem item : stockItems) {
+                Object[] row = new Object[7]; // Adjust the size to the number of columns
+                row[0] = item.getStockItemID();
+                row[1] = item.getStockItemName();
+                row[2] = item.getUnitPrice();
+                row[3] = item.getRecommendedRetailPrice();
+                row[4] = item.getTypicalWeightPerUnit();
+                row[5] = (item.getStockItemHolding() != null) ? item.getStockItemHolding().getQuantityOnHand() : null;
+                row[6] = item.getSize();
+                // Retrieve QuantityOnHand from StockItemHolding
+                dataList.add(row);
+            }
+
+            Object[][] data = new Object[dataList.size()][];
+            dataList.toArray(data);
+
+            String[] columnIdentifiers = {"Product ID", "Product Naam", "Inkoop prijs", "Verkoop prijs", "Gewicht", "Voorraad", "Aantal op voorraad"};
+        model = new DefaultTableModel(data, columnIdentifiers) {
+                @Override
+                public Object getValueAt(int row, int column) {
+                    // weight at column index 4
+                    if (column == 4 && super.getValueAt(row, column) != null) {
+                        return super.getValueAt(row, column) + " kg";
+                    }
+                    return super.getValueAt(row, column);
+                }
+            };
+
+            model.setColumnIdentifiers(columnIdentifiers);
+
         } else {
             model = new DefaultTableModel();
         }
 
         if (this.table == null) {
+
             this.table = new JTable(model);
+
         } else {
             this.table.setModel(model);
         }
-
         this.table.repaint();
     }
 
