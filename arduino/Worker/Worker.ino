@@ -33,6 +33,8 @@ int x = 0;
 int y = 0;
 
 int yasLocation = 0;
+int lastYLocation = 0;
+int lastXasLocation = 0;
 
 bool vorkOpen;
 int Encoder1;
@@ -91,6 +93,24 @@ void loop()
           // SAFETY_MODE = true;
       }
     }
+
+    int xMotorLocation = motorencoderxas.getMotorLocation();
+    bool locationChanged = xMotorLocation != lastXasLocation || yasLocation != lastYLocation;
+    if(
+      millis() % 500 == 0 && locationChanged
+    ) {
+        StaticJsonDocument<200> doc;
+
+        JsonObject location = doc.to<JsonObject>();
+        location["x-location"] = xMotorLocation;
+        location["y-location"] = yasLocation;
+
+        jsonrobot.emitRobotLocation("LOCATION", location);
+        lastXasLocation = xMotorLocation;
+        lastYLocation = yasLocation;
+    }
+
+
     // controls for x axes
     motorcontrollerxas.driveMotor(x, inductiveSensorRight.readInductiveSensor(), inductiveSensorLeft.readInductiveSensor(), SAFETY_MODE, vorkOpen);
 
@@ -116,7 +136,6 @@ void receiveEvent(int placeholder) {
   if(label == "y") {
     yasLocation = value.toInt();
   }
-  Serial.println(yasLocation);
 }
 
 void requestEvent() {
