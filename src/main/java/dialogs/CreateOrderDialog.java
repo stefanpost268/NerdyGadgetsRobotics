@@ -24,7 +24,6 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
 
     private DefaultTableModel tableModel = new DefaultTableModel(new Object[]{"Product Nr", "Product", "Aantal", "Gewicht (kg)"}, 0);
     private CreateOrderJTable ordersOnTable = new CreateOrderJTable(this.tableModel);
-    private JLabel orderID = new JLabel();
     private JTextField shippingDate = new JTextField(10);
     private JComboBox<String> orderState = new JComboBox<>(orderStates);
     private JTextField customerName = new JTextField(10);
@@ -38,7 +37,7 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
     private JButton closeButton = new JButton("Sluiten");
     private JButton toevoegenButton = new JButton("Toevoegen");
     private JButton removeStockitem = new JButton("Verwijderen");
-    private JLabel productIDLabel = new JLabel();
+    private JLabel productIDLabel = new JLabel("Product ID:");
     private JLabel productQuantityLabel = new JLabel("Aantal: ");
     private JTextField productID = new JTextField(5);
     private JSpinner productQuantity = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1));
@@ -61,7 +60,6 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
         setResizable(false);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
-        this.orderID.setText("AUTOINCREMENT");
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new BorderLayout());
         this.ordersOnTable.setFillsViewportHeight(true);
@@ -104,7 +102,6 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
         rightPanelFooter.setBorder(new EmptyBorder(10, 10, 10, 10));
         rightPanelStockitemID.setLayout(new FlowLayout(FlowLayout.LEFT));
         rightPanelQuantity.setLayout(new FlowLayout(FlowLayout.LEFT));
-        productIDLabel.setText("Product ID: ");
 
         removeStockitem.addActionListener(this);
         toevoegenButton.addActionListener(this);
@@ -339,6 +336,7 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
         if (getLocalDate(shippingDate) == null || getCustomerID(customerName) == null || getPersonID(contactPerson) == null || getPersonID(salesPerson) == null || getPersonID(pickedByPerson) == null || shippingDate.getText().isEmpty()) {
             return;
         }
+
         Order order = new Order(
                 getCustomerID(customerName),
                 getPersonID(salesPerson),
@@ -355,7 +353,6 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
                 orderStates[orderState.getSelectedIndex()]);
 
         orderRepository.save(order);
-
         createOrderlines(order);
     }
 
@@ -370,7 +367,7 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
             StockItem stockItem1 = stockItem.get();
 
             OrderLine orderLines = new OrderLine();
-            orderLines.setOrderID(order);
+            orderLines.setOrder(order);
             orderLines.setStockItem(stockItem1);
             orderLines.setDescription(stockItem1.getStockItemName());
             orderLines.setPackageTypeID(stockItem1.getUnitPackageID());
