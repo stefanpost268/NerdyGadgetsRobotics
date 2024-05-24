@@ -27,7 +27,7 @@ public class ProductPage extends JPanel implements ActionListener {
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         searchPanel.add(this.searchField);
         searchPanel.add(this.searchButton);
-        searchPanel.add(Box.createHorizontalStrut(936)); //set margin so button is right side of screen
+        searchPanel.add(Box.createHorizontalStrut(836)); //set margin so button is right side of screen
         searchPanel.add(this.action);
         add(searchPanel, BorderLayout.PAGE_START);
         this.action.addActionListener(this);
