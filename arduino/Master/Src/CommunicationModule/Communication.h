@@ -1,4 +1,5 @@
 #include "../IRSensorModule/IRSensor.h"
+#include "../MotorEncoderModule/MotorEncoder.h"
 
 #ifndef COMMUNICATION_H
 #define COMMUNICATION_H

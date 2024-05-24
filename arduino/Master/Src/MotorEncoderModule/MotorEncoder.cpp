@@ -13,13 +13,17 @@ void MotorEncoder::setup() {
 }
 
 void MotorEncoder::readEncoder() {
-    if (digitalRead(this->encoder1Pin) == digitalRead(this->encoder2Pin)) {
+    if (digitalRead(this->encoder1Pin) == digitalRead(this->encoder2Pin) && motorLocation > 0) {
         motorLocation--;
+        if (motorLocation < 0)
+        {
+            motorLocation = 0;
+        }
     }
-    else {
+    else
+    {
         motorLocation++;
     }
-    return;
 }
 
 int MotorEncoder::getMotorLocation() {
