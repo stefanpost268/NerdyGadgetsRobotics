@@ -13,6 +13,7 @@ Joystick joystick = Joystick(A3);
 Communication communication = Communication(9);
 
 bool EmergencyButtonState = false;
+int communicationData[] = {sensor.readIRSensor(), motorencoder.getMotorLocation()};
 
 void setup()
 {
@@ -30,7 +31,8 @@ void loop()
         EmergencyButtonState = Wire.read();
     } 
 
-    communication.sendVorkStateToWorker(sensor, motorencoder.getMotorLocation());
+    communication.sendInformationToWorker(communicationData, sensor, motorencoder);
+
     
     motorcontroller.driveVork(
         joystick.readJoystick(),

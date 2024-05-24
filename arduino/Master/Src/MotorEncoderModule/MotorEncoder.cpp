@@ -42,4 +42,3 @@ int MotorEncoder::getMotorLocationAsCoordinate(int max, int columnCount) {
     }
 
 
-// Other member function implementations

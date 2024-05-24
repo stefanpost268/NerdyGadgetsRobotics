@@ -33,6 +33,8 @@ int x = 0;
 int y = 0;
 
 bool vorkOpen;
+int Encoder1;
+int Data[2];
 
 void setup()
 {
@@ -46,15 +48,15 @@ void setup()
     Wire.onRequest(requestEvent); // Set up a function to handle requests for data
 
     attachInterrupt(digitalPinToInterrupt(2), []() {
-        motorencoder.readEncoder();
+        motorencoderxas.readEncoder();
     }, RISING);
 
 }
 
 void loop()
 {
-    Serial.println(motorencoder.getMotorLocationAsCoordinate(3110, 5));
-    Serial.println(motorencoder.getMotorLocation());
+    Serial.println(motorencoderxas.getMotorLocationAsCoordinate(3110, 5));
+    Serial.println(motorencoderxas.getMotorLocation());
 
 
 
@@ -99,12 +101,16 @@ void loop()
     motorcontrolleryas.driveMotor(y, inductiveSensorBelow.readInductiveSensor(), clickSensorTop.readInductiveSensor(), SAFETY_MODE, 0);
 
     Serial.print("Motor location x: ");
-    Serial.println(motorencoder.getMotorLocation());
+    Serial.print(motorencoderxas.getMotorLocation());
+    Serial.print(", ");
+    Serial.println(Data[1]);
 }
 
 void receiveEvent(bool numBytes) {
   if (Wire.available() > 0) {
-    vorkOpen = Wire.read(); // Read the received command
+    Data[0,1] = Wire.read(); // Read the received command
+    vorkOpen = Data[0];
+    Encoder1 = Data[1];
   } else {
     SAFETY_MODE = true;
   }

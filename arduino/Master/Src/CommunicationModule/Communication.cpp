@@ -2,6 +2,7 @@
 #include "Communication.h"
 #include <Wire.h>
 #include "../IRSensorModule/IRSensor.h"
+#include "../MotorEncoderModule/MotorEncoder.h"
 
 Communication::Communication(int workerAdress) {
     Wire.begin();
@@ -16,8 +17,8 @@ bool Communication::readVorkState(IRSensor sensor) {
     }
 }
 
-void Communication::sendVorkStateToWorker(IRSensor sensor) {
+void Communication::sendInformationToWorker(int Data[], IRSensor sensor, MotorEncoder motorencoder) {
     Wire.beginTransmission(workerAdress);
-    Wire.write(readVorkState(sensor));                            
+    Wire.write(Data[0,1]);                            
     Wire.endTransmission();
 }

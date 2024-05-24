@@ -13,12 +13,12 @@ public:
     /**
      * Function that sends the vork state to the worker arduino
     */
-    void sendVorkStateToWorker(IRSensor sensor);
+    void sendInformationToWorker(int Data[], IRSensor sensor, MotorEncoder motorencoder);
 
 private:
     bool vorkOpen;
     int workerAdress;
-    
+    int Data[2];
     /**
      * Function that reads the vork state
     */

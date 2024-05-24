@@ -13,7 +13,6 @@ void MotorController::setup() {
     pinMode(directionPin, OUTPUT);
     pinMode(pwmPin, OUTPUT);
     pinMode(brakePin, OUTPUT);
-
 }
 
 void MotorController::motorForwards(int joystickInput) {
@@ -25,7 +24,6 @@ void MotorController::motorBackwards(int joystickInput) {
     digitalWrite(directionPin, HIGH);
     analogWrite(pwmPin, (joystickInput));
 }
-
 
 void MotorController::driveFork(int y, int IRSensorWaarde) {
     if (y < -50 && IRSensorWaarde > 140)
@@ -83,6 +81,3 @@ void MotorController::enableBrake() {
 void MotorController::disableBrake() {
     digitalWrite(brakePin, LOW);
 }
-
-
-
