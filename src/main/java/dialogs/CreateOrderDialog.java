@@ -183,28 +183,6 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
         gbc.gridy = 1;
         panel.add(this.customerName, gbc);
 
-        // Phone Number Label
-        JLabel phoneNumberLabel = new JLabel("Telefoon nummer: ");
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        panel.add(phoneNumberLabel, gbc);
-
-        // Phone Number Value
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        panel.add(this.customerPhone, gbc);
-
-        // Address Label
-        JLabel addressLabel = new JLabel("Adress: ");
-        gbc.gridx = 2;
-        gbc.gridy = 0;
-        panel.add(addressLabel, gbc);
-
-        // Address Value
-        gbc.gridx = 2;
-        gbc.gridy = 1;
-        panel.add(this.customerAdres, gbc);
-
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
