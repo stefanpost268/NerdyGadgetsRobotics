@@ -216,40 +216,43 @@ public class CreateOrderDialog extends JDialog implements ActionListener {
         panel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.CENTER;
-        gbc.insets = new Insets(5, 5, 5, 5); // Padding between components
+        gbc.insets = new Insets(5, 5, 5, 5);
         gbc.weightx = 1.0;
 
         // Contact Person Label
         JLabel contactPersonLabel = new JLabel("Contact Persoon ID: ");
         gbc.gridx = 0;
         gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.NONE;
         panel.add(contactPersonLabel, gbc);
 
         // Contact Person Value
-        gbc.gridx = 0;
         gbc.gridy = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(this.contactPerson, gbc);
 
         // Sales Person Label
         JLabel salesPersonLabel = new JLabel("Verkoop Medewerker ID: ");
         gbc.gridx = 1;
         gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.NONE;
         panel.add(salesPersonLabel, gbc);
 
         // Sales Person Value
-        gbc.gridx = 1;
         gbc.gridy = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(this.salesPerson, gbc);
 
         // Picked By Person Label
         JLabel pickedByPersonLabel = new JLabel("Magazijn Medewerker ID: ");
         gbc.gridx = 2;
         gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.NONE;
         panel.add(pickedByPersonLabel, gbc);
 
         // Picked By Person Value
-        gbc.gridx = 2;
         gbc.gridy = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(this.pickedByPerson, gbc);
 
         gbc.gridwidth = GridBagConstraints.REMAINDER;
