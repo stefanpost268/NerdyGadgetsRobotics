@@ -1,12 +1,10 @@
 #include <Arduino.h>
 #include "MotorController.h"
 
-MotorController::MotorController(int directionPin, int pwmPin, int brakePin, int encoder1, int encoder2, float speedmultiplier) {
+MotorController::MotorController(int directionPin, int pwmPin, int brakePin, float speedmultiplier) {
     this->directionPin = directionPin;
     this->pwmPin = pwmPin;
     this->brakePin = brakePin;
-    this->encoder1 = encoder1;
-    this->encoder2 = encoder2;
     this->speedmultiplier = speedmultiplier;
     setup();
 }
@@ -15,8 +13,6 @@ void MotorController::setup() {
     pinMode(directionPin, OUTPUT);
     pinMode(pwmPin, OUTPUT);
     pinMode(brakePin, OUTPUT);
-    pinMode(encoder1, INPUT_PULLUP);
-    pinMode(encoder2, INPUT_PULLUP);
 }
 
 void MotorController::motorForwards(int joystickInput) {
@@ -80,21 +76,3 @@ void MotorController::disableBrake() {
     digitalWrite(brakePin, LOW);
 }
 
-int MotorController::getMotorLocation() {
-    return motorLocation;
-}
-
-int MotorController::getMotorLocationAsCoordinate(int max, int columnCount) {
-        
-        int columnSize = max / columnCount;
-
-        for (size_t i = 0; i <= columnCount; i++)
-        {
-            if (motorLocation > columnSize * i && motorLocation < columnSize * (i + 1))
-            {
-                return i + 1;
-            }
-            
-        }
-        return 0; 
-    }

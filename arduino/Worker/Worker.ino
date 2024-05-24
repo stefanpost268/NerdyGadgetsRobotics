@@ -9,7 +9,7 @@
 #include "Src/Modules/EmergencyButtonModule/EmergencyButton.h"
 #include "Src/Modules/InductiveSensorModule/InductiveSensor.h"
 #include "Src/Modules/MotorControllerModule/MotorController.h"
-#include "../Master/Src/MotorEncoderModule/MotorEncoder.h"
+#include "Src/Modules/MotorEncoderModule/MotorEncoder.h"
 
 // lightSensor
 LightSensor lightSensor = LightSensor(2);
@@ -32,6 +32,8 @@ int x = 0;
 int y = 0;
 
 bool vorkOpen;
+int Encoder1;
+int Data[2];
 
 void setup()
 {
@@ -52,8 +54,7 @@ void setup()
 
 void loop()
 {
-    Serial.println(motorcontrollerxas.getMotorLocationAsCoordinate(6410, 5));
-    Serial.println(motorcontrollerxas.getMotorLocation());
+//
 
 
 
@@ -98,12 +99,16 @@ void loop()
     motorcontrolleryas.driveMotor(y, inductiveSensorBelow.readInductiveSensor(), clickSensorTop.readInductiveSensor(), SAFETY_MODE, 0);
 
     Serial.print("Motor location x: ");
-    Serial.println(motorencoder.getMotorLocation());
+    Serial.print(motorencoder.getMotorLocation());
+    Serial.print(", ");
+    Serial.println(Data[1]);
 }
 
 void receiveEvent(bool numBytes) {
   if (Wire.available() > 0) {
-    vorkOpen = Wire.read(); // Read the received command
+    Data[0,1] = Wire.read(); // Read the received command
+    vorkOpen = Data[0];
+    Encoder1 = Data[1];
   } else {
     SAFETY_MODE = true;
   }
