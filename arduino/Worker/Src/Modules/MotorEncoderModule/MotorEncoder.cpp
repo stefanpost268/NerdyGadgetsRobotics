@@ -26,6 +26,15 @@ int MotorEncoder::getMotorLocation() {
     return motorLocation;
 }
 
+void MotorEncoder::resetEncoder() {
+    motorLocation = 0;
+}
+
+void MotorEncoder::calibrate() {
+    resetEncoder();
+    
+}
+
 int MotorEncoder::getMotorLocationAsCoordinate(int max, int columnCount) {
         
         int columnSize = max / columnCount;

@@ -37,14 +37,16 @@ void loop()
         communication.sendInformationToWorker("v", (String) vorkCurrentState);
     }
 
-    if (millis() % 500 == 0 && location != currentLocation) {
+    //if (millis() % 50 == 0 && location != currentLocation) {
         currentLocation = location;
         communication.sendInformationToWorker("y", (String) currentLocation);
-    }
+    //}
 
     motorcontroller.driveVork(
         joystick.readJoystick(),
         sensor.readIRSensor(),
         EmergencyButtonState
     );
+
+    Serial.println(currentLocation);
 }

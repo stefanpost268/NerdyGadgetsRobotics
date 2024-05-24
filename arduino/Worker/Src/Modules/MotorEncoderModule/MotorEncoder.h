@@ -23,6 +23,16 @@ public:
     */
     int getMotorLocationAsCoordinate(int max, int columnCount);
 
+    /**
+     * Resets encoder value
+    */
+    void resetEncoder();
+
+    /**
+     * Calibrates the encoders
+    */
+    void calibrate();
+
 
 private:
     int encoder1Pin;

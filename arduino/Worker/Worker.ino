@@ -24,6 +24,8 @@ MotorController motorcontrolleryas = MotorController(13, 11, 8, 1);
 MotorEncoder motorencoder = MotorEncoder(2, 5);
 
 bool SAFETY_MODE = false;
+bool Automode = true;
+bool calibrated = false;
 
 int xas = A3;
 int yas = A2;
@@ -67,8 +69,8 @@ void loop()
 
     //EmergencyStop
     if (emergencyButton.isEmergencyStopPressed() && !SAFETY_MODE && !emergencyButton.isResetPressed()) { 
-        // jsonrobot.emitRobotState("STATE", "EMERGENCY_STOP", "Emergency button was pressed");
-        // SAFETY_MODE = true;
+        //jsonrobot.emitRobotState("STATE", "EMERGENCY_STOP", "Emergency button was pressed");
+        //SAFETY_MODE = true;
     }
 
     //reset
@@ -90,11 +92,22 @@ void loop()
           // SAFETY_MODE = true;
       }
     }
+
+    if (Automode){
+      if (calibrated) {
+        goToLocation(motorencoder.getMotorLocation(), yasLocation, 400, 200);
+      } else {
+        calibrateEncoders();
+      }
+    } else {
     // controls for x axes
     motorcontrollerxas.driveMotor(x, inductiveSensorRight.readInductiveSensor(), inductiveSensorLeft.readInductiveSensor(), SAFETY_MODE, vorkOpen);
 
     // controls for y axes
     motorcontrolleryas.driveMotor(y, inductiveSensorBelow.readInductiveSensor(), clickSensorTop.readInductiveSensor(), SAFETY_MODE, 0);
+    }
+
+    Serial.println("Cords: " + (String) motorencoder.getMotorLocation() + ", "+ yasLocation + ", " + calibrated);
 };
 
 void receiveEvent(int placeholder) {
@@ -115,10 +128,53 @@ void receiveEvent(int placeholder) {
   if(label == "y") {
     yasLocation = value.toInt();
   }
-  Serial.println(yasLocation);
+}
+
+void calibrateEncoders() {
+      if (inductiveSensorLeft.readInductiveSensor() == 0 && inductiveSensorBelow.readInductiveSensor() == 0) {
+        motorencoder.resetEncoder();
+        yasLocation = 0;
+        motorcontrollerxas.motorForwards(0);
+        motorcontrolleryas.motorBackwards(0);
+        calibrated = true;
+      } else {
+        motorcontrollerxas.motorForwards(255);
+        motorcontrolleryas.motorBackwards(255);
+      }
 }
 
 void requestEvent() {
   Wire.write(SAFETY_MODE);
 }
 
+void goToLocation(int currentxInput, int currentyInput, int targetx, int targety) {
+  switch (currentxInput < targetx ? 1 : (currentxInput > targetx ? -1 : 0)) {
+    case 1:
+      motorcontrollerxas.motorBackwards(255);
+      break;
+    case -1:
+      motorcontrollerxas.motorForwards(255);
+      break;
+    case 0:
+      motorcontrollerxas.enableBrake();
+      break;
+  }
+
+  switch (currentyInput < targety ? 1 : (currentyInput > targety ? -1 : 0)) {
+    case 1:
+      motorcontrolleryas.motorForwards(255);
+      break;
+    case -1:
+      motorcontrolleryas.motorBackwards(255);
+      break;
+    case 0:
+      motorcontrolleryas.enableBrake();
+      break;
+  }
+
+  if (currentxInput == targetx && currentyInput == targety) {
+    motorcontrollerxas.enableBrake();
+    motorcontrolleryas.enableBrake();
+    Serial.println("Target reached");
+  }
+}

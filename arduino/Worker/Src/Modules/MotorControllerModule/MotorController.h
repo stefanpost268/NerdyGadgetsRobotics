@@ -40,12 +40,7 @@ public:
     */
     void readEncoder();
 
-private:
-    int directionPin;
-    int pwmPin;
-    int brakePin;
-    float speedmultiplier;
-
+    void goToLocation(int currentxInput, int currentyInput, int targetx, int targety);
 
     /**
      * Function that enables the brake
@@ -64,6 +59,12 @@ private:
      * Function that moves the motor backwards
     */
     void motorBackwards(int joystickInput);
+
+private:
+    int directionPin;
+    int pwmPin;
+    int brakePin;
+    float speedmultiplier;
 
     /**
      * Function that sets up the motor controller
