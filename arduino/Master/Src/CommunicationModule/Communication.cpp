@@ -17,8 +17,8 @@ bool Communication::readVorkState(IRSensor sensor) {
     }
 }
 
-void Communication::sendInformationToWorker(int Data[], IRSensor sensor, MotorEncoder motorencoder) {
+void Communication::sendInformationToWorker(String label , String data) {
     Wire.beginTransmission(workerAdress);
-    Wire.write(Data[0,1]);                            
+    Wire.write((label+":"+data).c_str()); 
     Wire.endTransmission();
 }
