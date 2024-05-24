@@ -4,9 +4,11 @@
 #include "./Src/MotorControllerModule/MotorController.h"
 #include "./Src/JoystickModule/Joystick.h"
 #include "./Src/CommunicationModule/Communication.h"
+#include "./Src/MotorEncoderModule/MotorEncoder.h"
 
 IRSensor sensor = IRSensor(A2);
-MotorController motorcontroller = MotorController(12, 3, 9, A1);
+MotorController motorcontroller = MotorController(12, 3, 9);
+MotorEncoder motorencoder = MotorEncoder(2, 4);
 Joystick joystick = Joystick(A3);
 Communication communication = Communication(9);
 
@@ -15,6 +17,9 @@ bool EmergencyButtonState = false;
 void setup()
 {
     Serial.begin(9600);
+    attachInterrupt(digitalPinToInterrupt(2), []() {
+        motorencoder.readEncoder();
+    }, RISING);
 }
 
 void loop()
@@ -25,11 +30,14 @@ void loop()
         EmergencyButtonState = Wire.read();
     } 
 
-    communication.sendVorkStateToWorker(sensor);
+    communication.sendVorkStateToWorker(sensor, motorencoder.getMotorLocation());
     
     motorcontroller.driveVork(
         joystick.readJoystick(),
         sensor.readIRSensor(),
         EmergencyButtonState
     );
+
+    Serial.print("Motor location y: ");
+    Serial.println(motorencoder.getMotorLocation());
 }

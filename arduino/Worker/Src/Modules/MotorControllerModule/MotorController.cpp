@@ -15,8 +15,8 @@ void MotorController::setup() {
     pinMode(directionPin, OUTPUT);
     pinMode(pwmPin, OUTPUT);
     pinMode(brakePin, OUTPUT);
-    pinMode(encoder1, INPUT);
-    pinMode(encoder2, INPUT);
+    pinMode(encoder1, INPUT_PULLUP);
+    pinMode(encoder2, INPUT_PULLUP);
 }
 
 void MotorController::motorForwards(int joystickInput) {
