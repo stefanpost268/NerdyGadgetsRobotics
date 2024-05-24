@@ -27,7 +27,7 @@ public:
 private:
     int encoder1Pin;
     int encoder2Pin;
-    int motorLocation;
+    volatile int motorLocation;
 
     void setup();
 };

@@ -104,9 +104,10 @@ void loop()
     Serial.println(Data[1]);
 }
 
-void receiveEvent(bool numBytes) {
+void receiveEvent(int numBytes) {
   if (Wire.available() > 0) {
-    Data[0,1] = Wire.read(); // Read the received command
+    Data[0] = Wire.read(); // Read the received command
+    Data[1] = Wire.read(); // Read the received command
     vorkOpen = Data[0];
     Encoder1 = Data[1];
   } else {
@@ -117,7 +118,4 @@ void receiveEvent(bool numBytes) {
 void requestEvent() {
   Wire.write(SAFETY_MODE);
 }
-
-// right: 4662
-// right
 
