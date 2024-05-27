@@ -6,6 +6,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
+
 public class OrderInfoDialog extends JDialog {
     private DefaultTableModel tableModel = new DefaultTableModel(new Object[]{"Product Nr", "Product", "Aantal", "Gewicht (kg)"}, 0);
     private JTable ordersOnTable = new JTable(this.tableModel);
@@ -31,8 +32,8 @@ public class OrderInfoDialog extends JDialog {
         setResizable(false);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        this.orderID.setText(String.valueOf(order.getOrderID()));
-        this.shippingDate.setText(order.getExpectedDeliveryDate().toString());
+        this.orderID.setText("# " + order.getOrderID());
+        this.shippingDate.setText(order.getFormattedDate());
         this.orderState.setText(order.getOrderState());
 
         this.customerName.setText(customer.getCustomerName());
@@ -40,8 +41,12 @@ public class OrderInfoDialog extends JDialog {
         this.customerAdres.setText(customer.getDeliveryPostalCode());
         this.contactPerson.setText(order.getContactPerson().getFullName());
         this.salesPerson.setText(order.getSalesperson().getFullName());
+
         if(order.getPickedByPerson() != null) {
             this.pickedByPerson.setText(order.getPickedByPerson().getFullName());
+        }
+        else {
+            this.pickedByPerson.setText("Geen medewerker gevonden");
         }
 
         this.comment.setText(order.getComments());
@@ -54,7 +59,8 @@ public class OrderInfoDialog extends JDialog {
                 stockItem.getStockItemID(),
                 stockItem.getStockItemName(),
                 orderLine.getQuantity(),
-                stockItem.getTypicalWeightPerUnit()
+
+                stockItem.getTypicalWeightPerUnit() + " kg"
             });
         }
 
