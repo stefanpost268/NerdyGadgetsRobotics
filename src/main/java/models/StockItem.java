@@ -1,10 +1,7 @@
 package models;
 
 import jakarta.persistence.*;
-
-import java.math.BigDecimal;
 import java.util.Arrays;
-import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -19,30 +16,22 @@ public class StockItem {
     private String stockItemName;
 
     @Column(nullable = true)
-    private BigDecimal UnitPrice;
+    private double UnitPrice;
 
     @Column(nullable = true)
-    private BigDecimal RecommendedRetailPrice;
+    private double RecommendedRetailPrice;
 
     @Column(nullable = false)
-    private BigDecimal TypicalWeightPerUnit;
+    private double TypicalWeightPerUnit;
 
     @Column(length = 11, nullable = false)
     private int QuantityPerOuter;
+
     @Column(length = 20, nullable = false)
     private String Size;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "StockItemID", referencedColumnName = "StockItemID")
-    private StockItemHolding stockItemHolding;
-
-    public StockItemHolding getStockItemHolding() {
-        return stockItemHolding;
-    }
-
-    @Deprecated
     public List<String> getFieldNames() {
-        return Arrays.asList("StockItemID", "StockItemName", "UnitPrice", "RecommendedRetailPrice", "TypicalWeightPerUnit", "quantityonhand", "Size");
+        return Arrays.asList("StockItemID", "StockItemName", "UnitPrice", "RecommendedRetailPrice", "TypicalWeightPerUnit", "QuantityPerOuter", "Size");
     }
     
     public int getStockItemID() {
@@ -53,24 +42,7 @@ public class StockItem {
         return stockItemName;
     }
 
-    public BigDecimal getTypicalWeightPerUnit() {
+    public double getTypicalWeightPerUnit() {
         return TypicalWeightPerUnit;
     }
-
-    public BigDecimal getUnitPrice() {
-        return UnitPrice;
-    }
-
-    public BigDecimal getRecommendedRetailPrice() {
-        return RecommendedRetailPrice;
-    }
-
-    public int getQuantityPerOuter() {
-        return QuantityPerOuter;
-    }
-
-    public String getSize() {
-        return Size;
-    }
 }
-
