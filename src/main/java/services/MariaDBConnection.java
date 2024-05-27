@@ -3,6 +3,7 @@ package services;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+@Deprecated
 public class MariaDBConnection {
     private static final String URL = "jdbc:mariadb://localhost:3306/nerdygadgets";
     private static final String USER = "root";

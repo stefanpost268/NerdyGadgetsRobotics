@@ -2,8 +2,6 @@ package models;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
-
 @Entity
 @Table(name = "orderlines")
 public class OrderLine {
