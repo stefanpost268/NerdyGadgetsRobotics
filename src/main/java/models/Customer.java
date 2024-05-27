@@ -1,6 +1,7 @@
 package models;
 
 import jakarta.persistence.*;
+
 import java.util.List;
 
 @Entity
@@ -19,9 +20,6 @@ public class Customer {
 
     @Column(name = "DeliveryPostalCode")
     private String DeliveryPostalCode;
-
-    @Column(name = "DeliveryAddressLine2")
-    private String DeliveryAddressLine2;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Order> orders;
@@ -42,7 +40,4 @@ public class Customer {
         return CustomerID;
     }
 
-    public String getDeliveryAddressLine2() {
-        return DeliveryAddressLine2;
-    }
 }

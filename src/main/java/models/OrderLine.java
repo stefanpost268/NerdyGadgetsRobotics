@@ -2,6 +2,8 @@ package models;
 
 import jakarta.persistence.*;
 
+import java.util.Date;
+
 @Entity
 @Table(name = "orderlines")
 public class OrderLine {
@@ -10,9 +12,11 @@ public class OrderLine {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int OrderLineID;
 
-    @ManyToOne
-    @JoinColumn(name = "StockItemID", nullable = false)
-    private StockItem stockItem;
+    @Column(nullable = false)
+    private int OrderID;
+
+    @Column(nullable = false)
+    private int StockItemID;
 
     @Column(nullable = false)
     private String Description;
@@ -24,7 +28,7 @@ public class OrderLine {
     private int Quantity;
 
     @Column()
-    private Double UnitPrice;
+    private double UnitPrice;
 
     @Column(nullable = false)
     private double TaxRate;
@@ -32,15 +36,4 @@ public class OrderLine {
     @Column(nullable = false)
     private int PickedQuantity;
 
-    public int getOrderLineID() {
-        return OrderLineID;
-    }
-
-    public StockItem getStockItem() {
-        return stockItem;
-    }
-
-    public int getQuantity() {
-        return Quantity;
-    }
 }

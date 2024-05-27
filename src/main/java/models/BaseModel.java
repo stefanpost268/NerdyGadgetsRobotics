@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSetMetaData;
 import java.util.List;
 import java.util.ArrayList;
+
 import interfaces.Model;
 
 @Deprecated
@@ -122,6 +123,8 @@ public abstract class BaseModel<T> implements Model<T> {
         this.searchValue = null;
         return data;
     }
+
+    //////////////////////
 
     public List<Object[]> getProductData(String searchTerm) {
         List<Object[]> productData = new ArrayList<>();

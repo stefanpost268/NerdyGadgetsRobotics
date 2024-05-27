@@ -1,6 +1,7 @@
 package visualComponents;
 
 import objects.GridProduct;
+
 import javax.swing.JPanel;
 import java.awt.Graphics;
 import java.awt.Color;

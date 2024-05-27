@@ -2,8 +2,10 @@ package pages;
 
 import helpers.ConfigReader;
 import repositories.OrderRepository;
-import visualComponents.*;
-
+import visualComponents.ProcessingBox;
+import visualComponents.QueueBox;
+import visualComponents.WarehouseMap;
+import visualComponents.ExportPdfButton;
 import javax.swing.JPanel;
 import java.awt.*;
 
@@ -20,7 +22,7 @@ public class DashboardPage extends JPanel {
         map.setPreferredSize(new Dimension(map.width, map.height));
 
         panelFirst.add(map);
-        panelFirst.add(new packingListButton(orderRepository));
+        panelFirst.add(new ExportPdfButton());
         add(panelFirst);
 
         JPanel panel = new JPanel();
