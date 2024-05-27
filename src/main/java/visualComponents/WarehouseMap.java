@@ -1,11 +1,13 @@
 package visualComponents;
 
 import objects.GridProduct;
+import services.SerialCommunication;
 
 import javax.swing.JPanel;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Timer;
 
 public class WarehouseMap extends JPanel {
 
@@ -13,12 +15,24 @@ public class WarehouseMap extends JPanel {
     private int gridWidth;
     public int width = 570;
     public int height = 265;
+    private int robotX = 250;
+    private int robotY = 250;
     private ArrayList<GridProduct> gridProducts = new ArrayList<>();
+    private Timer timer = new Timer();
+    private SerialCommunication serialCommunication = new SerialCommunication();
 
 
     public WarehouseMap(int gridHeight, int gridWidth) {
         this.gridHeight = gridHeight;
         this.gridWidth = gridWidth;
+        timer.scheduleAtFixedRate(new java.util.TimerTask() {
+            @Override
+            public void run() {
+                robotX = serialCommunication.getReceivedJson().getJSONObject("data").getInt("x-location");
+                robotY = serialCommunication.getReceivedJson().getJSONObject("data").getInt("y-location");
+                repaint();
+            }
+        }, 0, 1000);
     }
 
     public WarehouseMap(int gridHeight, int gridWidth, int width, int height) {
@@ -33,6 +47,9 @@ public class WarehouseMap extends JPanel {
 
         //Drawing lines and numbers/letters
         drawGrid(g);
+
+        //Drawing the robot
+        drawRobot(g);
     }
 
     //Helper function to convert a number to the letter for the grid
@@ -87,6 +104,14 @@ public class WarehouseMap extends JPanel {
         for (GridProduct gridProduct : gridProducts) {
             gridProduct.draw(g, this);
         }
+    }
+
+    public void drawRobot(Graphics g) {
+        System.out.println("Drawing robot at x: " + robotX + " y: " + robotY);
+        int blockWidth =  this.width / gridWidth;
+        int blockHeight = this.height / gridHeight;
+        g.setColor(Color.RED);
+        g.drawOval(robotX, robotY, 50, 50);
     }
 
     public int getGridHeight() {
