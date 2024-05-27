@@ -14,13 +14,13 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.List;
 
-public class parcelVoucherButton extends JPanel {
+public class packingListButton extends JPanel {
     private final JButton pakketbon = new JButton("Export pakketbon");
     private int OrderID;
     private final OrderRepository order;
     public Page<Order> orders;
 
-    public parcelVoucherButton(OrderRepository orderRepository) {
+    public packingListButton(OrderRepository orderRepository) {
         super();
         this.order = orderRepository;
         this.pakketbon.addActionListener(e -> dialog());
