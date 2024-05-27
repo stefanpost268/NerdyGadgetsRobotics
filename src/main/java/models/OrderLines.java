@@ -2,6 +2,7 @@ package models;
 
 import jakarta.persistence.*;
 
+@Deprecated
 @Entity
 @Table(name = "orderlines")
 public class OrderLines {
