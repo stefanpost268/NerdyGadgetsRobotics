@@ -123,8 +123,6 @@ public abstract class BaseModel<T> implements Model<T> {
         return data;
     }
 
-    //////////////////////
-
     public List<Object[]> getProductData(String searchTerm) {
         List<Object[]> productData = new ArrayList<>();
         String query = "SELECT s.StockItemID, s.StockItemName, s.UnitPrice, s.RecommendedRetailPrice, s.TypicalWeightPerUnit, h.QuantityOnHand " +
