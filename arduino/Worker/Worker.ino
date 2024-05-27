@@ -38,6 +38,14 @@ int yasLocation = 0;
 bool vorkOpen;
 int Encoder1;
 int Data[2];
+int locationvisited = 0;
+
+int locationQueue[3][2] = 
+{
+    {200, 400},
+    {1000, 1000},
+    {100, 700}
+}; 
 
 void setup()
 {
@@ -95,7 +103,7 @@ void loop()
 
     if (Automode){
       if (calibrated) {
-        goToLocation(motorencoder.getMotorLocation(), yasLocation, 400, 200);
+        goToLocation(motorencoder.getMotorLocation(), yasLocation, locationQueue[0][0], locationQueue[0][1]);
       } else {
         calibrateEncoders();
       }
@@ -104,10 +112,10 @@ void loop()
     motorcontrollerxas.driveMotor(x, inductiveSensorRight.readInductiveSensor(), inductiveSensorLeft.readInductiveSensor(), SAFETY_MODE, vorkOpen);
 
     // controls for y axes
-    motorcontrolleryas.driveMotor(y, inductiveSensorBelow.readInductiveSensor(), clickSensorTop.readInductiveSensor(), SAFETY_MODE, 0);
+    motorcontrolleryas.driveMotor(y, inductiveSensorBelow.readInductiveSensor(), 1, SAFETY_MODE, 0);
     }
 
-    Serial.println("Cords: " + (String) motorencoder.getMotorLocation() + ", "+ yasLocation + ", " + calibrated);
+    Serial.println("Cords: " + (String) motorencoder.getMotorLocation() + ", " + yasLocation + ", cal:" + calibrated + ", kliksns:" + clickSensorTop.readInductiveSensor() + ", cal sensors: " + inductiveSensorLeft.readInductiveSensor() + ", " + inductiveSensorBelow.readInductiveSensor() + ", queue: " + locationQueue[0][0] + ", " + locationQueue[0][1] + ", " + locationQueue[1][0] + ", " + locationQueue[1][1]);
 };
 
 void receiveEvent(int placeholder) {
@@ -148,7 +156,7 @@ void requestEvent() {
 }
 
 void goToLocation(int currentxInput, int currentyInput, int targetx, int targety) {
-  switch (currentxInput < targetx ? 1 : (currentxInput > targetx ? -1 : 0)) {
+  switch (currentxInput < targetx - 10 ? 1 : (currentxInput > targetx + 10 ? -1 : 0)) {
     case 1:
       motorcontrollerxas.motorBackwards(255);
       break;
@@ -160,7 +168,7 @@ void goToLocation(int currentxInput, int currentyInput, int targetx, int targety
       break;
   }
 
-  switch (currentyInput < targety ? 1 : (currentyInput > targety ? -1 : 0)) {
+  switch (currentyInput < targety - 10 ? 1 : (currentyInput > targety + 10 ? -1 : 0)) {
     case 1:
       motorcontrolleryas.motorForwards(255);
       break;
@@ -168,13 +176,35 @@ void goToLocation(int currentxInput, int currentyInput, int targetx, int targety
       motorcontrolleryas.motorBackwards(255);
       break;
     case 0:
-      motorcontrolleryas.enableBrake();
+      motorcontrolleryas.motorForwards(20);
       break;
   }
 
-  if (currentxInput == targetx && currentyInput == targety) {
+  if ((currentxInput > targetx - 15 && currentxInput < targetx + 20) && (currentyInput > targety - 20 && currentyInput < targety + 15)) {
     motorcontrollerxas.enableBrake();
     motorcontrolleryas.enableBrake();
     Serial.println("Target reached");
+    delay(3000);
+    nextLocation();
   }
+}
+
+void nextLocation() { 
+    motorcontrollerxas.disableBrake();
+    motorcontrolleryas.disableBrake();
+    
+    if (locationvisited < 3) {
+      if (sizeof(locationQueue) / sizeof(locationQueue[0]) > 1) {
+          for (int i = 0; i < sizeof(locationQueue) / sizeof(locationQueue[0]); i++) {
+              locationQueue[i][0] = locationQueue[i + 1][0];
+              locationQueue[i][1] = locationQueue[i + 1][1];
+          }
+          locationvisited++;
+      }
+    } else {
+      if (locationvisited >= 3) {
+          Serial.println("All locations visited");
+          calibrateEncoders();
+      }
+    }
 }
