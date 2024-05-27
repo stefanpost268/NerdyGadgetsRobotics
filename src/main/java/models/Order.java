@@ -4,11 +4,14 @@ package models;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "orders")
 public class Order {
+
+
     enum OrderEnum {
         Open,
         InProgress,
@@ -22,6 +25,9 @@ public class Order {
 
     @Column(nullable = false)
     private LocalDate ExpectedDeliveryDate;
+
+    @Column(nullable = false)
+    private Date PickingCompletedWhen;
 
     @ManyToOne()
     @JoinColumn(name = "CustomerID", nullable = false)
@@ -51,8 +57,9 @@ public class Order {
     @Column(name = "Status", nullable = false)
     private String Status;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
-    private List<OrderLines> orderLines;
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "OrderID")
+    private List<OrderLine> orderLine;
 
     public List<String> getFieldNames() {
         return Arrays.asList("OrderID", "ExpectedDeliveryDate", "Customer", "ContactPerson", "Salesperson", "PickedByPerson", "Comments", "InternalComments", "DeliveryInstructions", "OrderLines");
@@ -85,8 +92,8 @@ public class Order {
         return DeliveryInstructions;
     }
 
-    public List<OrderLines> getOrderLines() {
-        return orderLines;
+    public List<OrderLine> getOrderLines() {
+        return orderLine;
     }
 
     public String getOrderState() {
@@ -112,9 +119,14 @@ public class Order {
         return Status;
     }
 
+    public Date getPickingCompletedWhen() {
+        return PickingCompletedWhen;
+    }
+
     public Object[] toObjectArray() {
 
         return new Object[] {getOrderID(), getCustomer().getCustomerName(), getStatus(), getOrderLines().size(), getOrderDate()};
     }
+
 
 }
