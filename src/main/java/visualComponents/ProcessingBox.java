@@ -3,7 +3,6 @@ package visualComponents;
 import models.Order;
 import models.OrderLine;
 import models.StockItem;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
