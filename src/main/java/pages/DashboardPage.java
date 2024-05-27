@@ -20,7 +20,7 @@ public class DashboardPage extends JPanel {
         map.setPreferredSize(new Dimension(map.width, map.height));
 
         panelFirst.add(map);
-        panelFirst.add(new pakketbonbutton(orderRepository));
+        panelFirst.add(new parcelVoucherButton(orderRepository));
         add(panelFirst);
 
         JPanel panel = new JPanel();
