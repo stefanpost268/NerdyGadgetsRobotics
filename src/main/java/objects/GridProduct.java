@@ -1,7 +1,6 @@
 package objects;
 
 import visualComponents.WarehouseMap;
-
 import java.awt.Color;
 import java.awt.Graphics;
 

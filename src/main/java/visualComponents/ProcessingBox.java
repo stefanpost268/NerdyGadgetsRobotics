@@ -1,9 +1,8 @@
 package visualComponents;
 
 import models.Order;
-import models.OrderLines;
+import models.OrderLine;
 import models.StockItem;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -36,8 +35,8 @@ public class ProcessingBox extends JPanel {
         }
     }
 
-    private void fillProcessingTable(List<OrderLines> data) {
-        for (OrderLines row : data) {
+    private void fillProcessingTable(List<OrderLine> data) {
+        for (OrderLine row : data) {
             StockItem stockItem = row.getStockItem();
             Object[] rowData = new Object[] {
                     stockItem.getStockItemID(),
