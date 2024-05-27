@@ -14,7 +14,7 @@ public class ProcessingBox extends JPanel {
 
     public ProcessingBox(Order order) {
         setBackground(Color.LIGHT_GRAY);
-        setLayout(new FlowLayout(FlowLayout.LEFT)); // align left
+        setLayout(new GridLayout(2,1));
 
         JLabel processingLabel = new JLabel("Producten processing in Bestelling");
         add(processingLabel);
