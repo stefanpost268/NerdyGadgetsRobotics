@@ -1,23 +1,22 @@
 package services;
 
-import helpers.DatabaseConnector;
+import models.Customer;
+import models.Order;
+import models.OrderLine;
 import org.xhtmlrenderer.pdf.ITextRenderer;
-
 import java.io.File;
 import java.io.OutputStream;
 import java.nio.file.Files;
-import java.util.List;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PdfRenderer extends ITextRenderer {
 
-    private final int orderID;
+    private final Order order;
 
-    public PdfRenderer(int orderID) {
+    public PdfRenderer(Order order) {
         super();
-        this.orderID = orderID;
+        this.order = order;
     }
 
     public void download(String outputFile) {
@@ -38,9 +37,6 @@ public class PdfRenderer extends ITextRenderer {
     }
 
     private String modifyHtmlContent(String htmlContent) {
-        DatabaseConnector database = new DatabaseConnector();
-        String[] customerData = database.getCustomerData(orderID);
-        List<Object[]> orderLines = database.getOrderlines(orderID);
 
         Pattern pattern = Pattern.compile("\\{\\{([^{}]*)\\}\\}");
         Matcher matcher = pattern.matcher(htmlContent);
@@ -51,7 +47,7 @@ public class PdfRenderer extends ITextRenderer {
             String placeholder = matcher.group(1);
             modifiedHtmlContent.append(htmlContent, lastIndex, matcher.start());
 
-            String replacement = getReplacementForPlaceholder(placeholder, customerData, orderLines);
+            String replacement = getReplacementForPlaceholder(placeholder);
             modifiedHtmlContent.append(replacement);
 
             lastIndex = matcher.end();
@@ -61,33 +57,35 @@ public class PdfRenderer extends ITextRenderer {
         return modifiedHtmlContent.toString();
     }
 
-    private String getReplacementForPlaceholder(String placeholder, String[] customerData, List<Object[]> orderLines) {
+    private String getReplacementForPlaceholder(String placeholder) {
+        Customer customer = this.order.getCustomer();
+
         switch (placeholder) {
             case "Bestellings nummer:":
-                return "Bestellings nummer: " + customerData[0];
+                return "Bestellings nummer: " + this.order.getOrderID();
             case "Naam:":
-                return "Naam: " + customerData[1];
+                return "Naam: " + customer.getCustomerName();
             case "Telefoonnummer:":
-                return "Telefoonnummer: " + customerData[2];
+                return "Telefoonnummer: " + customer.getPhoneNumber();
             case "Adres:":
-                return "Adres: " + customerData[3];
+                return "Adres: " + customer.getDeliveryAddressLine2();
             case "postcode:":
-                return "postcode: " + customerData[4];
+                return "postcode: " + customer.getDeliveryPostalCode();
             case "Bestel datum:":
-                return "Bestel datum: " + customerData[5];
+                return "Bestel datum: " + order.getOrderDate();
             case "orderlines":
-                return generateOrderLinesTable(orderLines);
+                return generateOrderLinesTable();
             default:
                 return "{{" + placeholder + "}}";
         }
     }
 
-    private String generateOrderLinesTable(List<Object[]> orderLines) {
+    private String generateOrderLinesTable() {
         StringBuilder tableHtml = new StringBuilder();
-        for (Object[] row : orderLines) {
-            int stockItemID = (int) row[0];
-            int quantity = (int) row[1];
-            String description = (String) row[2];
+        for (OrderLine orderLine : this.order.getOrderLines()) {
+            int stockItemID = orderLine.getStockItem().getStockItemID();
+            int quantity = orderLine.getQuantity();
+            String description = orderLine.getStockItem().getStockItemName();
             tableHtml.append("<tr>")
                     .append("<td>").append(stockItemID).append("</td>")
                     .append("<td>").append(description).append("</td>")

@@ -1,8 +1,10 @@
 package visualComponents;
 
-import helpers.DatabaseConnector;
+import models.Order;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import repositories.OrderRepository;
 import services.PdfRenderer;
-
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
@@ -10,23 +12,20 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.sql.Timestamp;
 import java.util.List;
 
 public class pakketbonbutton extends JPanel {
     private final JButton pakketbon = new JButton("Export pakketbon");
-
-
     private int OrderID;
+    private final OrderRepository order;
+    public Page<Order> orders;
 
-
-    public pakketbonbutton() {
+    public pakketbonbutton(OrderRepository orderRepository) {
         super();
-
+        this.order = orderRepository;
         this.pakketbon.addActionListener(e -> dialog());
         add(this.pakketbon);
     }
-
 
     private void dialog() {
         pakketbon.addActionListener(new ActionListener() {
@@ -34,23 +33,28 @@ public class pakketbonbutton extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent evt) {
-                DatabaseConnector database = new DatabaseConnector();
-                List<Object[]> orderlines = database.finishorders();
+                orders = order.findFinishedOrders(Pageable.ofSize(1000));
 
-                // Add example order lines
-                orderlines.add(new Object[]{1, new Timestamp(System.currentTimeMillis()), 5});
-                orderlines.add(new Object[]{2, new Timestamp(System.currentTimeMillis()), 3});
-                orderlines.add(new Object[]{3, new Timestamp(System.currentTimeMillis()), 7});
+                List<Order> orderList = orders.getContent();
+                Object[][] orderArray = new Object[orderList.size()][3];
+
+                int index = 0;
+                for (Order order : orderList) {
+                    Object[] item = new Object[3];
+                    item[0] = order.getOrderID();
+                    item[1] = order.getPickingCompletedWhen();
+                    item[2] = order.getOrderLines().size();
+                    orderArray[index] = item;
+                    index++;
+                }
 
                 String[] columnNames = {"OrderID", "PickingCompletedWhen", "Aantal Producten"};
-                Object[][] data = orderlines.toArray(new Object[0][]);
-                DefaultTableModel tableModel = new DefaultTableModel(data, columnNames);
+                DefaultTableModel tableModel = new DefaultTableModel(orderArray, columnNames);
 
                 JTable table = new JTable(tableModel);
                 JScrollPane scrollPane = new JScrollPane(table);
                 JPanel panel = new JPanel(new BorderLayout());
                 panel.add(scrollPane, BorderLayout.CENTER);
-
 
                 int selection = JOptionPane.showOptionDialog(null, panel, "bon exporteren", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
 
@@ -62,8 +66,6 @@ public class pakketbonbutton extends JPanel {
             }
         });
     }
-
-
 
     private void savePdf() {
         JFileChooser fileChooser = new JFileChooser();
@@ -96,7 +98,9 @@ public class pakketbonbutton extends JPanel {
                     return;
                 }
             }
-            PdfRenderer renderer = new PdfRenderer(OrderID);
+
+            Order order = this.order.findById(OrderID).orElse(null);
+            PdfRenderer renderer = new PdfRenderer(order);
             renderer.download(filePath);
         }
     }
