@@ -1,0 +1,2 @@
+ALTER TABLE stockitems
+ADD COLUMN Location VARCHAR(20);
