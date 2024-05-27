@@ -16,7 +16,7 @@ public:
     /**
      * Function that returns the motor location
     */
-    int getMotorLocation();
+    volatile int getMotorLocation();
 
     /**
      * Function that returns the motor location as a coordinate

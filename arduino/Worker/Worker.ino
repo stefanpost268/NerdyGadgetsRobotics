@@ -33,18 +33,18 @@ int yas = A2;
 int x = 0;
 int y = 0;
 
-int yasLocation = 0;
+volatile int yasLocation = 0;
 
 bool vorkOpen;
 int Encoder1;
 int Data[2];
 int locationvisited = 0;
 
-int locationQueue[3][2] = 
+int locationQueue[4][2] = 
 {
     {200, 400},
     {1000, 1000},
-    {100, 700}
+    {100, 700},
 }; 
 
 void setup()
@@ -146,8 +146,8 @@ void calibrateEncoders() {
         motorcontrolleryas.motorBackwards(0);
         calibrated = true;
       } else {
-        motorcontrollerxas.motorForwards(255);
-        motorcontrolleryas.motorBackwards(255);
+        motorcontrollerxas.motorForwards(225);
+        motorcontrolleryas.motorBackwards(225);
       }
 }
 
@@ -156,12 +156,12 @@ void requestEvent() {
 }
 
 void goToLocation(int currentxInput, int currentyInput, int targetx, int targety) {
-  switch (currentxInput < targetx - 10 ? 1 : (currentxInput > targetx + 10 ? -1 : 0)) {
+  switch (currentxInput < targetx ? 1 : (currentxInput > targetx ? -1 : 0)) {
     case 1:
-      motorcontrollerxas.motorBackwards(255);
+      motorcontrollerxas.motorBackwards(185);
       break;
     case -1:
-      motorcontrollerxas.motorForwards(255);
+      motorcontrollerxas.motorForwards(185);
       break;
     case 0:
       motorcontrollerxas.enableBrake();
@@ -170,17 +170,17 @@ void goToLocation(int currentxInput, int currentyInput, int targetx, int targety
 
   switch (currentyInput < targety - 10 ? 1 : (currentyInput > targety + 10 ? -1 : 0)) {
     case 1:
-      motorcontrolleryas.motorForwards(255);
+      motorcontrolleryas.motorForwards(175);
       break;
     case -1:
-      motorcontrolleryas.motorBackwards(255);
+      motorcontrolleryas.motorBackwards(175);
       break;
     case 0:
-      motorcontrolleryas.motorForwards(20);
+      motorcontrolleryas.motorForwards(40);
       break;
   }
 
-  if ((currentxInput > targetx - 15 && currentxInput < targetx + 20) && (currentyInput > targety - 20 && currentyInput < targety + 15)) {
+  if ((currentxInput > targetx - 10 && currentxInput < targetx + 10) && (currentyInput > targety - 10 && currentyInput < targety + 10)) {
     motorcontrollerxas.enableBrake();
     motorcontrolleryas.enableBrake();
     Serial.println("Target reached");
@@ -205,6 +205,17 @@ void nextLocation() {
       if (locationvisited >= 3) {
           Serial.println("All locations visited");
           calibrateEncoders();
+          locationvisited = 0;  
+          loadnewpacket();
       }
     }
+}
+
+void loadnewpacket(){
+  locationQueue[0][0] = 200;
+  locationQueue[0][1] = 400;
+  locationQueue[1][0] = 1000;
+  locationQueue[1][1] = 1000;
+  locationQueue[2][0] = 100;
+  locationQueue[2][1] = 700; 
 }

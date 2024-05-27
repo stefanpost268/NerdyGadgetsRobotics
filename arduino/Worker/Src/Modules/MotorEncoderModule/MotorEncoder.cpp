@@ -22,7 +22,7 @@ void MotorEncoder::readEncoder() {
     return;
 }
 
-int MotorEncoder::getMotorLocation() {
+volatile int MotorEncoder::getMotorLocation() {
     return motorLocation;
 }
 
