@@ -2,6 +2,7 @@ package interfaces;
 import java.lang.reflect.Field;
 import java.util.List;
 
+@Deprecated
 public interface Model<T> {
     String[] fillable();
     String getTableName();
