@@ -1,6 +1,5 @@
 package models;
 
-
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -10,15 +9,6 @@ import java.util.List;
 @Entity
 @Table(name = "orders")
 public class Order {
-
-
-    enum OrderEnum {
-        Open,
-        InProgress,
-        Done,
-        Error
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int OrderID;
@@ -60,10 +50,6 @@ public class Order {
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "OrderID")
     private List<OrderLine> orderLine;
-
-    public List<String> getFieldNames() {
-        return Arrays.asList("OrderID", "ExpectedDeliveryDate", "Customer", "ContactPerson", "Salesperson", "PickedByPerson", "Comments", "InternalComments", "DeliveryInstructions", "OrderLines");
-    }
 
     public LocalDate getExpectedDeliveryDate() {
         return ExpectedDeliveryDate;
