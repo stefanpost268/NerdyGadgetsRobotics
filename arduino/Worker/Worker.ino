@@ -13,7 +13,7 @@
 
 // lightSensor
 LightSensor lightSensor = LightSensor(A1);
-EmergencyButton emergencyButton = EmergencyButton(5, 10);
+EmergencyButton emergencyButton = EmergencyButton(5,10);
 JsonRobot jsonrobot = JsonRobot();
 InductiveSensor inductiveSensorLeft = InductiveSensor(4);
 InductiveSensor inductiveSensorRight = InductiveSensor(7);
@@ -76,20 +76,27 @@ void loop()
     }
 
     //EmergencyStop
-    if (emergencyButton.isEmergencyStopPressed() && !SAFETY_MODE && !emergencyButton.isResetPressed()) { 
+    if (digitalRead(5) && !SAFETY_MODE && !digitalRead(10)) { 
         jsonrobot.emitRobotState("STATE", "EMERGENCY_STOP", "Emergency button was pressed");
         SAFETY_MODE = true;
     }
 
     //reset
     if(SAFETY_MODE) {
-        if (!emergencyButton.isEmergencyStopPressed() && emergencyButton.isResetPressed()) {
-        jsonrobot.emitRobotState("STATE", "MANUAL_MODE", "Reset button was pressed");
-            SAFETY_MODE = false;
+        if (!digitalRead(5) && digitalRead(10)) {
+          jsonrobot.emitRobotState("STATE", "MANUAL_MODE", "Reset button was pressed");
+          SAFETY_MODE = false;
         }
   
         x = 0;
         y = 0;
+        // motorcontrollerxas.driveMotor(x, inductiveSensorRight.readInductiveSensor(), inductiveSensorLeft.readInductiveSensor(), SAFETY_MODE, vorkOpen);
+        // motorcontrolleryas.driveMotor(y, inductiveSensorBelow.readInductiveSensor(), clickSensorTop.readInductiveSensor(), SAFETY_MODE, 0);
+
+        // if(Automode) {
+        //   motorcontrollerxas.disableBrake();
+        //   motorcontrolleryas.disableBrake();
+        // }
     }
     else {
       x = map(analogRead(xas), 0, 1023, 255, -255);
@@ -100,28 +107,26 @@ void loop()
           SAFETY_MODE = true;
       }
     }
-
-    Serial.println("Cords: " + (String) motorencoder.getMotorLocation() + ", " + yasLocation + ", cal:" + calibrated + ", kliksns:" + clickSensorTop.readInductiveSensor() + ", cal sensors: " + inductiveSensorLeft.readInductiveSensor() + ", " + inductiveSensorBelow.readInductiveSensor() + ", queue: " + locationQueue[0][0] + ", " + locationQueue[0][1] + ", " + locationQueue[1][0] + ", " + locationQueue[1][1] + ", locations visited: " + locationvisited + ", lightsensor: " + lightSensor.isActive() + ", Safety_mode: " + SAFETY_MODE + ", EB: " + emergencyButton.isEmergencyStopPressed() + ", RB: " + emergencyButton.isEmergencyStopPressed());
-
-    if (SAFETY_MODE) {
-       return;
-    }
-
-    if (Automode){
-      if (calibrated) {
-        goToLocation(motorencoder.getMotorLocation(), yasLocation, locationQueue[0][0], locationQueue[0][1]);
+    
+    if(!SAFETY_MODE){
+      if (Automode){
+        if (calibrated) {
+          goToLocation(motorencoder.getMotorLocation(), yasLocation, locationQueue[0][0], locationQueue[0][1]);
+        } else {
+          calibrateEncoders();
+        }
       } else {
-        calibrateEncoders();
+      // controls for x axes
+      motorcontrollerxas.driveMotor(x, inductiveSensorRight.readInductiveSensor(), inductiveSensorLeft.readInductiveSensor(), SAFETY_MODE, vorkOpen);
+
+      // controls for y axes
+      motorcontrolleryas.driveMotor(y, inductiveSensorBelow.readInductiveSensor(), clickSensorTop.readInductiveSensor(), SAFETY_MODE, 0);
       }
-    } else {
-    // controls for x axes
-    motorcontrollerxas.driveMotor(x, inductiveSensorRight.readInductiveSensor(), inductiveSensorLeft.readInductiveSensor(), SAFETY_MODE, vorkOpen);
+      Serial.println("Cords: " + (String) motorencoder.getMotorLocation() + ", " + yasLocation + ", cal:" + calibrated + ", kliksns:" + clickSensorTop.readInductiveSensor() + ", cal sensors: " + inductiveSensorLeft.readInductiveSensor() + ", " + inductiveSensorBelow.readInductiveSensor() + ", queue: " + locationQueue[0][0] + ", " + locationQueue[0][1] + ", " + locationQueue[1][0] + ", " + locationQueue[1][1] + ", locations visited: " + locationvisited + ", lightsensor: " + lightSensor.isActive() + ", Safety_mode: " + SAFETY_MODE + ", EB: " + emergencyButton.isEmergencyStopPressed() + ", RB: " + emergencyButton.isEmergencyStopPressed());
+  };
+      
+}
 
-    // controls for y axes
-    motorcontrolleryas.driveMotor(y, inductiveSensorBelow.readInductiveSensor(), clickSensorTop.readInductiveSensor(), SAFETY_MODE, 0);
-    }
-
-};
 
 void receiveEvent(int placeholder) {
   String message = ""; 
@@ -181,7 +186,7 @@ void goToLocation(int currentxInput, int currentyInput, int targetx, int targety
       motorcontrolleryas.motorBackwards(175);
       break;
     case 0:
-      motorcontrolleryas.motorForwards(40);
+      motorcontrolleryas.enableBrake();
       break;
   }
 

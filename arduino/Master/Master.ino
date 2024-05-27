@@ -29,6 +29,10 @@ void setup()
 void loop()
 {
     Wire.requestFrom(9, 1);
+    if(Wire.available())
+    {
+        EmergencyButtonState = Wire.read();
+    } 
 
     bool state = communication.readVorkState(sensor);
     int location = motorencoder.getMotorLocation();
