@@ -12,13 +12,13 @@
 #include "Src/Modules/MotorEncoderModule/MotorEncoder.h"
 
 // lightSensor
-LightSensor lightSensor = LightSensor(2);
+LightSensor lightSensor = LightSensor(A1);
 EmergencyButton emergencyButton = EmergencyButton(5, 10);
 JsonRobot jsonrobot = JsonRobot();
 InductiveSensor inductiveSensorLeft = InductiveSensor(4);
 InductiveSensor inductiveSensorRight = InductiveSensor(7);
 InductiveSensor inductiveSensorBelow = InductiveSensor(6);
-InductiveSensor clickSensorTop = InductiveSensor(1);
+InductiveSensor clickSensorTop = InductiveSensor(A0);
 MotorController motorcontrollerxas = MotorController(12, 3, 9, 1);
 MotorController motorcontrolleryas = MotorController(13, 11, 8, 1);
 MotorEncoder motorencoder = MotorEncoder(2, 5);
@@ -42,9 +42,9 @@ int locationvisited = 0;
 
 int locationQueue[4][2] = 
 {
-    {200, 400},
+    {2000, 2000},
     {1000, 1000},
-    {100, 700},
+    {900, 200},
 }; 
 
 void setup()
@@ -67,18 +67,18 @@ void setup()
 void loop()
 {
     //LightSensor 
-    // if (!lightSensor.isActive() && !SAFETY_MODE) { 
-    //     jsonrobot.emitRobotState("STATE", "EMERGENCY_STOP", "warehouse is tilted");
-    //     SAFETY_MODE = true;
-    //     motorcontrollerxas.emergencyStop();
-    //     motorcontrolleryas.emergencyStop();
+    if (!lightSensor.isActive() && !SAFETY_MODE) { 
+        jsonrobot.emitRobotState("STATE", "EMERGENCY_STOP", "warehouse is tilted");
+        SAFETY_MODE = true;
+        motorcontrollerxas.emergencyStop();
+        motorcontrolleryas.emergencyStop();
         
-    // }
+    }
 
     //EmergencyStop
     if (emergencyButton.isEmergencyStopPressed() && !SAFETY_MODE && !emergencyButton.isResetPressed()) { 
-        //jsonrobot.emitRobotState("STATE", "EMERGENCY_STOP", "Emergency button was pressed");
-        //SAFETY_MODE = true;
+        jsonrobot.emitRobotState("STATE", "EMERGENCY_STOP", "Emergency button was pressed");
+        SAFETY_MODE = true;
     }
 
     //reset
@@ -96,9 +96,15 @@ void loop()
       y = map(analogRead(yas), 0, 1023, -255, 255);
 
       if (!lightSensor.isActive()) {
-          // lightSensor.emitWarehouseTiltedStatus();
-          // SAFETY_MODE = true;
+          lightSensor.emitWarehouseTiltedStatus();
+          SAFETY_MODE = true;
       }
+    }
+
+    Serial.println("Cords: " + (String) motorencoder.getMotorLocation() + ", " + yasLocation + ", cal:" + calibrated + ", kliksns:" + clickSensorTop.readInductiveSensor() + ", cal sensors: " + inductiveSensorLeft.readInductiveSensor() + ", " + inductiveSensorBelow.readInductiveSensor() + ", queue: " + locationQueue[0][0] + ", " + locationQueue[0][1] + ", " + locationQueue[1][0] + ", " + locationQueue[1][1] + ", locations visited: " + locationvisited + ", lightsensor: " + lightSensor.isActive() + ", Safety_mode: " + SAFETY_MODE + ", EB: " + emergencyButton.isEmergencyStopPressed() + ", RB: " + emergencyButton.isEmergencyStopPressed());
+
+    if (SAFETY_MODE) {
+       return;
     }
 
     if (Automode){
@@ -112,10 +118,9 @@ void loop()
     motorcontrollerxas.driveMotor(x, inductiveSensorRight.readInductiveSensor(), inductiveSensorLeft.readInductiveSensor(), SAFETY_MODE, vorkOpen);
 
     // controls for y axes
-    motorcontrolleryas.driveMotor(y, inductiveSensorBelow.readInductiveSensor(), 1, SAFETY_MODE, 0);
+    motorcontrolleryas.driveMotor(y, inductiveSensorBelow.readInductiveSensor(), clickSensorTop.readInductiveSensor(), SAFETY_MODE, 0);
     }
 
-    Serial.println("Cords: " + (String) motorencoder.getMotorLocation() + ", " + yasLocation + ", cal:" + calibrated + ", kliksns:" + clickSensorTop.readInductiveSensor() + ", cal sensors: " + inductiveSensorLeft.readInductiveSensor() + ", " + inductiveSensorBelow.readInductiveSensor() + ", queue: " + locationQueue[0][0] + ", " + locationQueue[0][1] + ", " + locationQueue[1][0] + ", " + locationQueue[1][1]);
 };
 
 void receiveEvent(int placeholder) {
@@ -168,7 +173,7 @@ void goToLocation(int currentxInput, int currentyInput, int targetx, int targety
       break;
   }
 
-  switch (currentyInput < targety - 10 ? 1 : (currentyInput > targety + 10 ? -1 : 0)) {
+  switch (currentyInput < targety - 9 ? 1 : (currentyInput > targety + 9 ? -1 : 0)) {
     case 1:
       motorcontrolleryas.motorForwards(175);
       break;
@@ -204,9 +209,10 @@ void nextLocation() {
     } else {
       if (locationvisited >= 3) {
           Serial.println("All locations visited");
+          motorcontrollerxas.enableBrake();
+          motorcontrolleryas.enableBrake();
           calibrateEncoders();
-          locationvisited = 0;  
-          loadnewpacket();
+          // locationvisited = 0;  
       }
     }
 }
