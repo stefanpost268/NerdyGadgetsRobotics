@@ -13,6 +13,17 @@ import java.awt.*;
 public class DashboardPage extends JPanel {
     private int borderThickness = 3;
     private int insets = 5;
+    private static final int MAIN_WIDTH = 1350;
+    private static final int MAIN_HEIGHT = 720;
+
+    private static final int LEFT_PANEL_WIDTH = (int) (MAIN_WIDTH * 0.7);
+    private static final int RIGHT_PANEL_WIDTH = (int) (MAIN_WIDTH * 0.3);
+    private static final int TOP_LEFT_PANEL_HEIGHT = (int) (MAIN_HEIGHT * 0.7);
+    private static final int BOTTOM_LEFT_PANEL_HEIGHT = (int) (MAIN_HEIGHT * 0.3);
+    private static final int TOP_RIGHT_PANEL_HEIGHT = (int) (MAIN_HEIGHT * 0.6);
+    private static final int BOTTOM_RIGHT_PANEL_HEIGHT = (int) (MAIN_HEIGHT * 0.4);
+    private static final int INSETS = 5;
+    private static final int BORDER_THICKNESS = 2;
     public DashboardPage(OrderRepository orderRepository) {
 //        setLayout(new GridLayout(1, 2));
 //        JPanel panelFirst = new JPanel();
@@ -43,8 +54,7 @@ public class DashboardPage extends JPanel {
         setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
 
-
-        // left space constraints
+        // Left space constraints
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.weightx = 0.7;
@@ -52,66 +62,75 @@ public class DashboardPage extends JPanel {
         constraints.fill = GridBagConstraints.BOTH;
 
         JPanel leftPanel = new JPanel(new GridBagLayout());
-//        leftPanel.setBackground(Color.BLUE); // Set a background color for demonstration
+        leftPanel.setPreferredSize(new Dimension(LEFT_PANEL_WIDTH, MAIN_HEIGHT));
         add(leftPanel, constraints);
 
-        // right space constraints
+        // Right space constraints
         constraints.gridx = 1;
         constraints.weightx = 0.3;
         constraints.weighty = 1.0;
         constraints.fill = GridBagConstraints.BOTH;
 
-        //right space
         JPanel rightPanel = new JPanel(new GridBagLayout());
-//        rightPanel.setBackground(Color.GREEN); // Set a background color for demonstration
+        rightPanel.setPreferredSize(new Dimension(RIGHT_PANEL_WIDTH, MAIN_HEIGHT));
         add(rightPanel, constraints);
 
-        // left panels constraints
+        // Left panel constraints
         GridBagConstraints leftConstraints = new GridBagConstraints();
         leftConstraints.gridx = 0;
         leftConstraints.gridy = 0;
         leftConstraints.weightx = 1.0;
         leftConstraints.weighty = 0.7;
         leftConstraints.fill = GridBagConstraints.BOTH;
-        leftConstraints.insets = new Insets(insets, insets, insets, insets);
+        leftConstraints.insets = new Insets(INSETS, INSETS, INSETS, INSETS);
 
-
-        JPanel topLeftPanel = new JPanel();
+        JPanel topLeftPanel = new JPanel(new BorderLayout());
         topLeftPanel.setBackground(Color.CYAN);
-        topLeftPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, borderThickness));
+        topLeftPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, BORDER_THICKNESS));
+        topLeftPanel.setPreferredSize(new Dimension(LEFT_PANEL_WIDTH, TOP_LEFT_PANEL_HEIGHT));
+        topLeftPanel.setMinimumSize(new Dimension(LEFT_PANEL_WIDTH, TOP_LEFT_PANEL_HEIGHT));
         leftPanel.add(topLeftPanel, leftConstraints);
 
-        //left panel constraints
+        // Left panel bottom constraints
         leftConstraints.gridy = 1;
         leftConstraints.weighty = 0.3;
 
-        JPanel bottomLeftPanel = new JPanel();
+        JPanel bottomLeftPanel = new JPanel(new BorderLayout());
         bottomLeftPanel.setBackground(Color.MAGENTA);
-        bottomLeftPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, borderThickness));
+        bottomLeftPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, BORDER_THICKNESS));
+        bottomLeftPanel.setPreferredSize(new Dimension(LEFT_PANEL_WIDTH, BOTTOM_LEFT_PANEL_HEIGHT));
+        bottomLeftPanel.setMinimumSize(new Dimension(LEFT_PANEL_WIDTH, BOTTOM_LEFT_PANEL_HEIGHT));
         leftPanel.add(bottomLeftPanel, leftConstraints);
 
-        // right panel constraints
+        // Right panel constraints
         GridBagConstraints rightConstraints = new GridBagConstraints();
         rightConstraints.gridx = 0;
         rightConstraints.gridy = 0;
         rightConstraints.weightx = 1.0;
         rightConstraints.weighty = 0.6;
         rightConstraints.fill = GridBagConstraints.BOTH;
-        rightConstraints.insets = new Insets(insets, insets, insets, insets);
+        rightConstraints.insets = new Insets(INSETS, INSETS, INSETS, INSETS);
 
-
-        JPanel topRightPanel = new JPanel();
+        JPanel topRightPanel = new JPanel(new BorderLayout());
         topRightPanel.setBackground(Color.YELLOW);
-        topRightPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, borderThickness));
+        topRightPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, BORDER_THICKNESS));
+        topRightPanel.setPreferredSize(new Dimension(RIGHT_PANEL_WIDTH, TOP_RIGHT_PANEL_HEIGHT));
+        topRightPanel.setMinimumSize(new Dimension(RIGHT_PANEL_WIDTH, TOP_RIGHT_PANEL_HEIGHT));
         rightPanel.add(topRightPanel, rightConstraints);
 
-        // right panel constraints
+        // Right panel bottom constraints
         rightConstraints.gridy = 1;
         rightConstraints.weighty = 0.4;
 
-        JPanel bottomRightPanel = new JPanel();
+        JPanel bottomRightPanel = new JPanel(new BorderLayout());
         bottomRightPanel.setBackground(Color.RED);
-        bottomRightPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, borderThickness));
+        bottomRightPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, BORDER_THICKNESS));
+        bottomRightPanel.setPreferredSize(new Dimension(RIGHT_PANEL_WIDTH, BOTTOM_RIGHT_PANEL_HEIGHT));
+        bottomRightPanel.setMinimumSize(new Dimension(RIGHT_PANEL_WIDTH, BOTTOM_RIGHT_PANEL_HEIGHT));
         rightPanel.add(bottomRightPanel, rightConstraints);
+
+//        topLeftPanel.add(map);
+//        topRightPanel.add(queueBox);
+//        bottomRightPanel.add(processingBox);
     }
 }
