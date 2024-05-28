@@ -20,8 +20,7 @@ InductiveSensor inductiveSensorBelow = InductiveSensor(6);
 InductiveSensor clickSensorTop = InductiveSensor(A0);
 MotorController motorcontrollerxas = MotorController(12, 3, 9, 1);
 MotorController motorcontrolleryas = MotorController(13, 11, 8, 1);
-MotorEncoder motorencoderxas = MotorEncoder(2, 5);
-
+MotorEncoder motorencoder = MotorEncoder(2, 5);
 
 bool SAFETY_MODE = false;
 bool Automode = true;
@@ -36,8 +35,6 @@ int x = 0;
 int y = 0;
 
 volatile int yasLocation = 0;
-int lastYLocation = 0;
-int lastXasLocation = 0;
 
 bool vorkOpen;
 int Encoder1;
@@ -63,22 +60,12 @@ void setup()
     Wire.onRequest(requestEvent); // Set up a function to handle requests for data
 
     attachInterrupt(digitalPinToInterrupt(2), []() {
-        motorencoderxas.readEncoder();
+        motorencoder.readEncoder();
     }, RISING);
 }
 
 void loop()
 {
-
-  delay(5000);
-  StaticJsonDocument<200> doc;
-
-  JsonObject location = doc.to<JsonObject>();
-  location["x-location"] = random(0, 1000);
-  location["y-location"] = random(0, 1000);
-
-  jsonrobot.emitRobotLocation("LOCATION", location);
-  
     //LightSensor 
     if (!lightSensor.isActive() && !SAFETY_MODE) { 
         jsonrobot.emitRobotState("STATE", "EMERGENCY_STOP", "warehouse is tilted");
@@ -122,7 +109,7 @@ void loop()
     if(!SAFETY_MODE){
       if (Automode){
         if (calibrated) {
-          goToLocation(motorencoderxas.getMotorLocation(), yasLocation, locationQueue[0][0], locationQueue[0][1]);
+          goToLocation(motorencoder.getMotorLocation(), yasLocation, locationQueue[0][0], locationQueue[0][1]);
         } else {
           calibrateEncoders();
         }
@@ -133,27 +120,11 @@ void loop()
       // controls for y axes
       motorcontrolleryas.driveMotor(y, inductiveSensorBelow.readInductiveSensor(), clickSensorTop.readInductiveSensor(), SAFETY_MODE, 0);
       }
+
+      // Serial.println("Cords: " + (String) motorencoder.getMotorLocation() + ", " + yasLocation + ", cal:" + calibrated + ", kliksns:" + clickSensorTop.readInductiveSensor() + ", cal sensors: " + inductiveSensorLeft.readInductiveSensor() + ", " + inductiveSensorBelow.readInductiveSensor() + ", queue: " + locationQueue[0][0] + ", " + locationQueue[0][1] + ", locations visited: " + locationvisited + ", lightsensor: " + lightSensor.isActive() + ", Safety_mode: " + SAFETY_MODE);
   };
       
 }
-
-    int xMotorLocation = motorencoderxas.getMotorLocation();
-    bool locationChanged = xMotorLocation != lastXasLocation || yasLocation != lastYLocation;
-
-    if(millis() % 500 == 0 && locationChanged) {
-        StaticJsonDocument<200> doc;
-
-        JsonObject location = doc.to<JsonObject>();
-        location["x-location"] = xMotorLocation;
-        location["y-location"] = yasLocation;
-
-        jsonrobot.emitRobotLocation("LOCATION", location);
-        lastXasLocation = xMotorLocation;
-        lastYLocation = yasLocation;
-    }
-
-    // controls for x axes
-    motorcontrollerxas.driveMotor(x, inductiveSensorRight.readInductiveSensor(), inductiveSensorLeft.readInductiveSensor(), SAFETY_MODE, vorkOpen);
 
 
 void receiveEvent(int placeholder) {
@@ -181,7 +152,7 @@ void receiveEvent(int placeholder) {
 
 void calibrateEncoders() {
       if (inductiveSensorLeft.readInductiveSensor() == 0 && inductiveSensorBelow.readInductiveSensor() == 0) {
-        motorencoderxas.resetEncoder();
+        motorencoder.resetEncoder();
         yasLocation = 0;
         motorcontrollerxas.motorForwards(0);
         motorcontrolleryas.motorBackwards(0);

@@ -49,4 +49,3 @@ int MotorEncoder::getMotorLocationAsCoordinate(int max, int columnCount) {
         return 0; 
     }
 
-

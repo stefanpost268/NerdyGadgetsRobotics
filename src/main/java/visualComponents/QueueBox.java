@@ -17,7 +17,7 @@ public class QueueBox extends JPanel {
 
     public QueueBox(OrderRepository orderRepository) {
         setBackground(Color.LIGHT_GRAY);
-        setLayout(new GridBagLayout());
+        setLayout(new FlowLayout(FlowLayout.LEFT)); // align left
         JLabel queueLabel = new JLabel("Bestelling wachtrij");
         add(queueLabel);
 
