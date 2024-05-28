@@ -1,17 +1,11 @@
 #include <Arduino.h>
 #include "EmergencyButton.h"
 
-EmergencyButton::EmergencyButton(int emergencyStopPin, int resetPin ): resetPin(resetPin), emergencyStopPin(emergencyStopPin) {
-    this->resetPin = resetPin;
-    this->emergencyStopPin = emergencyStopPin;
-    pinMode(resetPin, INPUT);
-    pinMode(emergencyStopPin, INPUT);
+EmergencyButton::EmergencyButton(int resetPin): emergencyPin(emergencyPin) {
+    this->emergencyPin = emergencyPin;
+    pinMode(emergencyPin, INPUT);
 }
 
-bool EmergencyButton::isEmergencyStopPressed() {
-  return digitalRead(this->emergencyStopPin) == LOW;
-}
-
-bool EmergencyButton::isResetPressed(){
-  return digitalRead(this->resetPin) == LOW;
+bool EmergencyButton::isEmergencyStop(){
+  return digitalRead(this->emergencyPin) == HIGH;
 }

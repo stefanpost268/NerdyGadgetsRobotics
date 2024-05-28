@@ -11,9 +11,8 @@
 #include "Src/Modules/MotorControllerModule/MotorController.h"
 #include "Src/Modules/MotorEncoderModule/MotorEncoder.h"
 
-// lightSensor
 LightSensor lightSensor = LightSensor(A1);
-EmergencyButton emergencyButton = EmergencyButton(5,10);
+EmergencyButton emergencyButton = EmergencyButton(10);
 JsonRobot jsonrobot = JsonRobot();
 InductiveSensor inductiveSensorLeft = InductiveSensor(4);
 InductiveSensor inductiveSensorRight = InductiveSensor(7);
@@ -26,6 +25,8 @@ MotorEncoder motorencoder = MotorEncoder(2, 5);
 bool SAFETY_MODE = false;
 bool Automode = true;
 bool calibrated = false;
+
+bool isResetButtonPressed = false;
 
 int xas = A3;
 int yas = A2;
@@ -40,11 +41,11 @@ int Encoder1;
 int Data[2];
 int locationvisited = 0;
 
-int locationQueue[4][2] = 
+int locationQueue[3][2] = 
 {
-    {2000, 2000},
-    {1000, 1000},
-    {900, 200},
+    {96, 2237},
+    {2178, 2237},
+    {2178, 713},
 }; 
 
 void setup()
@@ -61,7 +62,6 @@ void setup()
     attachInterrupt(digitalPinToInterrupt(2), []() {
         motorencoder.readEncoder();
     }, RISING);
-
 }
 
 void loop()
@@ -72,31 +72,29 @@ void loop()
         SAFETY_MODE = true;
         motorcontrollerxas.emergencyStop();
         motorcontrolleryas.emergencyStop();
-        
+        return;
     }
 
-    //EmergencyStop
-    if (digitalRead(5) && !SAFETY_MODE && !digitalRead(10)) { 
+    if(digitalRead(10) == HIGH && !SAFETY_MODE) {
         jsonrobot.emitRobotState("STATE", "EMERGENCY_STOP", "Emergency button was pressed");
         SAFETY_MODE = true;
+        motorcontrollerxas.emergencyStop();
+        motorcontrolleryas.emergencyStop();
     }
 
     //reset
     if(SAFETY_MODE) {
-        if (!digitalRead(5) && digitalRead(10)) {
+        if (isResetButtonPressed) {
           jsonrobot.emitRobotState("STATE", "MANUAL_MODE", "Reset button was pressed");
           SAFETY_MODE = false;
+          isResetButtonPressed = false;
+
+          motorcontrollerxas.disableBrake();
+          motorcontrolleryas.disableBrake();
         }
   
         x = 0;
         y = 0;
-        // motorcontrollerxas.driveMotor(x, inductiveSensorRight.readInductiveSensor(), inductiveSensorLeft.readInductiveSensor(), SAFETY_MODE, vorkOpen);
-        // motorcontrolleryas.driveMotor(y, inductiveSensorBelow.readInductiveSensor(), clickSensorTop.readInductiveSensor(), SAFETY_MODE, 0);
-
-        // if(Automode) {
-        //   motorcontrollerxas.disableBrake();
-        //   motorcontrolleryas.disableBrake();
-        // }
     }
     else {
       x = map(analogRead(xas), 0, 1023, 255, -255);
@@ -122,7 +120,8 @@ void loop()
       // controls for y axes
       motorcontrolleryas.driveMotor(y, inductiveSensorBelow.readInductiveSensor(), clickSensorTop.readInductiveSensor(), SAFETY_MODE, 0);
       }
-      Serial.println("Cords: " + (String) motorencoder.getMotorLocation() + ", " + yasLocation + ", cal:" + calibrated + ", kliksns:" + clickSensorTop.readInductiveSensor() + ", cal sensors: " + inductiveSensorLeft.readInductiveSensor() + ", " + inductiveSensorBelow.readInductiveSensor() + ", queue: " + locationQueue[0][0] + ", " + locationQueue[0][1] + ", " + locationQueue[1][0] + ", " + locationQueue[1][1] + ", locations visited: " + locationvisited + ", lightsensor: " + lightSensor.isActive() + ", Safety_mode: " + SAFETY_MODE + ", EB: " + emergencyButton.isEmergencyStopPressed() + ", RB: " + emergencyButton.isEmergencyStopPressed());
+
+      // Serial.println("Cords: " + (String) motorencoder.getMotorLocation() + ", " + yasLocation + ", cal:" + calibrated + ", kliksns:" + clickSensorTop.readInductiveSensor() + ", cal sensors: " + inductiveSensorLeft.readInductiveSensor() + ", " + inductiveSensorBelow.readInductiveSensor() + ", queue: " + locationQueue[0][0] + ", " + locationQueue[0][1] + ", locations visited: " + locationvisited + ", lightsensor: " + lightSensor.isActive() + ", Safety_mode: " + SAFETY_MODE);
   };
       
 }
@@ -145,6 +144,9 @@ void receiveEvent(int placeholder) {
   }
   if(label == "y") {
     yasLocation = value.toInt();
+  }
+  if(label == "r") {
+    isResetButtonPressed = true;
   }
 }
 
@@ -217,7 +219,6 @@ void nextLocation() {
           motorcontrollerxas.enableBrake();
           motorcontrolleryas.enableBrake();
           calibrateEncoders();
-          // locationvisited = 0;  
       }
     }
 }

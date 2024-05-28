@@ -23,6 +23,9 @@ void MotorEncoder::readEncoder() {
 }
 
 int MotorEncoder::getMotorLocation() {
+    if(motorLocation < 0) {
+        motorLocation = 0;
+    }
     return motorLocation;
 }
 

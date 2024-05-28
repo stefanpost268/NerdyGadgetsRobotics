@@ -14,12 +14,11 @@ void MotorEncoder::setup() {
 
 void MotorEncoder::readEncoder() {
     if (digitalRead(this->encoder2Pin)) {
-        motorLocation--;
-    }
-    else {
         motorLocation++;
     }
-    return;
+    else {
+        motorLocation--;
+    }
 }
 
 volatile int MotorEncoder::getMotorLocation() {
