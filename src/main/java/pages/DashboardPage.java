@@ -8,8 +8,6 @@ import javax.swing.*;
 import java.awt.*;
 
 public class DashboardPage extends JPanel {
-    private int borderThickness = 3;
-    private int insets = 5;
     private static final int MAIN_WIDTH = 1350;
     private static final int MAIN_HEIGHT = 720;
     private static final int LEFT_PANEL_WIDTH = (int) (MAIN_WIDTH * 0.7);
