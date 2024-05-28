@@ -27,10 +27,7 @@ public class DashboardPage extends JPanel {
         map.setPreferredSize(new Dimension(map.width, map.height));
 
         QueueBox queueBox = new QueueBox(orderRepository);
-
-
         ProcessingBox processingBox = new ProcessingBox(queueBox.getOrderInProgress());
-
 
         setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
@@ -65,7 +62,6 @@ public class DashboardPage extends JPanel {
         leftConstraints.insets = new Insets(INSETS, INSETS, INSETS, INSETS);
 
         JPanel topLeftPanel = new JPanel(new BorderLayout());
-//        topLeftPanel.setBackground(Color.CYAN);
         topLeftPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, BORDER_THICKNESS));
         topLeftPanel.setPreferredSize(new Dimension(LEFT_PANEL_WIDTH, TOP_LEFT_PANEL_HEIGHT));
         topLeftPanel.setMinimumSize(new Dimension(LEFT_PANEL_WIDTH, TOP_LEFT_PANEL_HEIGHT));
@@ -76,7 +72,6 @@ public class DashboardPage extends JPanel {
         leftConstraints.weighty = 0.3;
 
         JPanel bottomLeftPanel = new JPanel(new BorderLayout());
-//        bottomLeftPanel.setBackground(Color.MAGENTA);
         bottomLeftPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, BORDER_THICKNESS));
         bottomLeftPanel.setPreferredSize(new Dimension(LEFT_PANEL_WIDTH, BOTTOM_LEFT_PANEL_HEIGHT));
         bottomLeftPanel.setMinimumSize(new Dimension(LEFT_PANEL_WIDTH, BOTTOM_LEFT_PANEL_HEIGHT));
@@ -92,7 +87,6 @@ public class DashboardPage extends JPanel {
         rightConstraints.insets = new Insets(INSETS, INSETS, INSETS, INSETS);
 
         JPanel topRightPanel = new JPanel(new BorderLayout());
-//        topRightPanel.setBackground(Color.YELLOW);
         topRightPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, BORDER_THICKNESS));
         topRightPanel.setPreferredSize(new Dimension(RIGHT_PANEL_WIDTH, TOP_RIGHT_PANEL_HEIGHT));
         topRightPanel.setMinimumSize(new Dimension(RIGHT_PANEL_WIDTH, TOP_RIGHT_PANEL_HEIGHT));
@@ -103,7 +97,6 @@ public class DashboardPage extends JPanel {
         rightConstraints.weighty = 0.4;
 
         JPanel bottomRightPanel = new JPanel(new BorderLayout());
-//        bottomRightPanel.setBackground(Color.RED);
         bottomRightPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, BORDER_THICKNESS));
         bottomRightPanel.setPreferredSize(new Dimension(RIGHT_PANEL_WIDTH, BOTTOM_RIGHT_PANEL_HEIGHT));
         bottomRightPanel.setMinimumSize(new Dimension(RIGHT_PANEL_WIDTH, BOTTOM_RIGHT_PANEL_HEIGHT));
