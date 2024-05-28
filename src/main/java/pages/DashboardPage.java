@@ -15,7 +15,6 @@ public class DashboardPage extends JPanel {
     private int insets = 5;
     private static final int MAIN_WIDTH = 1350;
     private static final int MAIN_HEIGHT = 720;
-
     private static final int LEFT_PANEL_WIDTH = (int) (MAIN_WIDTH * 0.7);
     private static final int RIGHT_PANEL_WIDTH = (int) (MAIN_WIDTH * 0.3);
     private static final int TOP_LEFT_PANEL_HEIGHT = (int) (MAIN_HEIGHT * 0.7);
@@ -31,8 +30,6 @@ public class DashboardPage extends JPanel {
                 Integer.valueOf(ConfigReader.getConfig("grid.width"))
         );
         map.setPreferredSize(new Dimension(map.width, map.height));
-
-//        panelFirst.add(new ExportPdfButton());
 
         QueueBox queueBox = new QueueBox(orderRepository);
 
@@ -118,7 +115,8 @@ public class DashboardPage extends JPanel {
         rightPanel.add(bottomRightPanel, rightConstraints);
 
 
-        topLeftPanel.add(map);
+        topLeftPanel.add(map, BorderLayout.CENTER);
+        topLeftPanel.add(new ExportPdfButton(), BorderLayout.SOUTH);
         topRightPanel.add(queueBox);
         bottomRightPanel.add(processingBox);
     }
