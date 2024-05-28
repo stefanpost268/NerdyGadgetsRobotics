@@ -34,14 +34,14 @@ public class QueueBox extends JPanel {
         }
 
         queueTableModel = new DefaultTableModel(
-                new Object[]{"Bestel Nr", "Product aantal", "Status", "Actie"}, 0
+                new Object[]{"Bestel Nr", "Product aantal", "Status"}, 0
         );
 
         //Create table
         JTable queueTable = new JTable(queueTableModel);
         queueTable.setDefaultEditor(Object.class, null); // read-only
         JScrollPane queueScrollPane = new JScrollPane(queueTable); // Add scroll to table
-        queueScrollPane.setPreferredSize(new Dimension(320, 310));
+        queueScrollPane.setPreferredSize(new Dimension(380, 310));
 
         queueTable.getTableHeader().setReorderingAllowed(false); // Stop user column swipe
         fillQueueTable(orderData);

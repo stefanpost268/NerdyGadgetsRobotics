@@ -27,7 +27,7 @@ public class ProcessingBox extends JPanel {
         processingTable.getTableHeader().setReorderingAllowed(false); // Stop user column swipe
 
         JScrollPane processingScrollPane = new JScrollPane(processingTable); // Add scroll to table
-        processingScrollPane.setPreferredSize(new Dimension(320, 270));
+        processingScrollPane.setPreferredSize(new Dimension(380, 220));
         add(processingScrollPane);
 
         if(order != null) {
