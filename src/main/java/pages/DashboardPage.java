@@ -27,7 +27,6 @@ public class DashboardPage extends JPanel {
    
 
         WarehouseMap map = new WarehouseMap(
-                serialCommunication,
                 Integer.valueOf(ConfigReader.getConfig("grid.height")),
                 Integer.valueOf(ConfigReader.getConfig("grid.width"))
         );

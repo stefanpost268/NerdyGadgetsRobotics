@@ -4,9 +4,9 @@
 class EmergencyButton {
     public:
         EmergencyButton(int resetPin);
-        bool isEmergencyStop();
+        bool isResetPressed();
     private:
-        int emergencyPin;
+        int resetPin;
 };
 
 #endif

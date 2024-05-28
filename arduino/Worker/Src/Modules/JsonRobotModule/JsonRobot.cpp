@@ -22,19 +22,3 @@ void JsonRobot::emitRobotState(String label, String state, String reason){
     // Print the JSON string to the serial monitor
     Serial.println(jsonString);
 }
-
-void JsonRobot::emitRobotLocation(String label, JsonObject data) {
-    // Create a DynamicJsonDocument
-    DynamicJsonDocument doc(128); // Adjust the size as per your data
-
-    // Add data to the JSON document
-    doc["label"] = label;
-    doc["data"] = data;
-
-    // Serialize the JSON document to a string
-    String jsonString;
-    serializeJson(doc, jsonString);
-
-    // Print the JSON string to the serial monitor
-    Serial.println(jsonString);
-}
