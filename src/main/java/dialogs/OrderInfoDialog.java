@@ -1,14 +1,11 @@
 package dialogs;
 
-import models.Customer;
-import models.Order;
-import models.OrderLines;
-import models.StockItem;
-
+import models.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
+
 
 public class OrderInfoDialog extends JDialog {
     private DefaultTableModel tableModel = new DefaultTableModel(new Object[]{"Product Nr", "Product", "Aantal", "Gewicht (kg)"}, 0);
@@ -28,15 +25,15 @@ public class OrderInfoDialog extends JDialog {
 
     public OrderInfoDialog(Order order) {
         Customer customer = order.getCustomer();
-        List<OrderLines> orderLines = order.getOrderLines();
+        List<OrderLine> orderLines = order.getOrderLines();
 
         setLayout(new BorderLayout());
         setSize(800, 600);
         setResizable(false);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        this.orderID.setText(String.valueOf(order.getOrderID()));
-        this.shippingDate.setText(order.getExpectedDeliveryDate().toString());
+        this.orderID.setText("# " + order.getOrderID());
+        this.shippingDate.setText(order.getFormattedDate());
         this.orderState.setText(order.getOrderState());
 
         this.customerName.setText(customer.getCustomerName());
@@ -44,21 +41,26 @@ public class OrderInfoDialog extends JDialog {
         this.customerAdres.setText(customer.getDeliveryPostalCode());
         this.contactPerson.setText(order.getContactPerson().getFullName());
         this.salesPerson.setText(order.getSalesperson().getFullName());
+
         if(order.getPickedByPerson() != null) {
             this.pickedByPerson.setText(order.getPickedByPerson().getFullName());
+        }
+        else {
+            this.pickedByPerson.setText("Geen medewerker gevonden");
         }
 
         this.comment.setText(order.getComments());
         this.internalComment.setText(order.getInternalComments());
         this.deliveryComment.setText(order.getDeliveryInstructions());
 
-        for(OrderLines orderLine : orderLines) {
+        for(OrderLine orderLine : orderLines) {
             StockItem stockItem = orderLine.getStockItem();
             tableModel.addRow(new Object[]{
                 stockItem.getStockItemID(),
                 stockItem.getStockItemName(),
                 orderLine.getQuantity(),
-                stockItem.getTypicalWeightPerUnit()
+
+                stockItem.getTypicalWeightPerUnit() + " kg"
             });
         }
 
