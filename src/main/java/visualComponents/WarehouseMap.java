@@ -1,7 +1,6 @@
 package visualComponents;
 
 import objects.GridProduct;
-
 import javax.swing.JPanel;
 import java.awt.Graphics;
 import java.awt.Color;
@@ -11,8 +10,8 @@ public class WarehouseMap extends JPanel {
 
     private int gridHeight;
     private int gridWidth;
-    public int width = 570;
-    public int height = 265;
+    public int width = 670;
+    public int height = 365;
     private ArrayList<GridProduct> gridProducts = new ArrayList<>();
 
 
