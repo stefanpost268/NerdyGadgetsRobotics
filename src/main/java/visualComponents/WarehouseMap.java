@@ -17,8 +17,8 @@ public class WarehouseMap extends JPanel {
     private int gridWidth;
     public int width = 670;
     public int height = 365;
-    private int robotX = 250;
-    private int robotY = 250;
+    private int robotX = 67;
+    private int robotY = 397;
     private int warehouseMaxX = 0;
     private int warehouseMaxY = 0;
     
@@ -58,7 +58,7 @@ public class WarehouseMap extends JPanel {
 
                     repaint();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    System.out.println("No location data received");
                 }
             }
         }, 0, 1000);

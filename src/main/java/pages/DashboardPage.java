@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class DashboardPage extends JPanel {
+        private static final int MAIN_WIDTH = 1350;
         private static final int MAIN_HEIGHT = 720;
         private static final int LEFT_PANEL_WIDTH = (int) (MAIN_WIDTH * 0.7);
         private static final int RIGHT_PANEL_WIDTH = (int) (MAIN_WIDTH * 0.3);
@@ -18,7 +19,6 @@ public class DashboardPage extends JPanel {
         private static final int BOTTOM_RIGHT_PANEL_HEIGHT = (int) (MAIN_HEIGHT * 0.4);
         private static final int INSETS = 5;
         private static final int BORDER_THICKNESS = 2;
-        private static final int MAIN_WIDTH = 1350;
 
     public DashboardPage(OrderRepository orderRepository, SerialCommunication serialCommunication) {
         setLayout(new GridLayout(1, 2));
@@ -111,8 +111,7 @@ public class DashboardPage extends JPanel {
 
 
         topLeftPanel.add(map, BorderLayout.CENTER);
-        topLeftPanel.add(new visualComponents.LegendBox(serialCommunication));
-        topLeftPanel.add(new packingListButton(orderRepository), BorderLayout.SOUTH);
+        topLeftPanel.add(new visualComponents.LegendBox(serialCommunication, orderRepository), BorderLayout.WEST);
         topRightPanel.add(queueBox, BorderLayout.CENTER);
         bottomRightPanel.add(processingBox);
     }

@@ -15,22 +15,28 @@ public class SerialCommunication {
     public SerialCommunication() {
         SerialPort[] ports = SerialPort.getCommPorts();
         System.out.println("Available ports:");
+        int i = 0;
         for (SerialPort port : ports) {
-            System.out.println(port.getSystemPortName());
+            System.out.println(i + ": " + port.getSystemPortName());
+            i++;
         }
+        try {
+            // Change the index based on the correct port you want to select
+            this.serialPort = ports[13];
+            System.out.println("Selected port: " + this.serialPort.getSystemPortName());
 
-        // Change the index based on the correct port you want to select
-        this.serialPort = ports[13];
-        System.out.println("Selected port: " + this.serialPort.getSystemPortName());
+            serialPort.setComPortParameters(9600, 8, 1, SerialPort.NO_PARITY);
+            serialPort.setComPortTimeouts(SerialPort.TIMEOUT_NONBLOCKING, 0, 0);
 
-        serialPort.setComPortParameters(9600, 8, 1, SerialPort.NO_PARITY);
-        serialPort.setComPortTimeouts(SerialPort.TIMEOUT_NONBLOCKING, 0, 0);
+            if (serialPort.openPort()) {
+                System.out.println("Port is open.");
+                setupDataListener();
+            } else {
+                System.out.println("Failed to open port.");
+            }
 
-        if (serialPort.openPort()) {
-            System.out.println("Port is open.");
-            setupDataListener();
-        } else {
-            System.out.println("Failed to open port.");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
