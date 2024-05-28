@@ -117,7 +117,7 @@ public class DashboardPage extends JPanel {
 
         topLeftPanel.add(map, BorderLayout.CENTER);
         topLeftPanel.add(new ExportPdfButton(), BorderLayout.SOUTH);
-        topRightPanel.add(queueBox);
+        topRightPanel.add(queueBox, BorderLayout.CENTER);
         bottomRightPanel.add(processingBox);
     }
 }
