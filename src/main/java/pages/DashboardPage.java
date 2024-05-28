@@ -4,7 +4,7 @@ import helpers.ConfigReader;
 import repositories.OrderRepository;
 import visualComponents.*;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.*;
 
 public class DashboardPage extends JPanel {
@@ -113,7 +113,7 @@ public class DashboardPage extends JPanel {
 
 
         topLeftPanel.add(map, BorderLayout.CENTER);
-        topLeftPanel.add(new ExportPdfButton(), BorderLayout.SOUTH);
+        topLeftPanel.add(new packingListButton(orderRepository), BorderLayout.SOUTH);
         topRightPanel.add(queueBox, BorderLayout.CENTER);
         bottomRightPanel.add(processingBox);
     }
