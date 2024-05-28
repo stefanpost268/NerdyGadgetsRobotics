@@ -35,7 +35,7 @@ public class QueueBox extends JPanel {
         }
 
         queueTableModel = new DefaultTableModel(
-                new Object[]{"Bestel Nr", "Product aantal", "Status", "Actie"}, 0
+                new Object[]{"Bestel Nr", "Product aantal", "Status"}, 0
         );
 
         //Create table
