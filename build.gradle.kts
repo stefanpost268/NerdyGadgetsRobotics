@@ -15,6 +15,7 @@ dependencies {
     implementation("org.xhtmlrenderer:flying-saucer-pdf:9.7.2")
     implementation("com.fazecast:jSerialComm:[2.0.0,3.0.0)")
     implementation("org.slf4j:slf4j-nop:2.1.0-alpha1")
+    implementation("org.json:json:20210307")
 
     // Database
     implementation("org.springframework.data:spring-data-jpa:3.2.5")

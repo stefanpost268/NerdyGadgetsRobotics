@@ -43,6 +43,12 @@ void MotorController::driveFork(int y, int IRSensorWaarde) {
 
 void MotorController::driveMotor(int joystickInput, int sensor1, int sensor2, bool SAFETY_MODE, bool vorkOpen) {
     if (!SAFETY_MODE) {
+        if (sensor2 == 0)
+        {
+            // motorLocation = 0;
+        }
+      
+        
         if (joystickInput < -50 && vorkOpen == 0 && sensor2 != 0) 
         {
             disableBrake();
@@ -75,4 +81,3 @@ void MotorController::enableBrake() {
 void MotorController::disableBrake() {
     digitalWrite(brakePin, LOW);
 }
-

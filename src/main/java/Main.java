@@ -3,6 +3,8 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import pages.*;
 import repositories.*;
 import helpers.DatabaseConnector;
+import services.SerialCommunication;
+
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -17,6 +19,8 @@ public class Main extends JFrame implements ChangeListener {
     private OrderRepository orderRepository;
 
     private JTabbedPane tabbedPane;
+    private SerialCommunication serialCommunication = new SerialCommunication();
+
 
     public static void main(String[] args) {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
@@ -35,7 +39,7 @@ public class Main extends JFrame implements ChangeListener {
         this.tabbedPane = new JTabbedPane();
         this.tabbedPane.addChangeListener(this);
         tabbedPane.setUI(new BasicTabbedPaneUI());
-        tabbedPane.addTab("Dashboard", new DashboardPage(this.orderRepository));
+        tabbedPane.addTab("Dashboard", new DashboardPage(this.orderRepository, serialCommunication));
         tabbedPane.addTab("Bestellingen", new OrderPage(this.orderRepository));
         tabbedPane.addTab("Vooraad", new ProductPage(this.stockItemRepository));
         tabbedPane.setBorder(null);

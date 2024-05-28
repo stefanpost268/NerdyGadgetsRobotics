@@ -5,6 +5,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import services.PdfRenderer;
 
+import java.awt.*;
 import java.io.File;
 
 public class ExportPdfButton extends JPanel {

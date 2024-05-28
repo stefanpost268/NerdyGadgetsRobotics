@@ -20,6 +20,8 @@ public:
 
     /**
      * Function that returns the motor location as a coordinate
+     * @param max The maximum value of the coordinate
+     * @param columnCount The amount of columns in the warehouse
     */
     int getMotorLocationAsCoordinate(int max, int columnCount);
 

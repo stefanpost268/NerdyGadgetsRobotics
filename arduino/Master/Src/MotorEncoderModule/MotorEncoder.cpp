@@ -15,11 +15,15 @@ void MotorEncoder::setup() {
 void MotorEncoder::readEncoder() {
     if (digitalRead(this->encoder2Pin)) {
         motorLocation--;
+        if (motorLocation < 0)
+        {
+            motorLocation = 0;
+        }
     }
-    else {
+    else
+    {
         motorLocation++;
     }
-    return;
 }
 
 int MotorEncoder::getMotorLocation() {
@@ -43,4 +47,5 @@ int MotorEncoder::getMotorLocationAsCoordinate(int max, int columnCount) {
         }
         return 0; 
     }
+
 

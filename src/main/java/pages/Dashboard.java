@@ -13,10 +13,10 @@ public class Dashboard extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        getContentPane().add(
-            new WarehouseMap(Integer.valueOf(ConfigReader.getConfig("grid.height")),
-            Integer.valueOf(ConfigReader.getConfig("grid.width")))
-        );
+//        getContentPane().add(
+//            new WarehouseMap(Integer.valueOf(ConfigReader.getConfig("grid.height")),
+//            Integer.valueOf(ConfigReader.getConfig("grid.width")))
+//        );
 
         setVisible(true);
     }
