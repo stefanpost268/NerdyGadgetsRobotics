@@ -2,12 +2,9 @@ package pages;
 
 import helpers.ConfigReader;
 import repositories.OrderRepository;
-import visualComponents.ProcessingBox;
-import visualComponents.QueueBox;
-import visualComponents.WarehouseMap;
-import visualComponents.ExportPdfButton;
+import visualComponents.*;
 
-import javax.swing.*;
+import javax.swing.JPanel;
 import java.awt.*;
 
 public class DashboardPage extends JPanel {

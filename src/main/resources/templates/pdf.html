@@ -1,11 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <style>
+        header {
+          width: 4in;
+          display: block;
+          margin-left: 65%;
+          height: 1in;
+        }
+
+        body {
+          margin: 0in 0in 0in 0in;
+          width: 7.2in;
+          height: 10.6in;
+        }
+
+        table.info {
+          font-family: arial;
+          font-size: 12px;
+        }
+
+        th {
+          background-color: gray;
+          color: white;
+          font-weight: bold;
+        }
+
+        td {
+          vertical-align: top;
+        }
+
+        .store-info div {
+          font-size: 1.2em;
+        }
+
+        .store-info div.company-name {
+          font-size: 1.5em;
+          font-weight: bold;
+        }
+
+        table.klantinfo {
+          margin-top: 0.1in;
+          padding: 0.1in 0in 0.1in 0in;
+        }
+
+        table.klantinfo th {
+          padding: 2px;
+        }
+
+        table.order, .order th, .order td{
+            border: 1px solid black;
+            border-collapse:collapse;
+        }
+
+        table.klant {
+            color: white;
+            background-color: black;
+            width: 7.2in;
+            height: 0.3in;
+        }
+
+        .order th{
+            background-color: black;
+            color: white;
+            front-weight: bold;
+        }
+
+        .order td {
+            vertical-align: top;
+        }
+
+        table.test{
+            background-color: turquoise;
+            width: 7.2in;
+            height: 0.3in;
+            position:fixed;
+            bottom: 0%
+        }
+
+        .test th{
+            background-color: turquoise;
+        }
+    </style>
 </head>
 <body>
-    <b>HELLO WORLD</b>
+<header>
+    <div>
+        <a>
+            <img src="../NerdyGadgetsRobotics/src/main/resources/images/NerdyGadgetsLogo.png" alt="NerdyGadGets"/>
+        </a>
+    </div>
+</header>
+
+<br/>
+
+<table style="width:25%" class="info">
+
+    <tbody>
+    <tr>
+        <td colspan="2" style="width:4.5in" class="store-info">
+            <div class="company-name">NerdyGadgets</div>
+            <div>Campus 18
+                <br/>
+                Zwolle
+                <br/>
+                8017 CA
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td style="height: 50px"></td>
+    </tr>
+    </tbody>
+</table>
+
+<table>
+
+</table>
+
+<table class="klant">
+    <tbody>
+        <tr>
+            <td>klant:</td>
+        </tr>
+    </tbody>
+</table>
+<table style="width:100%" class="klantinfo">
+    <tbody>
+
+    <tr>
+        <td align="left"> {{Naam:}} </td>
+        <td align="center"> {{Adres:}} </td>
+        <td align="right" > {{Bestellings nummer:}} </td>
+    </tr>
+    <tr>
+        <td align="left"> {{postcode:}} </td>
+        <td align="center"> {{Telefoonnummer:}} </td>
+        <td align="right" > {{Bestel datum:}} </td>
+    </tr>
+
+
+    </tbody>
+</table>
+<br/>
+
+<table width="100%" class="order">
+    <tr>
+        <th width="75"  >Item id</th>
+        <th width = "450" >Product</th>
+        <th width="75" >aantal</th>
+    </tr>
+        {{orderlines}}
+</table>
+
+<table class="test" style="position: absolute; ">
+    <tr>
+        <td align="left"> Email:Nerdygadgets@gmail.com </td>
+        <td align="center"> Telefoon nummer: 088 469 9911</td>
+        <td align="right"> Website: www.NerdyGadgets.com </td>
+    </tr>
+</table>
+
 </body>
 </html>
+
