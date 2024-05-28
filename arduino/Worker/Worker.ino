@@ -59,16 +59,6 @@ void setup()
 
 void loop()
 {
-
-  delay(5000);
-  StaticJsonDocument<200> doc;
-
-  JsonObject location = doc.to<JsonObject>();
-  location["x-location"] = random(0, 1000);
-  location["y-location"] = random(0, 1000);
-
-  jsonrobot.emitRobotLocation("LOCATION", location);
-  
     //LightSensor 
     // if (!lightSensor.isActive() && !SAFETY_MODE) { 
     //     jsonrobot.emitRobotState("STATE", "EMERGENCY_STOP", "warehouse is tilted");

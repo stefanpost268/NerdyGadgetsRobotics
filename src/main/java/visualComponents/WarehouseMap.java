@@ -19,8 +19,8 @@ public class WarehouseMap extends JPanel {
     public int height = 365;
     private int robotX = 67;
     private int robotY = 397;
-    private int warehouseMaxX = 0;
-    private int warehouseMaxY = 0;
+    private int warehouseMaxX = 3246;
+    private int warehouseMaxY = 2630;
     
     private ArrayList<GridProduct> gridProducts = new ArrayList<>();
     private Timer timer = new Timer();
@@ -52,8 +52,8 @@ public class WarehouseMap extends JPanel {
                     robotY = serialCommunication.getReceivedJson().getJSONObject("data").getInt("y-location");
 
                     //map the robot's location to the map's coordinates
-                    robotX = map(robotX, 0, 1000, 57, 627);
-                    robotY = Math.abs(map(robotY, 0, 1000, 27, 292) - 292);
+                    robotX = map(robotX, 0, warehouseMaxX, 57, 627);
+                    robotY = Math.abs(map(robotY, 0, warehouseMaxY, 27, 292) - 292);
                     System.out.println(Math.abs(map(robotY, 0, 1000, 27, 292) - 292));
 
                     repaint();
