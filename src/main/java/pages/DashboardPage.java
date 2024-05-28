@@ -25,35 +25,24 @@ public class DashboardPage extends JPanel {
     private static final int INSETS = 5;
     private static final int BORDER_THICKNESS = 2;
     public DashboardPage(OrderRepository orderRepository) {
-//        setLayout(new GridLayout(1, 2));
-//        JPanel panelFirst = new JPanel();
-//        panelFirst.setLayout(new GridLayout(2, 1));
-//
+
         WarehouseMap map = new WarehouseMap(
                 Integer.valueOf(ConfigReader.getConfig("grid.height")),
                 Integer.valueOf(ConfigReader.getConfig("grid.width"))
         );
         map.setPreferredSize(new Dimension(map.width, map.height));
-//
-//        panelFirst.add(map);
+
 //        panelFirst.add(new ExportPdfButton());
-//        add(panelFirst);
-//
-//        JPanel panel = new JPanel();
-//
+
         QueueBox queueBox = new QueueBox(orderRepository);
-        queueBox.setPreferredSize(new Dimension(330, 340));
-//        panel.add(queueBox);
-//
+
+
         ProcessingBox processingBox = new ProcessingBox(queueBox.getOrderInProgress());
-        processingBox.setPreferredSize(new Dimension(330, 300));
-//        panel.add(processingBox);
-//
-//        add(panel);
+
+
         setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
 
-        // Left space constraints
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.weightx = 0.7;
