@@ -42,7 +42,7 @@ public class QueueBox extends JPanel {
         JTable queueTable = new JTable(queueTableModel);
         queueTable.setDefaultEditor(Object.class, null); // read-only
         JScrollPane queueScrollPane = new JScrollPane(queueTable); // Add scroll to table
-        queueScrollPane.setPreferredSize(new Dimension(320, 310));
+        queueScrollPane.setPreferredSize(new Dimension(380, 340));
 
         queueTable.getTableHeader().setReorderingAllowed(false); // Stop user column swipe
         fillQueueTable(orderData);
