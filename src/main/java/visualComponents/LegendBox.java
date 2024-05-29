@@ -59,6 +59,6 @@ public class LegendBox extends JPanel {
                     e.printStackTrace();
                 }
             }
-        }, 0, 1000);
+        }, 0, 100);
     }
 }

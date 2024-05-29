@@ -41,6 +41,9 @@ int Encoder1;
 int Data[2];
 int locationvisited = 0;
 
+int lastXLocation = 0;
+int lastYLocation = 0;
+
 int locationQueue[3][2] = 
 {
     {96, 2237},
@@ -106,11 +109,11 @@ void loop()
       }
     }
 
-
-    int xMotorLocation = motorencoderxas.getMotorLocation();
-    bool locationChanged = xMotorLocation != lastXasLocation || yasLocation != lastYLocation;
+  
+    int xMotorLocation = motorencoder.getMotorLocation();
+    bool locationChanged = xMotorLocation != lastXLocation || yasLocation != lastYLocation;
     if(
-      millis() % 500 == 0 && locationChanged
+      millis() % 1000 == 0 && locationChanged
     ) {
         StaticJsonDocument<200> doc;
 
@@ -119,13 +122,11 @@ void loop()
         location["y-location"] = yasLocation;
 
         jsonrobot.emitRobotLocation("LOCATION", location);
-        lastXasLocation = xMotorLocation;
+        lastXLocation = xMotorLocation;
         lastYLocation = yasLocation;
     }
 
 
-    // controls for x axes
-    motorcontrollerxas.driveMotor(x, inductiveSensorRight.readInductiveSensor(), inductiveSensorLeft.readInductiveSensor(), SAFETY_MODE, vorkOpen);
 
     
     if(!SAFETY_MODE){

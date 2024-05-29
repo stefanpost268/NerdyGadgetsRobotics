@@ -1,11 +1,15 @@
 package visualComponents;
 
 import objects.GridProduct;
+import services.SerialCommunication;
 
 import javax.swing.JPanel;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Timer;
+
+import static services.Formatter.map;
 
 public class WarehouseMap extends JPanel {
 
@@ -17,17 +21,23 @@ public class WarehouseMap extends JPanel {
     private int robotY = 397;
     private int warehouseMaxX = 3246;
     private int warehouseMaxY = 2630;
+    private Timer timer = new java.util.Timer();
+    private SerialCommunication serialCommunication;
+
     
     private ArrayList<GridProduct> gridProducts = new ArrayList<>();
 
 
-    public WarehouseMap(int gridHeight, int gridWidth) {
+    public WarehouseMap(SerialCommunication serialCommunication, int gridHeight, int gridWidth) {
+        this.serialCommunication = serialCommunication;
         this.gridHeight = gridHeight;
         this.gridWidth = gridWidth;
+        initializeTimer();
+
     }
 
-    public WarehouseMap(int gridHeight, int gridWidth, int width, int height) {
-        this(gridHeight, gridWidth);
+    public WarehouseMap(SerialCommunication serialCommunication, int gridHeight, int gridWidth, int width, int height) {
+        this(serialCommunication, gridHeight, gridWidth);
         this.width = width;
         this.height = height;
     }
@@ -54,7 +64,7 @@ public class WarehouseMap extends JPanel {
                     System.out.println("No location data received");
                 }
             }
-        }, 0, 1000);
+        }, 0, 500);
     }
 
     @Override
