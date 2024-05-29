@@ -98,6 +98,11 @@ void loop()
   
         x = 0;
         y = 0;
+         // controls for x axes
+      motorcontrollerxas.driveMotor(x, inductiveSensorRight.readInductiveSensor(), inductiveSensorLeft.readInductiveSensor(), SAFETY_MODE, vorkOpen);
+
+      // controls for y axes
+      motorcontrolleryas.driveMotor(y, inductiveSensorBelow.readInductiveSensor(), clickSensorTop.readInductiveSensor(), SAFETY_MODE, 0);
     }
     else {
       x = map(analogRead(xas), 0, 1023, 255, -255);

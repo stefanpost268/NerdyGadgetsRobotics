@@ -47,7 +47,7 @@ public class LegendBox extends JPanel {
             @Override
             public void run() {
                 try {
-                    if (serialCommunication.getReceivedJson() == null || !serialCommunication.getReceivedJson().getString("label").equals("LOCATION")) {
+                    if (serialCommunication.getReceivedJson().length() == 0 || !serialCommunication.getReceivedJson().getString("label").equals("LOCATION")) {
                         return;
                     }
 
