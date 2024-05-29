@@ -23,8 +23,11 @@ MotorController motorcontrolleryas = MotorController(13, 11, 8, 1);
 MotorEncoder motorencoder = MotorEncoder(2, 5);
 
 bool SAFETY_MODE = false;
-bool Automode = true;
+bool Automode = false;
 bool calibrated = false;
+
+bool VORK_EXTENDED = false;
+bool exe = false;
 
 bool isResetButtonPressed = false;
 
@@ -66,6 +69,7 @@ void setup()
 
 void loop()
 {
+     Wire.requestFrom(9, 1);
     //LightSensor 
     if (!lightSensor.isActive() && !SAFETY_MODE) { 
         jsonrobot.emitRobotState("STATE", "EMERGENCY_STOP", "warehouse is tilted");
@@ -123,7 +127,12 @@ void loop()
 
       // Serial.println("Cords: " + (String) motorencoder.getMotorLocation() + ", " + yasLocation + ", cal:" + calibrated + ", kliksns:" + clickSensorTop.readInductiveSensor() + ", cal sensors: " + inductiveSensorLeft.readInductiveSensor() + ", " + inductiveSensorBelow.readInductiveSensor() + ", queue: " + locationQueue[0][0] + ", " + locationQueue[0][1] + ", locations visited: " + locationvisited + ", lightsensor: " + lightSensor.isActive() + ", Safety_mode: " + SAFETY_MODE);
   };
-      
+  if (exe == false)
+  {
+  pickUpProduct();  
+    exe = true;
+  }
+  
 }
 
 
@@ -148,6 +157,15 @@ void receiveEvent(int placeholder) {
   if(label == "r") {
     isResetButtonPressed = true;
   }
+  if (label == "p")
+  {
+    if (value == "FULLY_EXTENDED")
+    {
+      VORK_EXTENDED = true;
+    }
+    
+  }
+  
 }
 
 void calibrateEncoders() {
@@ -230,4 +248,26 @@ void loadnewpacket(){
   locationQueue[1][1] = 1000;
   locationQueue[2][0] = 100;
   locationQueue[2][1] = 700; 
+}
+
+void pickUpProduct() {
+  sendInstructionToMaster("p", "VORK_FORWARD");
+  Serial.println("instruction sent");
+  
+}
+
+void goUp() {
+      if (VORK_EXTENDED)
+      {
+        motorcontrolleryas.motorForwards(255);
+        delay(10);
+        VORK_EXTENDED = false;
+      }
+      
+}
+
+void sendInstructionToMaster(String label , String data) {
+    Wire.beginTransmission(SLAVE_ADDRESS);
+    Wire.write((label+":"+data).c_str()); 
+    Wire.endTransmission();
 }

@@ -19,10 +19,16 @@ int communicationData[] = {sensor.readIRSensor(), motorencoder.getMotorLocation(
 bool vorkCurrentState = false;
 int currentLocation = 0;
 
+bool goForward = false;
+bool goBackward = false;
+bool fully_extended = false;
+
 
 void setup()
 {
     Serial.begin(9600);
+    Wire.begin(9);
+    Wire.onReceive(receiveEvent);
     attachInterrupt(digitalPinToInterrupt(2), []() {
         motorencoder.readEncoder();
     }, RISING);
@@ -57,4 +63,62 @@ void loop()
         sensor.readIRSensor(),
         EmergencyButtonState
     );
+
+    pickUpProduct();
 }
+
+void receiveEvent(int placeholder) {
+  String message = ""; 
+  while (Wire.available()) {
+    char letter = Wire.read(); 
+    message += letter;
+}
+
+  // split string with :
+  int index = message.indexOf(":");
+  String label = message.substring(0, index);
+  String value = message.substring(index + 1);
+
+    // Serial.println("received: "+ value);     
+
+    if(label == "p") {
+        if (value == "VORK_FORWARD")
+        {
+            goForward = true;
+        }
+        if (value == "VORK_BACKWARD")
+        {
+            goBackward = true;
+        }
+        
+  } 
+}
+
+void pickUpProduct() {    
+    if (goForward)
+    {
+        motorcontroller.disableBrake();
+        motorcontroller.vorkForwards(255);
+        if (sensor.readIRSensor() < 160)
+        {
+            goForward = false;
+            communication.sendInformationToWorker("p", "FULLY_EXTENDED");
+        }
+        
+
+    }
+        if (goBackward)
+    {
+        motorcontroller.disableBrake();
+        motorcontroller.vorkBackwards(255);
+        if (sensor.readIRSensor() > 400)
+        {
+            goBackward = false;
+        }
+        
+
+    }
+    
+}
+
+//fully retracted:408 -------fully extended:152
