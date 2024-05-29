@@ -36,7 +36,6 @@ public class SerialCommunication {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
             System.out.println("Failed to open port.");
         }
     }
