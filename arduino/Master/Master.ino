@@ -20,14 +20,20 @@ bool EmergencyButtonState = false;
 int communicationData[] = {sensor.readIRSensor(), motorencoder.getMotorLocation()};
 bool vorkCurrentState = false;
 int currentLocation = 0;
-
-
+bool redLEd = false;
+bool greenLed = false;
+bool orangeLed = true;
+bool switchstate = false;
 void setup()
 {
+
     Serial.begin(9600);
     attachInterrupt(digitalPinToInterrupt(2), []() {
         motorencoder.readEncoder();
     }, RISING);
+
+    Wire.begin(9); // Initialize I2C communication with address
+    Wire.onReceive(receiveEvent); // Set up a function to handle received data
 }
 
 void loop()
@@ -59,4 +65,57 @@ void loop()
         sensor.readIRSensor(),
         EmergencyButtonState
     );
+
+
+if(digitalRead(8) == HIGH){
+    // if(switchstate){
+        communication.sendInformationToWorker("a", "1");
+        // switchstate=!switchstate;
+        greenLed = true;
+        redLEd = false;
+        orangeLed = false;
+        
+    // } else if (!switchstate){
+    //     communication.sendInformationToWorker("m", "1");
+    //     switchstate=!switchstate;
+    //     redLEd = false;
+    //     orangeLed = true;
+    //     greenLed = false;
+    // }
+}
+    
+    if(redLEd){
+    showRobotState.setColor(255,0,0);// rood
+    }else if(greenLed){
+    showRobotState.setColor(0,255,0);// groen
+    }else if(orangeLed){
+    showRobotState.setColor(255,140,0);// oranje
+    }
+
+}
+
+void receiveEvent(int placeholder) {
+  String message = ""; 
+  while (Wire.available()) {
+    char letter = Wire.read(); 
+    message += letter;
+  }
+
+  // split string with :
+  int index = message.indexOf(":");
+  String label = message.substring(0, index);
+  String value = message.substring(index + 1);
+
+  Serial.println(message);
+
+  if(label == "s") {
+    redLEd = true;
+    orangeLed = false;
+    greenLed = false;
+  }
+  if(label == "m") {
+    orangeLed = true;
+    redLEd = false;
+    greenLed = false;
+  }
 }
