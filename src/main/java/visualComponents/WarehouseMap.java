@@ -55,16 +55,14 @@ public class WarehouseMap extends JPanel {
                     robotY = serialCommunication.getReceivedJson().getJSONObject("data").getInt("y-location");
 
                     //map the robot's location to the map's coordinates
-                    robotX = map(robotX, 0, warehouseMaxX, 57, 627);
-                    robotY = Math.abs(map(robotY, 0, warehouseMaxY, 27, 292) - 292);
-                    System.out.println(Math.abs(map(robotY, 0, 1000, 27, 292) - 292));
-
+                    robotX = map(robotX, 0, warehouseMaxX, 117, 627);
+                    robotY = Math.abs(map(robotY, 0, warehouseMaxY, 27, 292) - 319);
                     repaint();
                 } catch (Exception e) {
                     System.out.println("No location data received");
                 }
             }
-        }, 0, 500);
+        }, 0, 510);
     }
 
     @Override
@@ -73,6 +71,10 @@ public class WarehouseMap extends JPanel {
 
         //Drawing lines and numbers/letters
         drawGrid(g);
+
+        //Drawing the robot
+        g.setColor(Color.RED);
+        g.fillOval(robotX, robotY, 25, 25);
     }
 
     //Helper function to convert a number to the letter for the grid

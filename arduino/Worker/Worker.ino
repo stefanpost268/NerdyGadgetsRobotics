@@ -23,7 +23,7 @@ MotorController motorcontrolleryas = MotorController(13, 11, 8, 1);
 MotorEncoder motorencoder = MotorEncoder(2, 5);
 
 bool SAFETY_MODE = false;
-bool Automode = true;
+bool Automode = false;
 bool calibrated = false;
 
 bool isResetButtonPressed = false;
