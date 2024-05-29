@@ -62,7 +62,7 @@ public class WarehouseMap extends JPanel {
             OrderLines orderLine = (OrderLines) orderLines.get(i);
             StockItem stockItem = orderLine.getStockItem();
 
-            locations.add(stockItem.getItemLocation());
+            locations.add(stockItem.getLocation());
         }
 
         ArrayList<RoutePoint> route = RouteCalculator.calculateRoute(locations);

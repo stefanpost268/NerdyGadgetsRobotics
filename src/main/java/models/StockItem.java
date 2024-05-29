@@ -33,7 +33,7 @@ public class StockItem {
     private String Size;
 
     @Column(length = 5, nullable = false)
-    private String ItemLocation;
+    private String Location;
 
     public List<String> getFieldNames() {
         return Arrays.asList("StockItemID", "StockItemName", "UnitPrice", "RecommendedRetailPrice", "TypicalWeightPerUnit", "QuantityPerOuter", "Size");
@@ -51,7 +51,7 @@ public class StockItem {
         return TypicalWeightPerUnit;
     }
 
-    public String getItemLocation() {
-        return ItemLocation;
+    public String getLocation() {
+        return Location;
     }
 }

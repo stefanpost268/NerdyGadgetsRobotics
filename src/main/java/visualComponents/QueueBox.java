@@ -97,7 +97,7 @@ public class QueueBox extends JPanel implements ActionListener {
             ArrayList<String> locations = new ArrayList<>();
 
             for (OrderLines orderLine : orderLines) {
-                locations.add(orderLine.getStockItem().getItemLocation());
+                locations.add(orderLine.getStockItem().getLocation());
             }
 
             System.out.println(RouteCalculator.calculateRoute(locations));
