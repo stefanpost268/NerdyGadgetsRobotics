@@ -23,7 +23,7 @@ MotorController motorcontrolleryas = MotorController(13, 11, 8, 1);
 MotorEncoder motorencoder = MotorEncoder(2, 5);
 
 bool SAFETY_MODE = false;
-bool Automode = false;
+bool Automode = true;
 bool calibrated = false;
 
 bool isResetButtonPressed = false;
@@ -98,11 +98,14 @@ void loop()
   
         x = 0;
         y = 0;
-         // controls for x axes
-      motorcontrollerxas.driveMotor(x, inductiveSensorRight.readInductiveSensor(), inductiveSensorLeft.readInductiveSensor(), SAFETY_MODE, vorkOpen);
+        if (!Automode)
+        {
+          motorcontrollerxas.driveMotor(x, inductiveSensorRight.readInductiveSensor(), inductiveSensorLeft.readInductiveSensor(), SAFETY_MODE, vorkOpen);
 
-      // controls for y axes
-      motorcontrolleryas.driveMotor(y, inductiveSensorBelow.readInductiveSensor(), clickSensorTop.readInductiveSensor(), SAFETY_MODE, 0);
+          motorcontrolleryas.driveMotor(y, inductiveSensorBelow.readInductiveSensor(), clickSensorTop.readInductiveSensor(), SAFETY_MODE, 0);
+        }
+        
+     
     }
     else {
       x = map(analogRead(xas), 0, 1023, 255, -255);
@@ -148,8 +151,6 @@ void loop()
       // controls for y axes
       motorcontrolleryas.driveMotor(y, inductiveSensorBelow.readInductiveSensor(), clickSensorTop.readInductiveSensor(), SAFETY_MODE, 0);
       }
-
-      // Serial.println("Cords: " + (String) motorencoder.getMotorLocation() + ", " + yasLocation + ", cal:" + calibrated + ", kliksns:" + clickSensorTop.readInductiveSensor() + ", cal sensors: " + inductiveSensorLeft.readInductiveSensor() + ", " + inductiveSensorBelow.readInductiveSensor() + ", queue: " + locationQueue[0][0] + ", " + locationQueue[0][1] + ", locations visited: " + locationvisited + ", lightsensor: " + lightSensor.isActive() + ", Safety_mode: " + SAFETY_MODE);
   };
       
 }
