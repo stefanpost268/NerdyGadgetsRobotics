@@ -36,7 +36,7 @@ public class SerialCommunication {
             }
 
         } catch (Exception e) {
-            System.out.println("Failed to open port.");
+            System.out.println("Failed to establish serial communication with the arduino.");
         }
     }
 
