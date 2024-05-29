@@ -6,7 +6,7 @@ public:
     /**
      * Constructor
     */
-    MotorController(int directionPin, int pwmPin, int brakePin, int encoder1);
+    MotorController(int directionPin, int pwmPin, int brakePin);
 
     /**
      * Function that drives the vork
@@ -17,7 +17,6 @@ private:
     int directionPin;
     int pwmPin;
     int brakePin;
-    int encoder1;
 
     /**
      * Function that enables the brake

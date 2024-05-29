@@ -1,11 +1,10 @@
 #include <Arduino.h>
 #include "MotorController.h"
 
-MotorController::MotorController(int directionPin, int pwmPin, int brakePin, int encoder1, float speedmultiplier) {
+MotorController::MotorController(int directionPin, int pwmPin, int brakePin, float speedmultiplier) {
     this->directionPin = directionPin;
     this->pwmPin = pwmPin;
     this->brakePin = brakePin;
-    this->encoder1 = encoder1;
     this->speedmultiplier = speedmultiplier;
     setup();
 }
@@ -14,7 +13,6 @@ void MotorController::setup() {
     pinMode(directionPin, OUTPUT);
     pinMode(pwmPin, OUTPUT);
     pinMode(brakePin, OUTPUT);
-    pinMode(encoder1, INPUT);
 }
 
 void MotorController::motorForwards(int joystickInput) {
@@ -77,3 +75,4 @@ void MotorController::enableBrake() {
 void MotorController::disableBrake() {
     digitalWrite(brakePin, LOW);
 }
+

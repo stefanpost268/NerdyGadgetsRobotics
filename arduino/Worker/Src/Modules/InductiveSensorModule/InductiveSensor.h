@@ -4,7 +4,11 @@
 class InductiveSensor {
     public:
         InductiveSensor(int InductiveSensorPin);
-        int readInductiveSensor();
+        
+        /**
+         * Read the inductive sensor, returns false when object detected.
+        */
+        bool readInductiveSensor();
         
     private:
         int InductiveSensorPin;
