@@ -1,10 +1,15 @@
 package visualComponents;
 
 import objects.GridProduct;
+import services.SerialCommunication;
+
 import javax.swing.JPanel;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Timer;
+
+import static services.Formatter.map;
 
 public class WarehouseMap extends JPanel {
 
@@ -12,18 +17,52 @@ public class WarehouseMap extends JPanel {
     private int gridWidth;
     public int width = 670;
     public int height = 365;
+    private int robotX = 67;
+    private int robotY = 397;
+    private int warehouseMaxX = 3246;
+    private int warehouseMaxY = 2630;
+    private Timer timer = new java.util.Timer();
+    private SerialCommunication serialCommunication;
+
+    
     private ArrayList<GridProduct> gridProducts = new ArrayList<>();
 
 
-    public WarehouseMap(int gridHeight, int gridWidth) {
+    public WarehouseMap(SerialCommunication serialCommunication, int gridHeight, int gridWidth) {
+        this.serialCommunication = serialCommunication;
         this.gridHeight = gridHeight;
         this.gridWidth = gridWidth;
+        initializeTimer();
+
     }
 
-    public WarehouseMap(int gridHeight, int gridWidth, int width, int height) {
-        this(gridHeight, gridWidth);
+    public WarehouseMap(SerialCommunication serialCommunication, int gridHeight, int gridWidth, int width, int height) {
+        this(serialCommunication, gridHeight, gridWidth);
         this.width = width;
         this.height = height;
+    }
+
+    private void initializeTimer() {
+        timer.scheduleAtFixedRate(new java.util.TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    if (serialCommunication.getReceivedJson().length() == 0 || !serialCommunication.getReceivedJson().getString("label").equals("LOCATION")) {
+                        return;
+                    }
+
+                    robotX = serialCommunication.getReceivedJson().getJSONObject("data").getInt("x-location");
+                    robotY = serialCommunication.getReceivedJson().getJSONObject("data").getInt("y-location");
+
+                    //map the robot's location to the map's coordinates
+                    robotX = map(robotX, 0, warehouseMaxX, 117, 627);
+                    robotY = Math.abs(map(robotY, 0, warehouseMaxY, 27, 292) - 319);
+                    repaint();
+                } catch (Exception e) {
+                    System.out.println("No location data received");
+                }
+            }
+        }, 0, 510);
     }
 
     @Override
@@ -32,6 +71,10 @@ public class WarehouseMap extends JPanel {
 
         //Drawing lines and numbers/letters
         drawGrid(g);
+
+        //Drawing the robot
+        g.setColor(Color.RED);
+        g.fillOval(robotX, robotY, 25, 25);
     }
 
     //Helper function to convert a number to the letter for the grid

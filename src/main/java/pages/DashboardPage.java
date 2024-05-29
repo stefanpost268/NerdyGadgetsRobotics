@@ -2,25 +2,32 @@ package pages;
 
 import helpers.ConfigReader;
 import repositories.OrderRepository;
+import services.SerialCommunication;
 import visualComponents.*;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class DashboardPage extends JPanel {
-    private static final int MAIN_WIDTH = 1350;
-    private static final int MAIN_HEIGHT = 720;
-    private static final int LEFT_PANEL_WIDTH = (int) (MAIN_WIDTH * 0.7);
-    private static final int RIGHT_PANEL_WIDTH = (int) (MAIN_WIDTH * 0.3);
-    private static final int TOP_LEFT_PANEL_HEIGHT = (int) (MAIN_HEIGHT * 0.7);
-    private static final int BOTTOM_LEFT_PANEL_HEIGHT = (int) (MAIN_HEIGHT * 0.3);
-    private static final int TOP_RIGHT_PANEL_HEIGHT = (int) (MAIN_HEIGHT * 0.6);
-    private static final int BOTTOM_RIGHT_PANEL_HEIGHT = (int) (MAIN_HEIGHT * 0.4);
-    private static final int INSETS = 5;
-    private static final int BORDER_THICKNESS = 2;
-    public DashboardPage(OrderRepository orderRepository) {
+        private static final int MAIN_WIDTH = 1350;
+        private static final int MAIN_HEIGHT = 720;
+        private static final int LEFT_PANEL_WIDTH = (int) (MAIN_WIDTH * 0.7);
+        private static final int RIGHT_PANEL_WIDTH = (int) (MAIN_WIDTH * 0.3);
+        private static final int TOP_LEFT_PANEL_HEIGHT = (int) (MAIN_HEIGHT * 0.7);
+        private static final int BOTTOM_LEFT_PANEL_HEIGHT = (int) (MAIN_HEIGHT * 0.3);
+        private static final int TOP_RIGHT_PANEL_HEIGHT = (int) (MAIN_HEIGHT * 0.6);
+        private static final int BOTTOM_RIGHT_PANEL_HEIGHT = (int) (MAIN_HEIGHT * 0.4);
+        private static final int INSETS = 5;
+        private static final int BORDER_THICKNESS = 2;
+
+    public DashboardPage(OrderRepository orderRepository, SerialCommunication serialCommunication) {
+        setLayout(new GridLayout(1, 2));
+        JPanel panelFirst = new JPanel();
+        panelFirst.setLayout(new GridLayout(2, 1));
+   
 
         WarehouseMap map = new WarehouseMap(
+                serialCommunication,
                 Integer.valueOf(ConfigReader.getConfig("grid.height")),
                 Integer.valueOf(ConfigReader.getConfig("grid.width"))
         );
@@ -104,7 +111,7 @@ public class DashboardPage extends JPanel {
 
 
         topLeftPanel.add(map, BorderLayout.CENTER);
-        topLeftPanel.add(new packingListButton(orderRepository), BorderLayout.SOUTH);
+        topLeftPanel.add(new visualComponents.LegendBox(serialCommunication, orderRepository), BorderLayout.WEST);
         topRightPanel.add(queueBox, BorderLayout.CENTER);
         bottomRightPanel.add(processingBox);
     }
