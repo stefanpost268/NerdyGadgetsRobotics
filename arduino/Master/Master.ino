@@ -68,20 +68,19 @@ void loop()
 
 
 if(digitalRead(8) == HIGH){
-    // if(switchstate){
+    if(switchstate){
         communication.sendInformationToWorker("a", "1");
-        // switchstate=!switchstate;
+        switchstate=!switchstate;
         greenLed = true;
         redLEd = false;
         orangeLed = false;
-        
-    // } else if (!switchstate){
-    //     communication.sendInformationToWorker("m", "1");
-    //     switchstate=!switchstate;
-    //     redLEd = false;
-    //     orangeLed = true;
-    //     greenLed = false;
-    // }
+    } else if (!switchstate){
+        communication.sendInformationToWorker("a", "0");
+        switchstate=!switchstate;
+        redLEd = false;
+        orangeLed = true;
+        greenLed = false;
+    }
 }
     
     if(redLEd){

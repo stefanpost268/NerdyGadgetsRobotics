@@ -188,10 +188,10 @@ Serial.println(message);
     isResetButtonPressed = true;
   }
   if(label = "a"){
-    Automode = true;
-  }
-  if(label = "m"){
-    Automode = false;
+    Automode = value.toInt();
+    if(Automode){
+      calibrated = false;
+    }
   }
 }
 
