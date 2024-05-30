@@ -99,6 +99,7 @@ void loop()
           jsonrobot.emitRobotState("STATE", "MANUAL_MODE", "Reset button was pressed");
           isResetButtonPressed = false;
           SAFETY_MODE = false;
+          Automode = false;          
           motorcontrollerxas.disableBrake();
           motorcontrolleryas.disableBrake();
         }
@@ -123,15 +124,7 @@ void loop()
           SAFETY_MODE = true;
       }
     }
-
-  if(SAFETY_MODE){
-    Automode = false;
-  } else if (Automode){
-    SAFETY_MODE = false;
-  }
   
-  
-
     int xMotorLocation = motorencoder.getMotorLocation();
     bool locationChanged = xMotorLocation != lastXLocation || yasLocation != lastYLocation;
     if(
@@ -188,10 +181,9 @@ Serial.println(message);
     isResetButtonPressed = true;
   }
   if(label = "a"){
-    Automode = value.toInt();
-    if(Automode){
-      calibrated = false;
-    }
+    Automode = true;
+    calibrated = false;
+    locationvisited = 0;
   }
 }
 
