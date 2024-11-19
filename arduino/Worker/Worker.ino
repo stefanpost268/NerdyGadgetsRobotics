@@ -10,6 +10,7 @@
 #include "Src/Modules/InductiveSensorModule/InductiveSensor.h"
 #include "Src/Modules/MotorControllerModule/MotorController.h"
 #include "Src/Modules/MotorEncoderModule/MotorEncoder.h"
+#include "Src/Modules/CommunicationModule/Communication.h"
 
 LightSensor lightSensor = LightSensor(A1);
 EmergencyButton emergencyButton = EmergencyButton(10);
@@ -21,9 +22,11 @@ InductiveSensor clickSensorTop = InductiveSensor(A0);
 MotorController motorcontrollerxas = MotorController(12, 3, 9, 1);
 MotorController motorcontrolleryas = MotorController(13, 11, 8, 1);
 MotorEncoder motorencoder = MotorEncoder(2, 5);
+Communication communication = Communication(9);
 
+int switchState = 0;
 bool SAFETY_MODE = false;
-bool Automode = true;
+bool Automode = false;
 bool calibrated = false;
 
 bool isResetButtonPressed = false;
@@ -69,12 +72,15 @@ void setup()
 
 void loop()
 {
+    Wire.requestFrom(9, 1);
     //LightSensor 
     if (!lightSensor.isActive() && !SAFETY_MODE) { 
         jsonrobot.emitRobotState("STATE", "EMERGENCY_STOP", "warehouse is tilted");
         SAFETY_MODE = true;
         motorcontrollerxas.emergencyStop();
         motorcontrolleryas.emergencyStop();
+        communication.sendInformationToMaster("s", "1");
+
         return;
     }
 
@@ -83,15 +89,17 @@ void loop()
         SAFETY_MODE = true;
         motorcontrollerxas.emergencyStop();
         motorcontrolleryas.emergencyStop();
+        communication.sendInformationToMaster("s", "1");
     }
 
     //reset
     if(SAFETY_MODE) {
         if (isResetButtonPressed) {
+          communication.sendInformationToMaster("m", "1");
           jsonrobot.emitRobotState("STATE", "MANUAL_MODE", "Reset button was pressed");
-          SAFETY_MODE = false;
           isResetButtonPressed = false;
-
+          SAFETY_MODE = false;
+          Automode = false;          
           motorcontrollerxas.disableBrake();
           motorcontrolleryas.disableBrake();
         }
@@ -116,7 +124,6 @@ void loop()
           SAFETY_MODE = true;
       }
     }
-
   
     int xMotorLocation = motorencoder.getMotorLocation();
     bool locationChanged = xMotorLocation != lastXLocation || yasLocation != lastYLocation;
@@ -134,9 +141,6 @@ void loop()
         lastYLocation = yasLocation;
     }
 
-
-
-    
     if(!SAFETY_MODE){
       if (Automode){
         if (calibrated) {
@@ -152,7 +156,6 @@ void loop()
       motorcontrolleryas.driveMotor(y, inductiveSensorBelow.readInductiveSensor(), clickSensorTop.readInductiveSensor(), SAFETY_MODE, 0);
       }
   };
-      
 }
 
 
@@ -162,7 +165,7 @@ void receiveEvent(int placeholder) {
     char letter = Wire.read(); 
     message += letter;
   }
-
+Serial.println(message);
   // split string with :
   int index = message.indexOf(":");
   String label = message.substring(0, index);
@@ -176,6 +179,11 @@ void receiveEvent(int placeholder) {
   }
   if(label == "r") {
     isResetButtonPressed = true;
+  }
+  if(label = "a"){
+    Automode = true;
+    calibrated = false;
+    locationvisited = 0;
   }
 }
 
